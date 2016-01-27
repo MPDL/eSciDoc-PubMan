@@ -178,40 +178,50 @@
 
 					<xsl:variable name="component-content" select="$component-data/foxml:digitalObject/foxml:datastream[@ID = 'content']/foxml:datastreamVersion[last()]"/>
 					
+					
+					
 					<escidocComponents:component xlink:type="simple" xlink:title="{$component-metadata/file:file/dc:title}" xlink:href="/ir/item/{$PID}/components/component/{$component-id}">
 						<escidocComponents:properties xlink:type="simple" xlink:title="Properties" xlink:href="/ir/item/{$PID}/components/component/{$component-id}/properties">
 							<prop:creation-date>
 								<xsl:value-of select="$component-data/foxml:digitalObject/foxml:objectProperties/foxml:property[@NAME = 'info:fedora/fedora-system:def/model#createdDate']/@VALUE"/>
 							</prop:creation-date>
 							<srel:created-by xlink:type="simple" xlink:title="{$component-rels-ext/prop:created-by-title}" xlink:href="/aa/user-account/{replace($component-rels-ext/srel:created-by/@rdf:resource, 'info:fedora/', '')}" />
-							<prop:description>
-								<xsl:value-of select="$component-metadata/file:file/dc:description"/>
-							</prop:description>
+							
+							<xsl:variable name="component-description" select="$component-metadata/file:file/dc:description"/>
+							
+							<xsl:if test="$component-description != ''">
+								<prop:description>
+									<xsl:value-of select="$component-metadata/file:file/dc:description"/>
+								</prop:description>
+							</xsl:if>
+							
 							<prop:valid-status>
 								<xsl:value-of select="$component-rels-ext/prop:valid-status"/>
 							</prop:valid-status>
 							<prop:visibility>
 								<xsl:value-of select="$component-rels-ext/prop:visibility"/>
 							</prop:visibility>
+							
 							<xsl:if test="$component-rels-ext/prop:pid != ''">
 								<prop:pid>
 									<xsl:value-of select="$component-rels-ext/prop:pid"/>
 								</prop:pid>
 							</xsl:if>
+							
 							<prop:content-category>
 								<xsl:value-of select="$component-rels-ext/prop:content-category"/>
 							</prop:content-category>
 							<prop:file-name>
 								<xsl:value-of select="$component-metadata/file:file/dc:title"/>
 							</prop:file-name>
-							<prop:mime-type>
-								<xsl:choose>
-									<xsl:when test="$component-rels-ext/prop:mime-type != ''">
-										<xsl:value-of select="$component-rels-ext/prop:mime-type"/>
-									</xsl:when>
-									<!--  xsl:otherwise>application/octet-stream</xsl:otherwise-->
-								</xsl:choose>
-							</prop:mime-type>
+							
+							<xsl:variable name="component-mime-type" select="$component-rels-ext/prop:mime-type"/>							
+							<xsl:if test="$component-mime-type != ''">
+								<prop:mime-type>
+									<xsl:value-of select="$component-rels-ext/prop:mime-type"/>					
+								</prop:mime-type>
+							</xsl:if>
+							
 							<xsl:variable name="component-checksum" select="$component-content/foxml:contentDigest/@DIGEST"/>
 							<xsl:if test="$component-checksum != ''">
 								<prop:checksum>

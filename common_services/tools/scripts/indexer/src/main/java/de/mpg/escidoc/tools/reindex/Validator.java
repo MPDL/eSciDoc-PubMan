@@ -364,7 +364,7 @@ public class Validator
 			e.printStackTrace();
 		}
 		
-		if (!pubItem1.equals(pubItem2))
+		if (!comparePubItemVOs(pubItem1, pubItem2))
 		{
 			indexer.getIndexingReport().addToErrorList("Difference when comparing <" + pubItem1.getPid() + "> with <" + pubItem2.getPid() + ">");					
 		}
@@ -398,6 +398,48 @@ public class Validator
 	     }
 	     
 	     return doc;
+	}
+	
+	private boolean comparePubItemVOs(final PubItemVO item1, final PubItemVO item2)
+	{
+		if (item1.getBaseUrl() != null && item2.getBaseUrl() != null && !item1.getBaseUrl().equals(item2.getBaseUrl()))
+				return false;
+		if (!item1.getContentModel().equals(item2.getContentModel()))
+				return false;
+		if (!item1.getContext().equals(item2.getContext()))
+			return false;
+		if (!item1.getCreationDate().equals(item2.getCreationDate()))
+			return false;
+		if (!item1.getFiles().equals(item2.getFiles()))
+			return false;
+		if (!item1.getLatestRelease().equals(item2.getLatestRelease()))
+			return false;
+		if (!item1.getLatestVersion().equals(item2.getLatestVersion()))
+			return false;
+		if (!item1.getLocalTags().equals(item2.getLocalTags()))
+			return false;
+		if (!item1.getLockStatus().equals(item2.getLockStatus()))
+			return false;
+		if (!item1.getLockStatus().equals(item2.getLockStatus()))
+			return false;
+		if (!item1.getMetadata().equals(item2.getMetadata()))
+			return false;
+		if (!item1.getModificationDate().equals(item2.getModificationDate()))
+			return false;
+		if (!item1.getOwner().equals(item2.getOwner()))
+			return false;
+		if (!item1.getPid().equals(item2.getPid()))
+			return false;
+		if (!item1.getPublicStatus().equals(item2.getPublicStatus()))
+			return false;
+		if (!item1.getPublicStatusComment().equals(item2.getPublicStatusComment()))
+			return false;
+		if (!item1.getVersion().equals(item2.getVersion()))
+			return false;
+		if (item1.getWithdrawalComment() != null && item2.getWithdrawalComment() != null && !item1.getWithdrawalComment().equals(item2.getWithdrawalComment()))
+			return false;
+		
+		return true;
 	}
 
 
