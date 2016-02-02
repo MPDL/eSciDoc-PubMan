@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  CDDL HEADER START
@@ -1284,6 +1285,12 @@
 						<xsl:when test="($Flavor = 'MPIGEM')"> 
 							<xsl:copy-of select="Util:queryConeExact('persons', concat($familyname, ', ', $givenname), 'Max Planck Institute for Research on Collective Goods')"/>
 						</xsl:when>
+						<xsl:when test="($Flavor = 'MPIB')"> 
+							<xsl:copy-of select="Util:queryConeExact('persons', concat($familyname, ', ', $givenname), 'Max Planck Institute for Human Development')"/>
+						</xsl:when>
+						<xsl:when test="($Flavor = 'MPIEA')"> 
+							<xsl:copy-of select="Util:queryConeExact('persons', concat($familyname, ', ', $givenname), 'Max Planck Institute for Empirical Aesthetics')"/>
+						</xsl:when>
 						<xsl:otherwise>
 							<xsl:copy-of select="Util:queryCone('persons', concat($familyname, ', ', $givenname))"/>
 						</xsl:otherwise>
@@ -1304,8 +1311,8 @@
 						<xsl:value-of select="$givenname"/>
 					</eterms:given-name>
 					
-			<!-- Besonderheit für Import von externen caesar-Publikationen	-->
-					<!--<xsl:if test="exists($cone-creator/cone/rdf:RDF/rdf:Description) and $Flavor = 'CAESAR'">
+			<!-- Besonderheit für Import von externen caesar-Publikationen
+					<xsl:if test="exists($cone-creator/cone/rdf:RDF/rdf:Description) and $Flavor = 'CAESAR'">
 						<organization:organization>
 							<dc:title>
 								<xsl:text>External Organizations</xsl:text>
@@ -1317,7 +1324,7 @@
 					</xsl:if> -->
 					
 					<!-- Affiliated Institution depends on publication-date) -->
-				<!-- <xsl:if test="$Flavor != 'CAESAR'">  --> <xsl:if test="$Flavor != ''">
+					<!-- <xsl:if test="$Flavor != 'CAESAR'">  --> <xsl:if test="$Flavor != ''">
 					<xsl:variable name="publication-date">
 						<xsl:choose>
 							<xsl:when test="./../D">
@@ -1406,9 +1413,22 @@
 							</organization:organization>
 						</xsl:when>
 						
+						<!-- Allgemeine Regelung: "External Affiliation", falls zwar CoNE-Treffer, aber Publikationsdatum nicht in eventuellen Zeitraum d. CoNE-Affiliations ; 18.12.15 Erndt -->
+						<xsl:when test="($cone-creator/cone[1]/rdf:RDF[1]/rdf:Description) and not($cone-creator/cone[1]/rdf:RDF[1]/rdf:Description/escidoc:position[escidocFunctions:smaller(rdf:Description/escidoc:start-date, $publication-date) 
+											and escidocFunctions:smaller($publication-date, rdf:Description/escidoc:end-date)])">
+							<organization:organization>
+								<dc:title>
+									<xsl:text>External Organizations</xsl:text>
+								</dc:title>
+								<dc:identifier>
+									<xsl:text>escidoc:persistent22</xsl:text>
+								</dc:identifier>
+							</organization:organization>
+						</xsl:when>
+						
 					</xsl:choose>
 				</xsl:if>
-			
+				
 				</person:person>
 				
 			</xsl:otherwise>
