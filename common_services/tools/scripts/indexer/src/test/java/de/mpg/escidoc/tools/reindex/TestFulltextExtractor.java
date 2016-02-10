@@ -96,9 +96,9 @@ public class TestFulltextExtractor
 		assertTrue((new File(extractor.getFulltextPath(), "escidoc_20017+content+content.0.txt")).exists());
 		assertTrue((new File(extractor.getFulltextPath(), "escidoc_2110752+content+content.0.txt")).exists());
 		
-		assertTrue("Expected 23 Found " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == 23);
+		assertTrue("Expected 25 Found " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == 25);
 		assertTrue("Expected 1 Found " + extractor.getStatistic().getFilesErrorOccured(), extractor.getStatistic().getFilesErrorOccured() == 0);
-		assertTrue("Is " + extractor.getStatistic().getFilesExtractionDone(), extractor.getStatistic().getFilesExtractionDone() == 23);
+		assertTrue("Is " + extractor.getStatistic().getFilesExtractionDone(), extractor.getStatistic().getFilesExtractionDone() == 25);
 		assertTrue("Is " + extractor.getStatistic().getFilesSkipped(), extractor.getStatistic().getFilesSkipped() == 0);
 		assertTrue("Is " + extractor.getStatistic().getErrorList().size(), extractor.getStatistic().getErrorList().size() == 0);
 	}
@@ -113,12 +113,54 @@ public class TestFulltextExtractor
 		
 		assertTrue(!(new File(extractor.getFulltextPath(), "escidoc_1587192+content+content.0.txt")).exists());
 		
-		assertTrue("Is " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == 23);
+		assertTrue("Expected 25 Found " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == 25);
 		assertTrue("expected <0> got <" + extractor.getStatistic().getFilesErrorOccured() + ">", extractor.getStatistic().getFilesErrorOccured() == 0) ;
 		assertTrue(extractor.getStatistic().getFilesExtractionDone() == 1);
 		assertTrue(extractor.getStatistic().getFilesSkipped() == 0);
 		assertTrue(extractor.getStatistic().getErrorList().size() == 0);
 	}
+	
+	/**
+	 * Test ms excel - should be done by Tika now
+	 * @throws Exception
+	 */
+    @Test
+    public void testDirWithExcelFile() throws Exception
+    {
+        
+        extractor.init(new File("src/test/resources/19"));
+        extractor.extractFulltexts(new File("src/test/resources/19/escidoc_733621+content+content.0"));
+        extractor.finalizeExtraction();
+        
+        assertTrue((new File(extractor.getFulltextPath(), "escidoc_733621+content+content.0.txt")).exists());
+        
+        assertTrue("Is " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == 25);
+        assertTrue("expected <0> got <" + extractor.getStatistic().getFilesErrorOccured() + ">", extractor.getStatistic().getFilesErrorOccured() == 0) ;
+        assertTrue(extractor.getStatistic().getFilesExtractionDone() == 1);
+        assertTrue(extractor.getStatistic().getFilesSkipped() == 0);
+        assertTrue(extractor.getStatistic().getErrorList().size() == 0);
+    }
+    
+    /**
+     * Test pdf with problems 
+     * @throws Exception
+     */
+    @Test
+    public void testDirWithProblemPdfFile() throws Exception
+    {
+        
+        extractor.init(new File("src/test/resources/19"));
+        extractor.extractFulltexts(new File("src/test/resources/19/escidoc_1956237+content+content.0"));
+        extractor.finalizeExtraction();
+        
+        assertTrue((new File(extractor.getFulltextPath(), "escidoc_1956237+content+content.0.txt")).exists());
+        
+        assertTrue("Is " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == 25);
+        assertTrue("expected <0> got <" + extractor.getStatistic().getFilesErrorOccured() + ">", extractor.getStatistic().getFilesErrorOccured() == 0) ;
+        assertTrue(extractor.getStatistic().getFilesExtractionDone() == 1);
+        assertTrue(extractor.getStatistic().getFilesSkipped() == 0);
+        assertTrue(extractor.getStatistic().getErrorList().size() == 0);
+    }
 	
 	@Test
 	public void testLastModifiedFile1() throws Exception
