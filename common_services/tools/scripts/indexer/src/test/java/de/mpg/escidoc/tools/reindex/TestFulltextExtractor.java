@@ -161,6 +161,27 @@ public class TestFulltextExtractor
         assertTrue(extractor.getStatistic().getFilesSkipped() == 0);
         assertTrue(extractor.getStatistic().getErrorList().size() == 0);
     }
+    
+    /**
+     * Test pdf with problems 
+     * @throws Exception
+     */
+    @Test
+    public void testDirWithProblemCsvFile() throws Exception
+    {
+        
+        extractor.init(new File("src/test/resources/19"));
+        extractor.extractFulltexts(new File("src/test/resources/19/escidoc_441261+content+content.0"));
+        extractor.finalizeExtraction();
+        
+        assertTrue((new File(extractor.getFulltextPath(), "escidoc_441261+content+content.0.txt")).exists());
+        
+        assertTrue("Is " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == 26);
+        assertTrue("expected <0> got <" + extractor.getStatistic().getFilesErrorOccured() + ">", extractor.getStatistic().getFilesErrorOccured() == 0) ;
+        assertTrue(extractor.getStatistic().getFilesExtractionDone() == 1);
+        assertTrue(extractor.getStatistic().getFilesSkipped() == 0);
+        assertTrue(extractor.getStatistic().getErrorList().size() == 0);
+    }
 	
 	@Test
 	public void testLastModifiedFile1() throws Exception
