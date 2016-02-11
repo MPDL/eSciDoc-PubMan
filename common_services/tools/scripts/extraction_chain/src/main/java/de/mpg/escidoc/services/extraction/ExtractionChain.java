@@ -64,6 +64,8 @@ import com.itextpdf.text.pdf.parser.PdfTextExtractor;
  */
 public class ExtractionChain
 {
+    private static final int TIKA_CONTENT_SIZE = 10*2048*2048;
+
     public static boolean verbose = false;
     
     private static Logger logger = Logger.getLogger(ExtractionChain.class);
@@ -274,7 +276,7 @@ public class ExtractionChain
             
             stream = TikaInputStream.get(new File(infileName));
     		
-    		ContentHandler handler = new BodyContentHandler(10*1024*1024);
+    		ContentHandler handler = new BodyContentHandler(TIKA_CONTENT_SIZE);
     		
     		new AutoDetectParser().parse(stream, handler, new Metadata(), new ParseContext());
     		
