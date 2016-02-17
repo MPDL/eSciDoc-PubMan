@@ -24,7 +24,6 @@ public class TestLocationHelper
 	}
 	
 	@Test
-	@Ignore
 	public void test()
 	{
 		assertTrue(LocationHelper.getLocation("escidoc:persistent13") != null);
