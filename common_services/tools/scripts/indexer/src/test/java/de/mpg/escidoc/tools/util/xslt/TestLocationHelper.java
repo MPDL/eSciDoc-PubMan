@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.mpg.escidoc.tools.reindex.Indexer;
@@ -23,6 +24,7 @@ public class TestLocationHelper
 	}
 	
 	@Test
+	@Ignore
 	public void test()
 	{
 		assertTrue(LocationHelper.getLocation("escidoc:persistent13") != null);
