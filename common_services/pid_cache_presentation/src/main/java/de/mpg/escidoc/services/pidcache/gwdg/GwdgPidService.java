@@ -147,7 +147,7 @@ public class GwdgPidService
 		GetMethod method = new GetMethod(GWDG_PIDSERVICE);
 		try
 		{	GwdgClient client = new GwdgClient();
-			client.getHttpConnectionManager().getParams().setConnectionTimeout(GwdgClient.GWDG_SERVICE_TIMEOUT);
+			//client.getHttpConnectionManager().getParams().setConnectionTimeout(GwdgClient.GWDG_SERVICE_TIMEOUT);
 	    	ProxyHelper.executeMethod(client, method);
 		} 
 		catch (Exception e) 

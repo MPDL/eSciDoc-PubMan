@@ -255,12 +255,6 @@
                     <xsl:value-of select="dcterms:created"/>
                 </doi:date>
             </xsl:if>
-            <xsl:if test="event:event/eterms:start-date != ''">
-                <doi:date>
-                    <xsl:attribute name="dateType">event start date</xsl:attribute>
-                    <xsl:value-of select="event:event/eterms:start-date"/>
-                </doi:date>
-            </xsl:if>
         </doi:dates>
 	
         <doi:resourceType>
