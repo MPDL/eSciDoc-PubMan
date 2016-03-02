@@ -284,7 +284,7 @@
 						<xsl:with-param name="gen" select="'conference-paper'"/>
 					</xsl:call-template>
 				</xsl:when>				
-				<xsl:when test="PT='J'">
+				<xsl:when test="PT='J' or PT='S'"> <!-- PT='S' ergänzt durch Erndt 2.3.16 für Import Hr. Vogt (MPI Kernphysik) -->
 					<xsl:call-template name="createEntry">
 						<xsl:with-param name="gen" select="'article'"/>
 					</xsl:call-template>
@@ -625,7 +625,7 @@
 									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:when>
-							<xsl:when test="SO and PT='J'">
+							<xsl:when test="SO and (PT='J' or PT='S')"> <!-- PT='S' ergänzt durch Erndt 2.3. für Import Hr. Vogt MPI Kernphysik) -->
 								<xsl:value-of select="$genre-ves/enum[.='journal']/@uri"/>
 							</xsl:when>					
 						</xsl:choose>
