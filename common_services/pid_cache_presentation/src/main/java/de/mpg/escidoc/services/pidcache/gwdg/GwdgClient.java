@@ -14,7 +14,7 @@ public class GwdgClient extends HttpClient
 {
 	public static String GWDG_PIDSERVICE_USER = null;
     private static String GWDG_PIDSERVICE_PASS = null;;
-    public static int GWDG_SERVICE_TIMEOUT = 20;
+    public static int GWDG_SERVICE_TIMEOUT = 20 * 1000;
     
     /**
      * Default constructor
