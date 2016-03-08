@@ -176,9 +176,11 @@ public class TestBase
     
     protected void addForDeletion(String objectId)
     {
-        objectsToDelete.add(objectId);
-        
-        logger.info("Added for deletion: " + objectId);   
+        if (objectId != null && !"".equals(objectId))
+        {
+            objectsToDelete.add(objectId);       
+            logger.info("Added for deletion: " + objectId);   
+        }
     }
 
 
