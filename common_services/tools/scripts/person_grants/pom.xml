@@ -1,0 +1,78 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>de.mpg.escidoc.services.tools.scripts</groupId>
+	<artifactId>person_grants</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>person_grants</name>
+	<url>http://maven.apache.org</url>
+
+	<repositories>
+		<repository>
+			<id>nexus</id>
+			<url>http://rd.mpdl.mpg.de/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<site>
+			<id>website</id>
+			<url>scp://webhost.company.com/www/website</url>
+		</site>
+	</distributionManagement>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>de.mpg.mpdl.tools.scripts.person_grants.PersonGrantsMain</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>de.mpg.escidoc.services.wildfly</groupId>
+			<artifactId>transformation</artifactId>
+			<version>1.0.82</version>
+		</dependency>
+		<dependency>
+			<groupId>de.mpg.escidoc.services.wildfly</groupId>
+			<artifactId>common_logic</artifactId>
+			<version>1.1.94</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons.io</groupId>
+			<artifactId>apache-commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
