@@ -14,7 +14,7 @@ public class GwdgClient extends HttpClient
 {
 	public static String GWDG_PIDSERVICE_USER = null;
     private static String GWDG_PIDSERVICE_PASS = null;;
-    public static int GWDG_SERVICE_TIMEOUT = 20;
+    public static int GWDG_SERVICE_TIMEOUT = 20 * 1000;
     
     /**
      * Default constructor
@@ -29,7 +29,9 @@ public class GwdgClient extends HttpClient
 		GWDG_SERVICE_TIMEOUT = Integer.parseInt(PropertyReader.getProperty("escidoc.pid.gwdg.timeout"));
 		this.getParams().setAuthenticationPreemptive(true);
     	Credentials defaultcreds = new UsernamePasswordCredentials(GWDG_PIDSERVICE_USER, GWDG_PIDSERVICE_PASS);
-    	this.getState().setCredentials(new AuthScope(AuthScope.ANY), defaultcreds);    	
+    	this.getState().setCredentials(new AuthScope(AuthScope.ANY), defaultcreds);
+    	this.setConnectionTimeout(GWDG_SERVICE_TIMEOUT);
+    	
 	}
 	
 	/**

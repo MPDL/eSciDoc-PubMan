@@ -238,6 +238,12 @@
 					<xsl:call-template name="createEntry">
 						<xsl:with-param name="gen">thesis</xsl:with-param>
 					</xsl:call-template>
+				</xsl:when>
+				<!-- Ergänzung Erndt (1.3.2016): RIS-Export aus Zotero liefert Genre "JOUR" für Artikel --> 
+				<xsl:when test="TY='JOUR'">
+					<xsl:call-template name="createEntry">
+						<xsl:with-param name="gen">article</xsl:with-param>
+					</xsl:call-template>
 				</xsl:when>				
 				<xsl:otherwise>
 					<xsl:call-template name="createEntry">
@@ -304,6 +310,7 @@
 			<xsl:apply-templates select="L1"/>
 			<xsl:apply-templates select="L2"/>
 			<xsl:apply-templates select="ID"/>
+			<xsl:apply-templates select="DO"/>
 						
 			<xsl:if test="SN and ($gen='journal' or $gen='series' or $gen='book' or $gen='thesis' or $gen='proceedings' or $gen='report')">
 				<xsl:element name="dc:identifier">
@@ -360,7 +367,14 @@
 								<xsl:with-param name="genre" select="$gen"/>
 								<xsl:with-param name="title" select="T2"/>
 							</xsl:call-template>
-						</xsl:if>	
+						</xsl:if>
+						<!-- Ergänzung Erndt (1.3.2016): weitere mögliche Kombination für Quellentitel (für RIS-Exportdateien aus Zotero) -->
+						<xsl:if test="T2 and TY='JOUR'">
+							<xsl:call-template name="createSource">
+								<xsl:with-param name="genre" select="$gen"/>
+								<xsl:with-param name="title" select="T2"/>
+							</xsl:call-template>
+						</xsl:if>
 					</xsl:if>
 										
 					<xsl:if test="((T1 or TI or CT) and T3)">
@@ -385,6 +399,13 @@
 							<xsl:with-param name="genre" select="$gen"/>
 							<xsl:with-param name="title" select="JF"/>
 						</xsl:call-template>
+					</xsl:if>
+					<!-- Ergänzung Erndt (1.3.2016): weitere mögliche Kombination für Quellentitel (für RIS-Exportdateien aus Zotero) -->
+					<xsl:if test="T2 and TY='JOUR'">
+							<xsl:call-template name="createSource">
+								<xsl:with-param name="genre" select="$gen"/>
+								<xsl:with-param name="title" select="T2"/>
+							</xsl:call-template>
 					</xsl:if>
 					<xsl:if test="T3">
 						<!-- source series -->
@@ -430,6 +451,30 @@
 				<xsl:value-of select="error(QName('http://www.escidoc.de', 'err:MultipleCreatorsFound' ), concat('There is more than one CoNE entry matching --', concat($familyname, ', ', givenname), '--'))"/>
 			</xsl:when>
 			<xsl:when test="not(exists($coneCreator/cone/rdf:RDF/rdf:Description))">
+				<!-- Ergänzung Erndt 2.3.16 für MPI FI (Hr. Haury; siehe Mails v. 29.2.16) -->
+				<xsl:choose>
+				<xsl:when test="$import-name='MPFI'">
+					<person:person>
+					<eterms:family-name>
+						<xsl:value-of select="familyname"/>
+					</eterms:family-name>
+					<xsl:choose>
+						<xsl:when test="exists(givenname) and not(givenname='')">
+							<eterms:given-name>
+								<xsl:value-of select="$givenname"/>
+							</eterms:given-name>
+						</xsl:when>
+						<!-- TODO alternative: initials? -->
+					</xsl:choose>
+					<organization:organization>
+						<dc:title>Max Planck Florida Institute for Neuroscience, Max Planck Society</dc:title>
+						<dc:identifier>escidoc:1950288</dc:identifier>
+					</organization:organization>
+					
+					</person:person>
+				</xsl:when>
+				<!-- Ende Ergänzung Erndt -->
+				<xsl:otherwise>
 				<xsl:comment>NOT FOUND IN CONE</xsl:comment>
 				<person:person>
 					<eterms:family-name>
@@ -454,6 +499,8 @@
 					</organization:organization>
 					
 				</person:person>
+				</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:comment>CONE CREATOR</xsl:comment>
@@ -644,7 +691,7 @@
 				  
 			</xsl:if>
 			<!-- SOURCE VOLUME -->
-			<xsl:if test="(VL and (JF or JO or ET))">
+			<xsl:if test="(VL and (JF or JO or ET)) or (VL and TY='JOUR')">
 				<xsl:element name="eterms:volume">
 					<xsl:value-of select="VL" />
 				</xsl:element>
@@ -844,6 +891,12 @@
 	<xsl:template match="ID">
 		<xsl:element name="dc:identifier">
 			<xsl:attribute name="xsi:type">eterms:OTHER</xsl:attribute>
+			<xsl:value-of select="."/>
+		</xsl:element>
+	</xsl:template>
+	<xsl:template match="DO">
+		<xsl:element name="dc:identifier">
+			<xsl:attribute name="xsi:type">eterms:DOI</xsl:attribute>
 			<xsl:value-of select="."/>
 		</xsl:element>
 	</xsl:template>

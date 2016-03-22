@@ -4808,7 +4808,7 @@
 	<!-- All fields mapped into FreeKeywords are here defined since Pubman mask allow only one dcterms:subject -->
 	<xsl:template name="dcTermsSubject">
 	
-		<!-- Mapping f. MPI PKS: Collection-Name wird zu MPIPKS-Klassifikation -->
+		<!-- Mapping f. MPI PKS: Collection-Name wird zu MPIPKS-Klassifikation ; Auskommentiert v. Erndt (25.02.16) für nachträgl. Teilimport durch Andrea
 		<xsl:if test="$import-name = 'MPIPKS'">
 			<xsl:if test="exists(../../docaff/collection)">
 			<xsl:for-each select="../../docaff/collection">
@@ -4817,7 +4817,7 @@
 				</dc:subject>
 			</xsl:for-each>
 			</xsl:if>
-		</xsl:if>
+		</xsl:if>  -->
 		
 		<xsl:variable name="freekeywords">
 			

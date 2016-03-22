@@ -46,7 +46,9 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -127,7 +129,7 @@ public class TestBase
         System.setProperty("com.sun.xml.namespace.QName.useCompatibleSerialVersionUID", "1.0");
     }
     
-    protected static List<String> objectsToDelete;
+    protected static Set<String> objectsToDelete;
     
     /**
      * 
@@ -139,7 +141,7 @@ public class TestBase
         PUBMAN_TEST_COLLECTION_ID = PropertyReader.getProperty("escidoc.framework_access.context.id.test");
         PUBMAN_TEST_COLLECTION_NAME = PropertyReader.getProperty("escidoc.framework_access.context.name.test");
         
-        objectsToDelete = new ArrayList<String>();
+        objectsToDelete = new HashSet<String>();
     }
     
     /**
@@ -174,9 +176,11 @@ public class TestBase
     
     protected void addForDeletion(String objectId)
     {
-        objectsToDelete.add(objectId);
-        
-        logger.info("Added for deletion: " + objectId);   
+        if (objectId != null && !"".equals(objectId))
+        {
+            objectsToDelete.add(objectId);       
+            logger.info("Added for deletion: " + objectId);   
+        }
     }
 
 

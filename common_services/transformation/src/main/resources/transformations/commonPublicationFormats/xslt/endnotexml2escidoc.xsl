@@ -1256,7 +1256,9 @@
 						</xsl:when>
 						<xsl:when test="not($isSource) and $Flavor = 'MPFI'">
 							<organization:organization>
-								<dc:title>Max Planck Florida Institute for Neuroscience</dc:title>
+								<!-- Hardcoded due to high effort for just one Institute -->
+								<!-- LIVE -->
+								<dc:title>Max Planck Florida Institute for Neuroscience, Max Planck Society</dc:title>
 								<dc:identifier>escidoc:1950288</dc:identifier>
 							</organization:organization>
 						</xsl:when>

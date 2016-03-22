@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 
 import org.apache.axis.message.MessageElement;
 import org.apache.commons.httpclient.HttpClient;
@@ -67,7 +67,7 @@ public class TestFullTextSearch
 	private static SRWPort searchHandler_escidoc_all;
 	private static XmlTransforming xmlTransforming;
 	
-	private static List<String> itemIdsForPurging;
+	private static HashSet<String> itemIdsForPurging;
 
 	private static Logger logger = Logger.getLogger(TestFullTextSearch.class);
 	
@@ -94,7 +94,7 @@ public class TestFullTextSearch
 		
 		xmlTransforming = new XmlTransformingBean();
 		
-		itemIdsForPurging = new ArrayList<String>();
+		itemIdsForPurging = new HashSet<String>();
 	}
 	
 	@AfterClass
