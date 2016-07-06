@@ -1235,10 +1235,8 @@
 				<escidoc.unapi.download.server>http://dev-pubman.mpdl.mpg.de/dataacquisition/download/unapi</escidoc.unapi.download.server>
 				<escidoc.unapi.view.server>http://dev-pubman.mpdl.mpg.de/dataacquisition/view/unapi</escidoc.unapi.view.server>
 				<jboss.deploy.port>8889</jboss.deploy.port>
-				<!--  
-				<jboss.install.dir>/mnt/pubman/dev-pubman</jboss.install.dir>
-				-->
-				<jboss.install.dir>/usr/share/escidoc/wildfly</jboss.install.dir>
+				
+				<jboss.install.dir>/usr/share/jboss</jboss.install.dir>
 				<jboss.user.scp>jboss@dev-pubman.mpdl.mpg.de</jboss.user.scp>
 				
 				<!-- syndication service -->
