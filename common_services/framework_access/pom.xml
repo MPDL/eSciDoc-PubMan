@@ -209,7 +209,6 @@
 				<plugins>
 					<plugin>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.3</version>
 						<executions>
 							<execution>
 								<phase>compile</phase>
@@ -219,8 +218,11 @@
 								<configuration>
 									<tasks>
                                         <!-- copy over the stylesheets --> 
+                                        <!--  
+                                        <echo message="${jboss.user.scp}:${jboss.install.dir}/server/default/conf/search/config/index/item_container_admin" </echo>
 										<scp file="${project.build.directory}/classes/itemContainerAdminXmlToLucene.xslt" todir="${jboss.user.scp}:${jboss.install.dir}/server/default/conf/search/config/index/item_container_admin" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" /> 													
-                                                            
+                                         -->
+										<echo> "${jboss.user.scp}:${jboss.install.dir}/server/default/conf/search/config/index/escidoc_all"</echo>
 										<scp file="${project.build.directory}/classes/mpdlEscidocXmlToLucene.xslt" todir="${jboss.user.scp}:${jboss.install.dir}/server/default/conf/search/config/index/escidoc_all" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
 									</tasks>
 								</configuration>
