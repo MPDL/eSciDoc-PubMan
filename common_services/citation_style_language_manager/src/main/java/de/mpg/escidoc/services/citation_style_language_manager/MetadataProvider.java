@@ -625,7 +625,7 @@ public class MetadataProvider implements ItemDataProvider {
 	            // Source sequence number --> Locator
 	            if (source.getSequenceNumber() != null)
 	            {
-	                cslItem.locator(source.getSequenceNumber());
+	                cslItem.chapterNumber(source.getSequenceNumber());
 	            }
 	            
 	            // Source identifiers
