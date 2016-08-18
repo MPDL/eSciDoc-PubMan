@@ -42,9 +42,9 @@
 	<version>0.1.62-SNAPSHOT</version>
 	
 	<scm>
-		<connection>scm:git:git@github.com:MPDL-Collections/PubMan/common_services/pid_cache_ear</connection>
-		<developerConnection>scm:git:git@github.com:MPDL-Collections/PubMan/common_services/pid_cache_ear</developerConnection>
-		<url>https://github.com/MPDL-Collections/PubMan/</url>
+		<connection>scm:git:git@github.com:MPDL/PubMan/common_services/pid_cache_ear</connection>
+		<developerConnection>scm:git:git@github.com:MPDL/PubMan/common_services/pid_cache_ear</developerConnection>
+		<url>https://github.com/MPDL/PubMan/</url>
 	  <tag>HEAD</tag>
   </scm>
 	

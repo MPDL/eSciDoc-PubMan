@@ -267,9 +267,9 @@
 	</ciManagement>
 	
 	<scm>
-		<connection>scm:git:git@github.com:MPDL-Collections/PubMan.git</connection>
-		<developerConnection>scm:git:git@github.com:MPDL-Collections/PubMan.git</developerConnection>
-		<url>https://github.com/MPDL-Collections/PubMan</url>
+		<connection>scm:git:git@github.com:MPDL/PubMan.git</connection>
+		<developerConnection>scm:git:git@github.com:MPDL/PubMan.git</developerConnection>
+		<url>https://github.com/MPDL/PubMan</url>
 	  <tag>HEAD</tag>
   </scm>
 	

@@ -40,9 +40,9 @@
 	<packaging>war</packaging>
 
 	<scm>
-		<connection>scm:git:git@github.com:MPDL-Collections/PubMan/pubman/pubman_presentation</connection>
-		<developerConnection>scm:git:git@github.com:MPDL-Collections/PubMan/pubman/pubman_presentation</developerConnection>
-		<url>https://github.com/MPDL-Collections/PubMan/</url>
+		<connection>scm:git:git@github.com:MPDL/PubMan/pubman/pubman_presentation</connection>
+		<developerConnection>scm:git:git@github.com:MPDL/PubMan/pubman/pubman_presentation</developerConnection>
+		<url>https://github.com/MPDL/PubMan/</url>
 	  <tag>HEAD</tag>
   </scm>
 

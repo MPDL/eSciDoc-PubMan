@@ -42,9 +42,9 @@
 	<version>0.2.37-SNAPSHOT</version>
 	
 	<scm>
-		<connection>scm:git:git@github.com:MPDL-Collections/PubMan/common_services/aa_presentation</connection>
-		<developerConnection>scm:git:git@github.com:MPDL-Collections/PubMan/common_services/aa_presentation</developerConnection>
-		<url>https://github.com/MPDL-Collections/PubMan/</url>
+		<connection>scm:git:git@github.com:MPDL/PubMan/common_services/aa_presentation</connection>
+		<developerConnection>scm:git:git@github.com:MPDL/PubMan/common_services/aa_presentation</developerConnection>
+		<url>https://github.com/MPDL/PubMan/</url>
 	  <tag>HEAD</tag>
   </scm>
 	

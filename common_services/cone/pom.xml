@@ -42,9 +42,9 @@
 	<version>1.2.59-SNAPSHOT</version>
 	
 	<scm>
-		<connection>scm:git:git@github.com:MPDL-Collections/PubMan/common_services/cone</connection>
-		<developerConnection>scm:git:git@github.com:MPDL-Collections/PubMan/common_services/cone</developerConnection>
-		<url>https://github.com/MPDL-Collections/PubMan/</url>
+		<connection>scm:git:git@github.com:MPDL/PubMan/common_services/cone</connection>
+		<developerConnection>scm:git:git@github.com:MPDL/PubMan/common_services/cone</developerConnection>
+		<url>https://github.com/MPDL/PubMan/</url>
 	  <tag>HEAD</tag>
   </scm>
 	

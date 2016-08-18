@@ -41,9 +41,9 @@
 	<packaging>war</packaging>
 	
 	<scm>
-		<connection>scm:git:git@github.com:MPDL-Collections/PubMan/common_services/dataacquisition_presentation</connection>
-		<developerConnection>scm:git:git@github.com:MPDL-Collections/PubMan/common_services/dataacquisition_presentation</developerConnection>
-		<url>https://github.com/MPDL-Collections/PubMan/</url>
+		<connection>scm:git:git@github.com:MPDL/PubMan/common_services/dataacquisition_presentation</connection>
+		<developerConnection>scm:git:git@github.com:MPDL/PubMan/common_services/dataacquisition_presentation</developerConnection>
+		<url>https://github.com/MPDL/PubMan/</url>
 	  <tag>HEAD</tag>
   </scm>
 

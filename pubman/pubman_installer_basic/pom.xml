@@ -28,9 +28,9 @@
 	<version>7.5.3-SNAPSHOT</version>
 
 	<scm>
-		<connection>scm:git:git@github.com:MPDL-Collections/PubMan/pubman/pubman_installer_basic</connection>
-		<developerConnection>scm:git:git@github.com:MPDL-Collections/PubMan/pubman/pubman_installer_basic</developerConnection>
-		<url>https://github.com/MPDL-Collections/PubMan/</url>
+		<connection>scm:git:git@github.com:MPDL/PubMan/pubman/pubman_installer_basic</connection>
+		<developerConnection>scm:git:git@github.com:MPDL/PubMan/pubman/pubman_installer_basic</developerConnection>
+		<url>https://github.com/MPDL/PubMan/</url>
 	</scm>
 
 	<build>
