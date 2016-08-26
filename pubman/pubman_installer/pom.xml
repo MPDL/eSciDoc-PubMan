@@ -41,9 +41,9 @@
 	<version>7.9.5-SNAPSHOT</version>
 	
 	<scm>
-		<connection>scm:git:git@github.com:MPDL-Collections/PubMan/pubman/pubman_installer</connection>
-		<developerConnection>scm:git:git@github.com:MPDL-Collections/PubMan/pubman/pubman_installer</developerConnection>
-		<url>https://github.com/MPDL-Collections/PubMan/</url>
+		<connection>scm:git:git@github.com:MPDL/PubMan/pubman/pubman_installer</connection>
+		<developerConnection>scm:git:git@github.com:MPDL/PubMan/pubman/pubman_installer</developerConnection>
+		<url>https://github.com/MPDL/PubMan/</url>
 	</scm>
 	
 	<build>

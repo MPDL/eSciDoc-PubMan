@@ -31,7 +31,7 @@
 	<parent>
 		<groupId>de.mpg.escidoc.services.wildfly</groupId>
 		<artifactId>pubman</artifactId>
-		<version>8.0.2-SNAPSHOT</version>
+		<version>7.11.2-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
@@ -39,11 +39,11 @@
 	<artifactId>pubman_ear</artifactId>
 	<name>pubman_ear</name>
 	<packaging>ear</packaging>
-	<version>8.0.2-SNAPSHOT</version>
+	<version>7.11.2-SNAPSHOT</version>
 	<scm>
-		<connection>scm:git:git@github.com:MPDL-Collections/PubMan/pubman/pubman_ear</connection>
-		<developerConnection>scm:git:git@github.com:MPDL-Collections/PubMan/pubman/pubman_ear</developerConnection>
-		<url>https://github.com/MPDL-Collections/PubMan/</url>
+		<connection>scm:git:git@github.com:MPDL/PubMan/pubman/pubman_ear</connection>
+		<developerConnection>scm:git:git@github.com:MPDL/PubMan/pubman/pubman_ear</developerConnection>
+		<url>https://github.com/MPDL/PubMan/</url>
 	  <tag>HEAD</tag>
   </scm>
 	<build>
@@ -312,14 +312,14 @@
 		<dependency>
 			<groupId>de.mpg.escidoc.pubman.wildfly</groupId>
 			<artifactId>pubman_logic</artifactId>
-			<version>8.0.2-SNAPSHOT</version>
+			<version>7.11.2-SNAPSHOT</version>
 			<scope>compile</scope>
 			<type>ejb</type>
 		</dependency>
 		<dependency>
 			<groupId>de.mpg.escidoc.pubman.wildfly</groupId>
 			<artifactId>pubman_presentation</artifactId>
-			<version>8.0.2-SNAPSHOT</version>
+			<version>7.11.2-SNAPSHOT</version>
 			<classifier>${escidoc.pubman.build.mode}</classifier>
 			<scope>compile</scope>
 			<type>war</type>
@@ -469,25 +469,25 @@
 								<configuration>
 									<tasks>
 									
-										<scp file="${project.build.directory}/${project.build.finalName}${escidoc.pubman.build.hyphen}${escidoc.pubman.build.mode}.${project.packaging}" todir="${jboss.user.scp}:${jboss.install.dir}/standalone/deployments" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
+										<scp file="${project.build.directory}/${project.build.finalName}${escidoc.pubman.build.hyphen}${escidoc.pubman.build.mode}.${project.packaging}" todir="${jboss.user.scp}:${wildfly.install.dir}/standalone/deployments" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
 										<!-- configuration for the deploy jboss server -->
-										<scp file="${project.build.directory}/classes/module.xml" todir="${jboss.user.scp}:${jboss.install.dir}/modules/pubman/main" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
+										<scp file="${project.build.directory}/classes/module.xml" todir="${jboss.user.scp}:${wildfly.install.dir}/modules/pubman/main" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
 										
 										<!-- <copy overwrite="true" file="${project.build.directory}/classes/validation-ds.xml" todir="${jboss.install.dir}/standalone/deployments" />-->
 										<!-- copy over the configuration file -->
-										<scp file="${project.build.directory}/classes/pubman.properties" todir="${jboss.user.scp}:${jboss.install.dir}/modules/pubman/main" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
+										<scp file="${project.build.directory}/classes/pubman.properties" todir="${jboss.user.scp}:${wildfly.install.dir}/modules/pubman/main" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
 										
-										<scp file="${project.build.directory}/classes/solution.properties" todir="${jboss.user.scp}:${jboss.install.dir}/modules/pubman/main" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
+										<scp file="${project.build.directory}/classes/solution.properties" todir="${jboss.user.scp}:${wildfly.install.dir}/modules/pubman/main" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
 										<!-- copy over the aa configuration file -->
-										<scp file="${project.build.directory}/classes/auth.properties" remoteTofile="${jboss.user.scp}:${jboss.install.dir}/modules/pubman/main/cone.properties" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
+										<scp file="${project.build.directory}/classes/auth.properties" remoteTofile="${jboss.user.scp}:${wildfly.install.dir}/modules/pubman/main/cone.properties" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
 										<!-- copy over the aa configuration file -->
-										<scp file="${project.build.directory}/classes/auth.properties" todir="${jboss.user.scp}:${jboss.install.dir}/modules/pubman/main" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
+										<scp file="${project.build.directory}/classes/auth.properties" todir="${jboss.user.scp}:${wildfly.install.dir}/modules/pubman/main" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
 										<!-- copy over the aa configuration xml -->
-										<scp file="${project.build.directory}/classes/conf.xml" todir="${jboss.user.scp}:${jboss.install.dir}/modules/pubman/main" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
+										<scp file="${project.build.directory}/classes/conf.xml" todir="${jboss.user.scp}:${wildfly.install.dir}/modules/pubman/main" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
 										<!-- copy over the validation datasource descriptor -->
 										<!-- <copy overwrite="true" file="${project.build.directory}/classes/pid-cache-ds.xml" todir="${jboss.install.dir}/standalone/deployments" />-->
 										<!-- copy over the apache FOP configuration file -->
-										<scp file="${project.build.directory}/classes/in_ear/dataaquisition/apache-fop-config.xml" todir="${jboss.user.scp}:${jboss.install.dir}/modules/pubman/main" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
+										<scp file="${project.build.directory}/classes/in_ear/dataaquisition/apache-fop-config.xml" todir="${jboss.user.scp}:${wildfly.install.dir}/modules/pubman/main" keyfile="${user.home}/.ssh/id_rsa" knownhosts="${user.home}/.ssh/known_hosts" passphrase="" trust="true" verbose="true" />
 										<!-- configuration for the runtime server jboss server -->
 										<!-- <xslt processor="trax" in="${jboss.install.dir}/server/default/deploy/properties-service.xml" style="${project.build.directory}/classes/properties-service-transform.xsl" out="${project.build.directory}/properties-service.temp" /> <copy overwrite="true" file="${project.build.directory}/properties-service.temp" toFile="${jboss.install.dir}/server/default/deploy/properties-service.xml"> 
 											</copy> -->

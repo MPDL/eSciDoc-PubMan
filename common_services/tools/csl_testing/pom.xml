@@ -1,24 +1,12 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>de.mpg.escidoc.services.wildfly</groupId>
-		<artifactId>pubman</artifactId>
-		<version>7.11.2-SNAPSHOT</version>
-		<relativePath>../../pom.xml</relativePath>
-	</parent>
 	<groupId>de.mpg.escidoc.services.wildfly</groupId>
-	<artifactId>citation_style_language_manager</artifactId>
-	<version>0.0.10-SNAPSHOT</version>
-	<name>citation_style_language_manager</name>
+	<artifactId>csl_testing</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>csl_testing</name>
 	<url>http://maven.apache.org</url>
-
-	<scm>
-		<connection>scm:git:git@github.com:MPDL/PubMan/common_services/citation_style_language_manager</connection>
-		<developerConnection>scm:git:git@github.com:MPDL/PubMan/common_services/citation_style_language_manager</developerConnection>
-		<url>https://github.com/MPDL/PubMan/</url>
-		<tag>HEAD</tag>
-	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,48 +14,35 @@
 
 	<repositories>
 		<repository>
-			<id>oss-snapshots-repo</id>
-			<name>Sonatype OSS Maven Repository</name>
-			<url>https://oss.sonatype.org/content/groups/public</url>
+			<id>nexus</id>
+			<url>http://rd.mpdl.mpg.de/nexus/content/groups/public</url>
 			<releases>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 			</releases>
 			<snapshots>
 				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
 			</snapshots>
 		</repository>
 	</repositories>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<skip>false</skip>
-					<includes>
-						<include>**/TestCitationStyleLanguageManager.java</include>
-					</includes>
-					<argLine>${jacoco.arguments.ut}</argLine>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>nexus</id>
+			<url>http://rd.mpdl.mpg.de/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<dependencies>
 		<dependency>
-			<groupId>de.mpg.escidoc.services.wildfly</groupId>
-			<artifactId>common_logic</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<version>4.12</version>
 		</dependency>
 		<dependency>
 			<groupId>de.undercouch</groupId>
@@ -99,6 +74,7 @@
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
