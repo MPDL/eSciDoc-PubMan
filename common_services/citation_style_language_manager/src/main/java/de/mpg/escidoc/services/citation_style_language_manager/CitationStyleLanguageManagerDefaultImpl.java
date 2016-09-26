@@ -119,12 +119,12 @@ public class CitationStyleLanguageManagerDefaultImpl implements CitationStyleLan
 	                if (citation.contains("<div class=\"csl-right-inline\">"))
 	                {
 	                    citation = citation.substring(citation.indexOf("<div class=\"csl-right-inline\">") + 30);
-	                    citation = citation.substring(0, citation.lastIndexOf("</div>"));
+	                    citation = citation.substring(0, citation.indexOf("</div>"));
 	                }
 	                else if (citation.contains("<div class=\"csl-entry\">"))
 	                {
 	                    citation = citation.substring(citation.indexOf("<div class=\"csl-entry\">") + 23);
-	                    citation = citation.substring(0, citation.lastIndexOf("</div>"));
+	                    citation = citation.substring(0, citation.indexOf("</div>"));
 	                }
 	                else
 	                {
