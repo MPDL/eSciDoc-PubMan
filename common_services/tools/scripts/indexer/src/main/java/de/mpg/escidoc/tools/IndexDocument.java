@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.mpg.escidoc.tools.reindex;
+package de.mpg.escidoc.tools;
 
 import java.io.File;
 import java.io.FileNotFoundException;

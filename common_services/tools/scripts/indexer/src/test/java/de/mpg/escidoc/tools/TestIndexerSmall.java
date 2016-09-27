@@ -1,4 +1,4 @@
-package de.mpg.escidoc.tools.reindex;
+package de.mpg.escidoc.tools;
 
 import static org.junit.Assert.assertTrue;
 
@@ -20,8 +20,8 @@ import de.mpg.escidoc.tools.util.xslt.LocationHelper;
 
 public class TestIndexerSmall
 {
-	private static final String JBOSS_SERVER_LUCENE_ESCIDOC_ALL = "C:/Test/tmp/escidoc_all";
-	//private static final String JBOSS_SERVER_LUCENE_ESCIDOC_ALL = "C:/Test/tmp/item_container_admin";
+	//private static final String JBOSS_SERVER_LUCENE_ESCIDOC_ALL = "C:/Test/tmp/escidoc_all";
+	private static final String JBOSS_SERVER_LUCENE_ESCIDOC_ALL = "C:/Test/tmp/item_container_admin";
 	//private static final String JBOSS_SERVER_LUCENE_ESCIDOC_ALL = "C:/tmp/jboss/server/default/data/index/lucene/item_container_admin";
 	
 	protected static Indexer indexer;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.mpg.escidoc.tools.reindex;
+package de.mpg.escidoc.tools;
 
 import org.apache.lucene.analysis.ASCIIFoldingFilter;
 import org.apache.lucene.analysis.TokenStream;

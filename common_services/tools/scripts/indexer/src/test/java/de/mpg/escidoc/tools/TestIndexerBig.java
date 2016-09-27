@@ -1,4 +1,4 @@
-package de.mpg.escidoc.tools.reindex;
+package de.mpg.escidoc.tools;
 
 import static org.junit.Assert.assertTrue;
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.mpg.escidoc.tools.reindex;
+package de.mpg.escidoc.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Properties;
@@ -293,6 +294,19 @@ public class Indexer
 	{
 		return this.currentIndexMode;
 	}
+	
+	public void setLastModificationDate(String mDate)
+	{
+	    long x = mDateMillis;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");                  
+        String combinedDate = mDate + defaultDate.substring(mDate.length());
+        try {
+            this.mDateMillis = dateFormat.parse(combinedDate).getTime();
+        } catch (ParseException e) {
+            mDateMillis = x;
+        }
+	    
+	}
 
 	/**
 	 * Read the allowed mimetypes for fulltexts from a file.
@@ -488,6 +502,7 @@ public class Indexer
 				}
 				else if (file.lastModified() < mDateMillis)
 				{
+				    logger.info("Skipping because of date <" + file.getName() + ">");
 					indexingReport.incrementFilesSkippedBecauseOfTime();
 				}
 			}

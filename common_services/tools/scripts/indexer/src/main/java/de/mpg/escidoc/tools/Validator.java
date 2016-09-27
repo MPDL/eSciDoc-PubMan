@@ -1,4 +1,4 @@
-package de.mpg.escidoc.tools.reindex;
+package de.mpg.escidoc.tools;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,8 +25,8 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 
-import de.mpg.escidoc.services.common.XmlTransforming;
 import de.mpg.escidoc.services.common.exceptions.TechnicalException;
+import de.mpg.escidoc.services.common.XmlTransforming;
 import de.mpg.escidoc.services.common.valueobjects.publication.PubItemVO;
 import de.mpg.escidoc.services.common.xmltransforming.XmlTransformingBean;
 
@@ -41,13 +42,13 @@ public class Validator
 	protected static Logger logger = Logger.getLogger(Validator.class);
 	
 	protected static String[] fieldNamesToSkip = {
-		"xml_representation", 
-		"xml_metadata",
+//		"xml_representation", 
+//		"xml_metadata",
 		"aa_xml_representation", 
 		"aa_xml_metadata",
 		"/base",
 		
-		// the following indexes causes problems because of encoding of '&' -> '&amp;'
+		// the following indexes cause problems because of encoding of '&' -> '&amp;'
 		// occurs only for item_container_admin index
 		"/title",
 		"/components/component/xLinkTitle"
@@ -215,7 +216,7 @@ public class Validator
 			{
 				Fieldable f2 = findFieldFor(f1, sf2);
 				
-				if (f2 == null)
+				if (f2 == null && !Arrays.asList(fieldNamesToSkip).contains(f1.name()))
 				{
 					indexer.getIndexingReport().addToErrorList("Different field values found for <" + name + ">" + " in <" +  m1.get(getObjidFieldName()) + ">\n");
 					continue;
@@ -346,13 +347,21 @@ public class Validator
 	private void compareSkippedFields(Map<String, Set<Fieldable>> m1,
 			Map<String, Set<Fieldable>> m2)
 	{
+	   Set<Fieldable> s1 = m1.get("xml_representation");
+	   Set<Fieldable> s2 = m1.get("xml_representation");
+	   
+	   if (s1 == null || s2 == null)
+	       return;
 		String xml_representation1 = m1.get("xml_representation").iterator().next().stringValue();
 		String xml_representation2 = m2.get("xml_representation").iterator().next().stringValue();
 		
-		PubItemVO pubItem1 = null;
-		PubItemVO pubItem2 = null;
+		if (xml_representation1 == null || xml_representation2 == null)
+		    return;
 		
-		XmlTransforming xmlTransforming = new XmlTransformingBean();
+		de.mpg.escidoc.services.common.valueobjects.publication.PubItemVO pubItem1 = null;
+		de.mpg.escidoc.services.common.valueobjects.publication.PubItemVO pubItem2 = null;
+		
+		de.mpg.escidoc.services.common.xmltransforming.XmlTransformingBean xmlTransforming = new de.mpg.escidoc.services.common.xmltransforming.XmlTransformingBean();
 		
 		try
 		{
@@ -400,43 +409,43 @@ public class Validator
 	     return doc;
 	}
 	
-	private boolean comparePubItemVOs(final PubItemVO item1, final PubItemVO item2)
+	private boolean comparePubItemVOs(final de.mpg.escidoc.services.common.valueobjects.publication.PubItemVO pubItem1, final de.mpg.escidoc.services.common.valueobjects.publication.PubItemVO pubItem2)
 	{
-		if (item1.getBaseUrl() != null && item2.getBaseUrl() != null && !item1.getBaseUrl().equals(item2.getBaseUrl()))
+		if (pubItem1.getBaseUrl() != null && pubItem2.getBaseUrl() != null && !pubItem1.getBaseUrl().equals(pubItem2.getBaseUrl()))
 				return false;
-		if (!item1.getContentModel().equals(item2.getContentModel()))
+		if (!pubItem1.getContentModel().equals(pubItem2.getContentModel()))
 				return false;
-		if (!item1.getContext().equals(item2.getContext()))
+		if (!pubItem1.getContext().equals(pubItem2.getContext()))
 			return false;
-		if (!item1.getCreationDate().equals(item2.getCreationDate()))
+		if (!pubItem1.getCreationDate().equals(pubItem2.getCreationDate()))
 			return false;
-		if (!item1.getFiles().equals(item2.getFiles()))
+		if (!pubItem1.getFiles().equals(pubItem2.getFiles()))
 			return false;
-		if (!item1.getLatestRelease().equals(item2.getLatestRelease()))
+		if (!pubItem1.getLatestRelease().equals(pubItem2.getLatestRelease()))
 			return false;
-		if (!item1.getLatestVersion().equals(item2.getLatestVersion()))
+		if (!pubItem1.getLatestVersion().equals(pubItem2.getLatestVersion()))
 			return false;
-		if (!item1.getLocalTags().equals(item2.getLocalTags()))
+		if (!pubItem1.getLocalTags().equals(pubItem2.getLocalTags()))
 			return false;
-		if (!item1.getLockStatus().equals(item2.getLockStatus()))
+		if (!pubItem1.getLockStatus().equals(pubItem2.getLockStatus()))
 			return false;
-		if (!item1.getLockStatus().equals(item2.getLockStatus()))
+		if (!pubItem1.getLockStatus().equals(pubItem2.getLockStatus()))
 			return false;
-		if (!item1.getMetadata().equals(item2.getMetadata()))
+		if (!pubItem1.getMetadata().equals(pubItem2.getMetadata()))
 			return false;
-		if (!item1.getModificationDate().equals(item2.getModificationDate()))
+		if (!pubItem1.getModificationDate().equals(pubItem2.getModificationDate()))
 			return false;
-		if (!item1.getOwner().equals(item2.getOwner()))
+		if (!pubItem1.getOwner().equals(pubItem2.getOwner()))
 			return false;
-		if (!item1.getPid().equals(item2.getPid()))
+		if (!pubItem1.getPid().equals(pubItem2.getPid()))
 			return false;
-		if (!item1.getPublicStatus().equals(item2.getPublicStatus()))
+		if (!pubItem1.getPublicStatus().equals(pubItem2.getPublicStatus()))
 			return false;
-		if (!item1.getPublicStatusComment().equals(item2.getPublicStatusComment()))
+		if (!pubItem1.getPublicStatusComment().equals(pubItem2.getPublicStatusComment()))
 			return false;
-		if (!item1.getVersion().equals(item2.getVersion()))
+		if (!pubItem1.getVersion().equals(pubItem2.getVersion()))
 			return false;
-		if (item1.getWithdrawalComment() != null && item2.getWithdrawalComment() != null && !item1.getWithdrawalComment().equals(item2.getWithdrawalComment()))
+		if (pubItem1.getWithdrawalComment() != null && pubItem2.getWithdrawalComment() != null && !pubItem1.getWithdrawalComment().equals(pubItem2.getWithdrawalComment()))
 			return false;
 		
 		return true;
