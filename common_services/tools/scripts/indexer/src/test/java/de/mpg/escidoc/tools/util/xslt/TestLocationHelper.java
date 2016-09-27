@@ -8,7 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.mpg.escidoc.tools.reindex.Indexer;
+import de.mpg.escidoc.tools.Indexer;
 
 public class TestLocationHelper
 {
