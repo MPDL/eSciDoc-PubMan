@@ -1,6 +1,6 @@
 package de.mpg.escidoc.tools;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,9 @@ import org.junit.Test;
 public class TestFulltextExtractor
 {
 	
-	static FullTextExtractor extractor; 
+	private static final int EXTRACTION_DONE = 26;
+    private static final int FILES_TOTAL = 27;
+    static FullTextExtractor extractor; 
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception
@@ -96,11 +98,11 @@ public class TestFulltextExtractor
 		assertTrue((new File(extractor.getFulltextPath(), "escidoc_20017+content+content.0.txt")).exists());
 		assertTrue((new File(extractor.getFulltextPath(), "escidoc_2110752+content+content.0.txt")).exists());
 		
-		assertTrue("Expected 26 Found " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == 26);
-		assertTrue("Expected 1 Found " + extractor.getStatistic().getFilesErrorOccured(), extractor.getStatistic().getFilesErrorOccured() == 0);
-		assertTrue("Is " + extractor.getStatistic().getFilesExtractionDone(), extractor.getStatistic().getFilesExtractionDone() == 26);
+		assertTrue("Expected 27 Found " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == FILES_TOTAL);
+		assertTrue("Expected 1 Found " + extractor.getStatistic().getFilesErrorOccured(), extractor.getStatistic().getFilesErrorOccured() == 1);
+		assertTrue("Is " + extractor.getStatistic().getFilesExtractionDone(), extractor.getStatistic().getFilesExtractionDone() == EXTRACTION_DONE);
 		assertTrue("Is " + extractor.getStatistic().getFilesSkipped(), extractor.getStatistic().getFilesSkipped() == 0);
-		assertTrue("Is " + extractor.getStatistic().getErrorList().size(), extractor.getStatistic().getErrorList().size() == 0);
+		assertTrue("Is " + extractor.getStatistic().getErrorList().size(), extractor.getStatistic().getErrorList().size() == 1);
 	}
 	
 	@Test
@@ -113,7 +115,7 @@ public class TestFulltextExtractor
 		
 		assertTrue(!(new File(extractor.getFulltextPath(), "escidoc_1587192+content+content.0.txt")).exists());
 		
-		assertTrue("Expected 26 Found " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == 26);
+		assertTrue("Expected 27 Found " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == FILES_TOTAL);
 		assertTrue("expected <0> got <" + extractor.getStatistic().getFilesErrorOccured() + ">", extractor.getStatistic().getFilesErrorOccured() == 0) ;
 		assertTrue(extractor.getStatistic().getFilesExtractionDone() == 1);
 		assertTrue(extractor.getStatistic().getFilesSkipped() == 0);
@@ -134,11 +136,32 @@ public class TestFulltextExtractor
         
         assertTrue((new File(extractor.getFulltextPath(), "escidoc_733621+content+content.0.txt")).exists());
         
-        assertTrue("Is " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == 26);
+        assertTrue("Is " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == FILES_TOTAL);
         assertTrue("expected <0> got <" + extractor.getStatistic().getFilesErrorOccured() + ">", extractor.getStatistic().getFilesErrorOccured() == 0) ;
         assertTrue(extractor.getStatistic().getFilesExtractionDone() == 1);
         assertTrue(extractor.getStatistic().getFilesSkipped() == 0);
         assertTrue(extractor.getStatistic().getErrorList().size() == 0);
+    }
+    
+    /**
+     * Test doc - should be done by Tika now, but is corrupt
+     * @throws Exception
+     */
+    @Test
+    public void testDirWithCorruptDocFile() throws Exception
+    {
+        
+        extractor.init(new File("src/test/resources/19"));
+        extractor.extractFulltexts(new File("src/test/resources/19/escidoc_1454595+content+content.0"));
+        extractor.finalizeExtraction();
+        
+        assertFalse((new File(extractor.getFulltextPath(), "escidoc_1454595+content+content.0.txt")).exists());
+        
+        assertTrue("Is " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == FILES_TOTAL);
+        assertTrue("expected <0> got <" + extractor.getStatistic().getFilesErrorOccured() + ">", extractor.getStatistic().getFilesErrorOccured() == 1) ;
+        assertTrue(extractor.getStatistic().getFilesExtractionDone() == 0);
+        assertTrue(extractor.getStatistic().getFilesSkipped() == 0);
+        assertTrue(extractor.getStatistic().getErrorList().size() == 1);
     }
     
     /**
@@ -155,7 +178,7 @@ public class TestFulltextExtractor
         
         assertTrue((new File(extractor.getFulltextPath(), "escidoc_1956237+content+content.0.txt")).exists());
         
-        assertTrue("Is " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == 26);
+        assertTrue("Is " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == FILES_TOTAL);
         assertTrue("expected <0> got <" + extractor.getStatistic().getFilesErrorOccured() + ">", extractor.getStatistic().getFilesErrorOccured() == 0) ;
         assertTrue(extractor.getStatistic().getFilesExtractionDone() == 1);
         assertTrue(extractor.getStatistic().getFilesSkipped() == 0);
@@ -176,7 +199,7 @@ public class TestFulltextExtractor
         
         assertTrue((new File(extractor.getFulltextPath(), "escidoc_441261+content+content.0.txt")).exists());
         
-        assertTrue("Is " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == 26);
+        assertTrue("Is " + extractor.getStatistic().getFilesTotal(), extractor.getStatistic().getFilesTotal() == FILES_TOTAL);
         assertTrue("expected <0> got <" + extractor.getStatistic().getFilesErrorOccured() + ">", extractor.getStatistic().getFilesErrorOccured() == 0) ;
         assertTrue(extractor.getStatistic().getFilesExtractionDone() == 1);
         assertTrue(extractor.getStatistic().getFilesSkipped() == 0);
