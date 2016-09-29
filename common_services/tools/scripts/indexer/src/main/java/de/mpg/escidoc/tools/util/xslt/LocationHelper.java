@@ -97,7 +97,7 @@ public class LocationHelper
 		
 		if (loc == null)
 		{
-			logger.info("No location found for <" + objid + ">");
+			logger.warn("No location found for <" + objid + ">");
 		}
 		return loc;
 	}

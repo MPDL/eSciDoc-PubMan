@@ -631,7 +631,7 @@ public class Indexer
 				}
 				else if ("nocomponent".equals(de.getErrorCodeLocalPart()))
 				{
-					threadLogger.info("Component file missing for < " + file + ">");
+					threadLogger.warn("Component file missing for < " + file + ">");
 					indexingReport.addToErrorList(file.getName());
 					indexingReport.incrementFilesErrorOccured();
 				}

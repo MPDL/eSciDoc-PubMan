@@ -60,6 +60,7 @@ public class TriplestoreHelper {
 
             if (rs.next()) {
                 String result = rs.getString("pkey");
+                logger.info("Returned table number <" + result + ">");
                 if (rs.next()) {
                     // connection.close();
                     logger.warn("More than one entry was found for component <" + CONTEXT_OU_RELATION + ">");
