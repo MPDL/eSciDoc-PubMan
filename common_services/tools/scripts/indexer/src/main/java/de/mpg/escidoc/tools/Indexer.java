@@ -51,7 +51,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import de.escidoc.sb.common.lucene.analyzer.EscidocAnalyzer;
-import de.escidoc.sb.gsearch.xslt.SortFieldHelper;
 import de.mpg.escidoc.tools.util.IndexingReport;
 import de.mpg.escidoc.tools.util.Util;
 
@@ -559,7 +558,6 @@ public class Indexer
 				// should be called only in case of error explicitly; usual it's called in DocumentHandler
 				threadLogger.warn("Error occured during indexing <" + file.getName() + ">", e);
 				return;
-				//throw new RuntimeException(e);
 			}
 			cleanup();
 		}
@@ -757,13 +755,6 @@ public class Indexer
 			
 			indexer.finalizeIndex();
 			indexer.removeResumeFile();
-		}
-		
-		if (referenceIndexDir != null)
-		{
-			Validator validator = new Validator(indexer);
-			validator.setReferencePath(referenceIndexDir.getCanonicalPath());
-			
 		}
 
 		logger.info(indexer.getIndexingReport().toString());

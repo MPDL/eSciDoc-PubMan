@@ -158,8 +158,8 @@ public class TriplestoreHelper {
                     logger.warn("More than one entry was found for context <" + context + ">");
                 }
                 else {
-                    logger.debug("Returning <" + result + ">");
-                    return result;
+                    logger.debug("Returning <" + result.substring(result.lastIndexOf("/") + 1, result.length() -1) + ">");
+                    return result.substring(result.lastIndexOf("/") + 1, result.length() -1);
                 }
             }
             else {
