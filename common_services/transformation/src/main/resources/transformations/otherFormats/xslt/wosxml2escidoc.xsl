@@ -172,7 +172,6 @@
 	
 	<xsl:function name="escidocFunction:monthStringToNumber" as="xs:string">
 		<xsl:param name="monthStr"/>
-		
 		<xsl:choose>
 			<xsl:when test="$monthStr='JAN'">01</xsl:when>
 			<xsl:when test="$monthStr='FEB'">02</xsl:when>
@@ -350,7 +349,48 @@
 			<xsl:element name="dc:title">
 				<xsl:value-of select="CT"/>
 			</xsl:element>
-			<xsl:variable name="monthStr" select="substring-before(CY,' ')"/>
+			
+			
+			<!-- Format1: "JAN 19-21, 2016" -->
+			<xsl:variable name="eventDateFormatRegex1" select="'^(\w{3}) (\d{1,2})-(\d{1,2}), (\d{4})$'"/>
+			<!-- Format2: "JAN 19-JUL 21, 2016" -->
+			<xsl:variable name="eventDateFormatRegex2" select="'^(\w{3}) (\d{1,2})-(\w{3}) (\d{1,2}), (\d{4})$'"/>
+
+			<xsl:choose>
+				<xsl:when test="fn:matches(CY, $eventDateFormatRegex1)">
+					<xsl:comment>Event Date Case 1</xsl:comment>
+					<xsl:variable name="monthNumber" select="escidocFunction:monthStringToNumber(fn:replace(CY, $eventDateFormatRegex1, '$1'))"/>
+					<xsl:variable name="dayStartNumber" select="escidocFunction:fillDayWithZero(fn:replace(CY, $eventDateFormatRegex1, '$2'))"/>
+					<xsl:variable name="dayEndNumber" select="escidocFunction:fillDayWithZero(fn:replace(CY, $eventDateFormatRegex1, '$3'))"/>
+					<xsl:element name="eterms:start-date">
+						<xsl:value-of select="fn:replace(CY, $eventDateFormatRegex1, concat('$4-', $monthNumber, '-', $dayStartNumber))"/>
+					</xsl:element>
+					<xsl:element name="eterms:end-date">
+						<xsl:value-of select="fn:replace(CY, $eventDateFormatRegex1, concat('$4-', $monthNumber, '-', $dayEndNumber))"/>
+					</xsl:element>
+				</xsl:when>
+	
+				
+				<xsl:when test="fn:matches(CY, $eventDateFormatRegex2)">
+					<xsl:comment>Event Date Case 2</xsl:comment>
+					<xsl:variable name="monthStartNumber" select="escidocFunction:monthStringToNumber(fn:replace(CY, $eventDateFormatRegex2, '$1'))"/>
+					<xsl:variable name="dayStartNumber" select="escidocFunction:fillDayWithZero(fn:replace(CY, $eventDateFormatRegex2, '$2'))"/>
+					<xsl:variable name="monthEndNumber" select="escidocFunction:monthStringToNumber(fn:replace(CY, $eventDateFormatRegex2, '$3'))"/>
+					<xsl:variable name="dayEndNumber" select="escidocFunction:fillDayWithZero(fn:replace(CY, $eventDateFormatRegex2, '$4'))"/>
+					<xsl:element name="eterms:start-date">
+						<xsl:value-of select="fn:replace(CY, $eventDateFormatRegex2, concat('$5-', $monthStartNumber, '-', $dayStartNumber))"/>
+					</xsl:element>
+					<xsl:element name="eterms:end-date">
+						<xsl:value-of select="fn:replace(CY, $eventDateFormatRegex2, concat('$5-', $monthEndNumber, '-', $dayEndNumber))"/>
+					</xsl:element>
+				</xsl:when>
+			</xsl:choose>
+			<xsl:element name="eterms:place">
+				<xsl:value-of select="CL"/>
+			</xsl:element>
+			
+			<!--  OLD -->
+			<!-- <xsl:variable name="monthStr" select="substring-before(CY,' ')"/>
 			<xsl:variable name="month">
 				<xsl:choose>
 					<xsl:when test="$monthStr='JAN'">01</xsl:when>
@@ -391,6 +431,7 @@
 			<xsl:element name="eterms:place">
 				<xsl:value-of select="CL"/>
 			</xsl:element>
+			 -->
 		</xsl:element>
 	</xsl:template>
 	<!-- CREATOR -->
