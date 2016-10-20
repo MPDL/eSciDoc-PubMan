@@ -26,7 +26,7 @@ public class IndexFieldReader {
         List<String> fieldList = new ArrayList<String>(fieldnames);
         Collections.sort(fieldList);
         
-        FileUtils.writeLines(new File(indexDir + "/" + "fields.txt"), fieldList);
+        FileUtils.writeLines(new File(indexDir + "/../" + "fields.txt"), fieldList);
         
     }
 
