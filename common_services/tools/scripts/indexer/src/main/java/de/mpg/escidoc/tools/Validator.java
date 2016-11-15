@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,9 +25,6 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 
 import de.mpg.escidoc.services.common.exceptions.TechnicalException;
-import de.mpg.escidoc.services.common.XmlTransforming;
-import de.mpg.escidoc.services.common.valueobjects.publication.PubItemVO;
-import de.mpg.escidoc.services.common.xmltransforming.XmlTransformingBean;
 
 public class Validator
 {
@@ -64,6 +60,8 @@ public class Validator
 		"escidoc:2116439"	
 	};
 	
+	protected static int numberOfDocuments = 10;
+	
 	public Validator()
 	{
 	}
@@ -78,6 +76,22 @@ public class Validator
 		this(indexer);
 		this.setReferencePath(path);
 	}
+	
+	public Validator(String path1, String path2) throws CorruptIndexException, IOException
+    {
+	    indexer = new Indexer();
+	    
+	    if (!new File(path1).exists())
+        {
+            logger.warn("Invalid reference index path <" + path1 + ">");
+            throw new FileNotFoundException("Invalid reference index path <" + path1 + ">");
+        }
+        this.referenceIndexPath = path2;
+        
+        indexReader1 = IndexReader.open(FSDirectory.open(new File(path1)));
+        indexReader2 = IndexReader.open(FSDirectory.open(new File(path2)));
+        indexSearcher2 = new IndexSearcher(indexReader2);
+    }
 	
 	public void setReferencePath(String path) throws CorruptIndexException, IOException
 	{
@@ -99,7 +113,7 @@ public class Validator
 		Document document1 = null;
 		Document document2 = null;
 		
-		for (int i = 0; i < indexReader1.maxDoc(); i++)
+		for (int i = 0; i < Math.min(indexReader1.maxDoc(), numberOfDocuments); i++)
 		{			
 			document1 = indexReader1.document(i);	
 			document2 = getReferenceDocument(getObjidFieldName(), document1.get(getObjidFieldName()), indexSearcher2);
@@ -139,6 +153,8 @@ public class Validator
 			
 			logger.info("comparing skipped fields 1 - 2");
 			compareSkippedFields(m1, m2);
+			
+			logger.info("End verifying index documents with <" + document1.get(getObjidFieldName()) + ">");
 		}
 		
 		logger.info("Validator result \n" + indexer.getIndexingReport().toString());
@@ -149,7 +165,7 @@ public class Validator
 	}
 	
 	private String getObjidFieldName()
-	{
+	{	    
 		switch (indexer.getCurrentIndexMode())
 		{
 		case LATEST_RELEASE:
@@ -449,6 +465,24 @@ public class Validator
 			return false;
 		
 		return true;
+	}
+	
+	public static void main(String[] args)
+	{
+	    try {
+            Validator validator = new Validator(args[0], args[1]);
+            
+            logger.info("Comparing <" + args[0]+ " to <" + args[1] + ">");
+            
+            validator.compareToReferenceIndex();
+        } catch (CorruptIndexException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+	    
 	}
 
 

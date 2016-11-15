@@ -176,6 +176,26 @@
 							<goal>single</goal>
 						</goals>
 					</execution>
+					
+					<execution>
+						<id>build-validator</id>
+						<configuration>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<archive>
+								<manifest>
+									<addClasspath>true</addClasspath>
+									<mainClass>de.mpg.escidoc.tools.Validator</mainClass>
+								</manifest>
+							</archive>
+							<finalName>${project.artifactId}-validator</finalName>
+						</configuration>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>

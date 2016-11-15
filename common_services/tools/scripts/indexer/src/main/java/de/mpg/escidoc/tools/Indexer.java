@@ -125,7 +125,24 @@ public class Indexer
 	
 	public IndexMode currentIndexMode = IndexMode.LATEST_VERSION;
 	
+ 
+    public Indexer() throws IOException {
+        InputStream s = getClass().getClassLoader().getResourceAsStream(propFileName);
 
+        if (s != null) {
+            properties.load(s);
+            logger.info(properties.toString());
+        } else {
+            throw new FileNotFoundException("Not found " + propFileName);
+        }
+
+        try {
+            this.init();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 	
 	/**
 	 * Constructor with initial base directory, should be the fedora "objects" directory.
