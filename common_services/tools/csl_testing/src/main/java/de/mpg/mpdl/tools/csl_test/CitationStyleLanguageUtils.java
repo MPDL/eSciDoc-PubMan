@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -30,6 +31,7 @@ import de.undercouch.citeproc.helper.CSLUtils;
  */
 public class CitationStyleLanguageUtils
 {
+    private final static Logger logger = Logger.getLogger(CitationStyleLanguageUtils.class);
 
     /**
      * gets a csl style from a url
@@ -47,12 +49,12 @@ public class CitationStyleLanguageUtils
         }
         catch (MalformedURLException e)
         {
-            System.out.println("URL seems to be malformed, when trying to retrieve the csl style\n" + e.toString());
+            logger.error("URL seems to be malformed, when trying to retrieve the csl style", e);
             throw new Exception(e);
         }
         catch (IOException e)
         {
-            System.out.println("IO-Problem, when trying to retrieve the csl style\n" + e.toString());
+            logger.error("IO-Problem, when trying to retrieve the csl style", e);
             throw new Exception(e);
         }
         return style;
@@ -89,16 +91,19 @@ public class CitationStyleLanguageUtils
         }
         catch (JsonParseException e)
         {
-            System.out.println("Error parsing json from URL (" + url + ")\n" + e.toString());
+            logger.error("Error parsing json from URL (" + url + ")", e);
             throw new Exception(e);
         }
         catch (IOException e)
         {
-            System.out.println("Error getting json from URL (" + url + ")\n" + e.toString());
+            logger.error("Error getting json from URL (" + url + ")", e);
             throw new Exception(e);
         }
-        System.out.println("Successfully parsed CSL-XML from URL (" + url + ")\n--------------------\n" + xml
+        if (logger.isDebugEnabled())
+        {
+            logger.debug("Successfully parsed CSL-XML from URL (" + url + ")\n--------------------\n" + xml
                     + "\n--------------------\n");
+        }
         return xml;
     }
 
@@ -123,23 +128,24 @@ public class CitationStyleLanguageUtils
         }
         catch (ParserConfigurationException e)
         {
-            System.out.println("Wrong parser configuration\n" + e.toString());
+            logger.error("Wrong parser configuration", e);
             return null;
         }
         catch (SAXException e)
         {
-            System.out.println("Problem creating XML\n" + e.toString());
+            logger.error("Problem creating XML", e);
             return null;
         }
         catch (IOException e)
         {
-            System.out.println("Problem transforming String to InputStream\n" + e.toString());
+            logger.error("Problem transforming String to InputStream", e);
             return null;
         }
         catch (Exception e)
         {
             // this is just the case when there is no attribute 'default-locale'
-            System.out.println("Error getting default-locale attribute\n" + e.toString());
+            if (logger.isDebugEnabled())
+                logger.debug("Error getting default-locale attribute", e);
             return null;
         }
         return defaultLocale;
@@ -165,28 +171,30 @@ public class CitationStyleLanguageUtils
             if (tagList != null && tagList.getLength() != 0)
             {
                 tag = tagList.item(0).getFirstChild().getNodeValue();
-                System.out.println("successfully parsed tag <" + tagList.item(0).getNodeName() + ">");
+                if (logger.isDebugEnabled())
+                    logger.debug("successfully parsed tag <" + tagList.item(0).getNodeName() + ">");
             }
         }
         catch (ParserConfigurationException e)
         {
-            System.out.println("Wrong parser configuration\n" + e.toString());
+            logger.error("Wrong parser configuration", e);
             return null;
         }
         catch (SAXException e)
         {
-            System.out.println("Problem creating XML\n" + e.toString());
+            logger.error("Problem creating XML", e);
             return null;
         }
         catch (IOException e)
         {
-            System.out.println("Problem transforming String to InputStream\n" + e.toString());
+            logger.error("Problem transforming String to InputStream", e);
             return null;
         }
         catch (Exception e)
         {
             // this is just the case when there is no attribute 'default-locale'
-            System.out.println("Error getting value for <" + tagName + ">\n" + e.toString());
+            if (logger.isDebugEnabled())
+                logger.debug("Error getting value for <" + tagName + ">", e);
             return null;
         }
         return tag;
