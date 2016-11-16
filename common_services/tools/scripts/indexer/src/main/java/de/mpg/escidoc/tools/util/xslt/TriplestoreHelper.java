@@ -97,7 +97,7 @@ public class TriplestoreHelper {
     }
 
     public String getContextOuRelationName() {
-        return this.context_ou_table;
+        return context_ou_table;
     }
 
     /**
