@@ -18,7 +18,8 @@ public class TestTriplestoreHelper
 	public void testGetOrganizationFor()
 	{
 		assertTrue(TriplestoreHelper.getInstance().getOrganizationFor("escidoc:1703283") != null);
-		assertTrue(TriplestoreHelper.getInstance().getOrganizationFor("escidoc:1703283").equals("<info:fedora/escidoc:1664137>"));
+		String id = TriplestoreHelper.getInstance().getOrganizationFor("escidoc:1703283");
+		assertTrue(id.equals("escidoc:1664137"));
 	}
 
 }
