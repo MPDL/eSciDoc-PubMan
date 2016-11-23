@@ -17,7 +17,7 @@ extract.pdfbox-app-jar.path = /usr/share/jboss/server/default/conf/pdfbox-app-1.
 #	
 			
 # directory to write the result of the indexing process to 
-index.result.directory = /X/index_test/indexer/index
+index.result.directory = /X/index_test/indexer/index1
 
 # create a new lucene index directory (true/false)
 index.result.directory.create = true
@@ -33,12 +33,12 @@ index.db.file.generate = false
 index.fulltexts.path = /X/index_test/indexer/fulltexts
 
 # path of indexing stylesheet to be used
-#index.stylesheet = mpdlEscidocXmlToLucene.xslt
-index.stylesheet = itemContainerAdminXmlToLucene.xslt
+#index.stylesheet = mpdlEscidocXmlToLuceneForIndexer.xslt
+index.stylesheet = itemContainerAdminXmlToLuceneForIndexer.xslt
 
 # path of stylesheet attributes
-index.stylesheet.attributes = ./gsearchAttributes.xslt
 #index.stylesheet.attributes = ./gsearchAttributes.xslt
+index.stylesheet.attributes = ./permissions.xslt
 
 # index name to be built, may be also set by command line
 #index.name.built = escidoc_all
