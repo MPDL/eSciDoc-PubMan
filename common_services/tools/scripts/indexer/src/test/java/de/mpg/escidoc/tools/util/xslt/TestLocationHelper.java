@@ -14,7 +14,7 @@ public class TestLocationHelper
 	protected static Indexer indexer;
 	
 	@BeforeClass
-	public  static void setUp() throws Exception
+	public static void setUp() throws Exception
 	{
 		indexer = new Indexer(new File("src/test/resources/20"));
 		indexer.init();
@@ -27,14 +27,14 @@ public class TestLocationHelper
 	{
 		assertTrue(LocationHelper.getLocation("escidoc:persistent13") != null);
 		assertTrue("Is " + LocationHelper.getLocation("escidoc:persistent13"), 
-				LocationHelper.getLocation("escidoc:persistent13").endsWith("indexer/src/test/resources/20/ous/escidoc_persistent13"));
+				LocationHelper.getLocation("escidoc:persistent13").endsWith("ous/escidoc_persistent13"));
 		
 		assertTrue("Is " + LocationHelper.getLocation("escidoc:24022"), 
-				LocationHelper.getLocation("escidoc:24022").endsWith("indexer/src/test/resources/20/ous/escidoc_24022"));
+				LocationHelper.getLocation("escidoc:24022").endsWith("ous/escidoc_24022"));
 		
 		assertTrue(LocationHelper.getLocation("escidoc:persistent22") != null);
 		assertTrue("Is " + LocationHelper.getLocation("escidoc:persistent22"), 
-				LocationHelper.getLocation("escidoc:persistent22").endsWith("indexer/src/test/resources/20/ous/escidoc_persistent22"));
+				LocationHelper.getLocation("escidoc:persistent22").endsWith("ous/escidoc_persistent22"));
 	}
 
 }

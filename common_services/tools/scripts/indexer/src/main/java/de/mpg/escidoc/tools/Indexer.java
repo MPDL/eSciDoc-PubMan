@@ -81,7 +81,6 @@ public class Indexer
 	
 	// name of the index inside the index to be built
 	private String indexName;
-	private String indexAttributesName;
 	
 	// absolute name of the directory containing the extracted fulltexts
 	private String fulltextDir;
@@ -212,7 +211,7 @@ public class Indexer
 			this.indexName = properties.getProperty("index.name.built");
 		}
 		this.currentIndexMode = ("escidoc_all".equals(this.indexName) ? IndexMode.LATEST_RELEASE : IndexMode.LATEST_VERSION);
-		this.indexAttributesName = properties.getProperty("index.stylesheet.attributes");
+//		this.indexAttributesName = properties.getProperty("index.stylesheet.attributes");
 				
 		String mDate = properties.getProperty("index.modification.date", "0");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");					
@@ -478,8 +477,7 @@ public class Indexer
 		catch (Exception e)
 		{
 			logger.warn("Indexing interrupted at <" + currentDir + ">", e);
-			FileWriter writer = new FileWriter(new File(resumeFilename));
-			writer.write(currentDir);
+			new FileWriter(new File(resumeFilename)).write(currentDir);
 		}		
 	}
 	
@@ -624,7 +622,7 @@ public class Indexer
 				long e1 = System.currentTimeMillis();
 				threadLogger.info("FOXML2eSciDoc transformation used <" + (e1 - s1) + "> ms");
 				
-				if (threadLogger.isDebugEnabled())
+				if (threadLogger.isDebugEnabled() || threadLogger.isTraceEnabled())
 				{
 					File tmpFile1 = File.createTempFile(file.getName() + "_foxml2escidoc_", ".tmp");
 					FileUtils.writeStringToFile(tmpFile1, writer1.toString());
@@ -658,7 +656,7 @@ public class Indexer
 			long e2 = System.currentTimeMillis();
 			threadLogger.info("eSciDoc2IndexDoc transformation used <" + (e2 - s2) + "> ms");
 			
-			if (threadLogger.isDebugEnabled())
+			if (threadLogger.isDebugEnabled()  || threadLogger.isTraceEnabled())
 			{
 				File tmpFile2 = File.createTempFile(file.getName() + "_idx_", ".tmp");			
 				FileUtils.writeStringToFile(tmpFile2, writer2.toString());
