@@ -86,11 +86,13 @@
 			<artifactId>locales</artifactId>
 			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>org.mozilla</groupId>
 			<artifactId>rhino</artifactId>
 			<version>1.7R4</version>
 		</dependency>
+		 -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.codehaus.plexus.util.StringUtils;
 
 public class TriplestoreHelper {
     private static final Logger logger = Logger.getLogger(TriplestoreHelper.class);
@@ -60,6 +61,7 @@ public class TriplestoreHelper {
 
             if (rs.next()) {
                 String result = rs.getString("pkey");
+                logger.info("Returned table number <" + result + ">");
                 if (rs.next()) {
                     // connection.close();
                     logger.warn("More than one entry was found for component <" + CONTEXT_OU_RELATION + ">");
@@ -95,7 +97,7 @@ public class TriplestoreHelper {
     }
 
     public String getContextOuRelationName() {
-        return this.context_ou_table;
+        return context_ou_table;
     }
 
     /**
@@ -131,18 +133,26 @@ public class TriplestoreHelper {
 
         if (elementPath != null && elementPath.endsWith("organizational-unit")) {
             String contextId = restUri.substring(restUri.lastIndexOf("/") + 1);
-
-            logger.debug("contextId <" + contextId + ">");
+            
+            if (StringUtils.isEmpty(contextId)) {
+                logger.warn("Got empty contextId - returning empty string");
+                return "";
+            }
+            if (logger.isDebugEnabled()) {
+                logger.debug("contextId <" + contextId + ">");
+            }
             return TriplestoreHelper.getInstance().getOrganizationFor(contextId);
         }
-        logger.debug("Nothing found");
         return "";
 
     }
 
     String getOrganizationFor(String context) {
+        
         String sql = "SELECT o FROM " + context_ou_table + " WHERE s LIKE ?";
-        logger.debug("SQL: " + sql);
+        if (logger.isDebugEnabled()) {
+            logger.debug("SQL: " + sql);
+        }
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -153,26 +163,19 @@ public class TriplestoreHelper {
             if (rs.next()) {
                 String result = rs.getString("o");
                 if (rs.next()) {
-                    // connection.close();
                     logger.warn("More than one entry was found for context <" + context + ">");
                 }
                 else {
-                    logger.debug("Returning <" + result + ">");
-                    return result;
+                    logger.debug("Returning <" + result.substring(result.lastIndexOf("/") + 1, result.length() -1) + ">");
+                    return result.substring(result.lastIndexOf("/") + 1, result.length() -1);
                 }
             }
             else {
-                connection.close();
-                logger.warn("No organization was found in tmap for  <" + context + ">");
+                logger.warn("No organization was found in tmap for context <" + context + ">");
             }
         }
-        catch (SQLException sqle) {
-            try {
-                connection.close();
-            }
-            catch (Exception e) {
-                logger.error("Error trying to close the connection", e);
-            }
+        catch (SQLException sqle) {            
+                logger.warn("SQl exception occured ", sqle);
         }
         return null;
     }

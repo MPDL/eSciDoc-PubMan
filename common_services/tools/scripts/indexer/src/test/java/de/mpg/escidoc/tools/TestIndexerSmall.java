@@ -1,4 +1,4 @@
-package de.mpg.escidoc.tools.reindex;
+package de.mpg.escidoc.tools;
 
 import static org.junit.Assert.assertTrue;
 
@@ -20,10 +20,19 @@ import de.mpg.escidoc.tools.util.xslt.LocationHelper;
 
 public class TestIndexerSmall
 {
-	private static final String JBOSS_SERVER_LUCENE_ESCIDOC_ALL = "C:/Test/tmp/escidoc_all";
-	//private static final String JBOSS_SERVER_LUCENE_ESCIDOC_ALL = "C:/Test/tmp/item_container_admin";
-	//private static final String JBOSS_SERVER_LUCENE_ESCIDOC_ALL = "C:/tmp/jboss/server/default/data/index/lucene/item_container_admin";
-	
+    // the directory containing all Fedora test objects as items, components and organizational units
+    public static final String TEST_RESOURCES_OBJECTS = "src/test/resources/20/";
+    
+    // the directory containing all Fedora fulltext objects
+    public static final String TEST_RESOURCES_FULLTEXTS = "src/test/resources/19/";
+    
+    public static final int INDEXING_ERROR_OCCURED = 1;
+    public static final int SKIPPED_LATEST_VERSION = 71;
+    public static final int SKIPPED_LATEST_RELEASE = 74;
+    
+    public static final int INDEXING_DONE_LATEST_RELEASE = 20;
+    public static final int INDEXING_DONE_LATEST_VERSION = 23;
+
 	protected static Indexer indexer;
 	protected static FullTextExtractor extractor;
 	protected static Validator validator;
@@ -34,60 +43,59 @@ public class TestIndexerSmall
 		
 		extractor = new FullTextExtractor();
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2110752+content+content.0"));
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2110752+content+content.0"));
 		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2110752+content+content.0"));
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2111415+content+content.0"));
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2111415+content+content.0"));
 		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2111415+content+content.0"));
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2110507+content+content.0"));
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2110507+content+content.0"));
 		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2110507+content+content.0"));
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2111497+content+content.0"));
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2111497+content+content.0"));
 		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2111497+content+content.0"));
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2111498+content+content.0"));
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2111498+content+content.0"));
 		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2111498+content+content.0"));
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2111499+content+content.0"));
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2111499+content+content.0"));
 		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2111499+content+content.0"));
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2111713+content+content.0"));
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2111713+content+content.0"));
 		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2111713+content+content.0"));
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2111687+content+content.0"));
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2111687+content+content.0"));
 		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2111687+content+content.0"));
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2120374+content+content.0"));
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2120374+content+content.0"));
 		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2120374+content+content.0"));	
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2165635+content+content.0"));
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2165635+content+content.0"));
 		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2165635+content+content.0"));	
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2149144+content+content.0"));
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2149144+content+content.0"));
 		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2149144+content+content.0"));	
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2149275+content+content.0"));
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2149275+content+content.0"));
 		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2149275+content+content.0"));	
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2149276+content+content.0"));
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2149276+content+content.0"));
 		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2149276+content+content.0"));	
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2149277+content+content.0"));
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2149277+content+content.0"));
 		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2149277+content+content.0"));	
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2149278+content+content.0"));
-		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2149278+content+content.0"));	
+		extractor.init(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2149278+content+content.0"));
+		extractor.extractFulltexts(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2149278+content+content.0"));	
 		
-		extractor.init(new File("src/test/resources/19/escidoc_2086800+content+content.0"));
-		extractor.extractFulltexts(new File("src/test/resources/19/escidoc_2086800+content+content.0"));	
+		extractor.extractFulltexts(new File(TEST_RESOURCES_FULLTEXTS + "escidoc_2086800+content+content.0"));	
 		
 	}
 	
 	@Before
 	public void setUp() throws Exception
 	{
-		indexer = new Indexer(new File("src/test/resources/20"));
+		indexer = new Indexer(new File(TEST_RESOURCES_OBJECTS));
 		indexer.init();
 
 		indexer.setCreateIndex(true);
@@ -106,28 +114,28 @@ public class TestIndexerSmall
 	public void testDir() throws Exception
 	{
 
-		indexer.indexItemsStart(new File("src/test/resources/20"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS));
 		indexer.finalizeIndex();
 		
 		switch (indexer.getCurrentIndexMode())
 		{
 		case LATEST_RELEASE:
-			assertTrue("Expected 19 Found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 19);
-			
-			assertTrue(indexer.getIndexingReport().getFilesErrorOccured() == 2);
-			assertTrue(indexer.getIndexingReport().getFilesSkippedBecauseOfTime() == 0);
+			assertTrue("Expected " + INDEXING_DONE_LATEST_RELEASE + " Found " + indexer.getIndexingReport().getFilesIndexingDone(), 
+			        indexer.getIndexingReport().getFilesIndexingDone() == INDEXING_DONE_LATEST_RELEASE);	
 			assertTrue("Is "+ indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType(), 
-					indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType() == 71);
+	                indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType() == SKIPPED_LATEST_RELEASE);
 			break;
 		case LATEST_VERSION:
-			assertTrue("Expected 22 Found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 22);
-			
-			assertTrue(indexer.getIndexingReport().getFilesErrorOccured() == 2);
-			assertTrue(indexer.getIndexingReport().getFilesSkippedBecauseOfTime() == 0);
+			assertTrue("Expected " + INDEXING_DONE_LATEST_VERSION + " Found " + indexer.getIndexingReport().getFilesIndexingDone(), 
+			        indexer.getIndexingReport().getFilesIndexingDone() == INDEXING_DONE_LATEST_VERSION);	
 			assertTrue("Is "+ indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType(), 
-					indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType() == 68);
+	                indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType() == SKIPPED_LATEST_VERSION);
 			break;
 		}
+		
+		assertTrue(indexer.getIndexingReport().getFilesErrorOccured() == INDEXING_ERROR_OCCURED);
+		assertTrue(indexer.getIndexingReport().getFilesSkippedBecauseOfTime() == 0);
+		
 	}
 	
 	@Test
@@ -135,11 +143,11 @@ public class TestIndexerSmall
 	// has reference
 	public void testItemWithoutComponent() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2110501"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2110501"));
 		indexer.finalizeIndex();
 		
 		validator = new Validator(indexer);
-		validator.setReferencePath(JBOSS_SERVER_LUCENE_ESCIDOC_ALL);
+		validator.setReferencePath();
 		
 		validator.compareToReferenceIndex();
 		
@@ -157,7 +165,7 @@ public class TestIndexerSmall
 	// has no reference
 	public void testItemMultipleAuthors() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2028454"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2028454"));
 		indexer.finalizeIndex();
 		
 		validator = new Validator(indexer);
@@ -188,7 +196,7 @@ public class TestIndexerSmall
 	@Test
 	public void testItemWithVisibleComponent() throws Exception
 	{	
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2110541"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2110541"));
 		indexer.finalizeIndex();
 		
 		assertTrue("Expected 1 Found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
@@ -199,7 +207,6 @@ public class TestIndexerSmall
 		assertTrue(indexer.getIndexingReport().getErrorList().size() == 0);
 		
 		validator = new Validator(indexer);
-		validator.setReferencePath(JBOSS_SERVER_LUCENE_ESCIDOC_ALL);
 	
 		validator.compareToReferenceIndex();
 		Map<String, Set<Fieldable>> fieldMap = validator.getFieldsOfDocument();
@@ -229,7 +236,7 @@ public class TestIndexerSmall
 	@Test
 	public void testItemWithLocator() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2095302"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2095302"));
 		indexer.finalizeIndex();
 		
 		assertTrue("Expected 1 Found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
@@ -260,7 +267,7 @@ public class TestIndexerSmall
 	public void testItemWithPrivateComponent() throws Exception
 	{
 
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2146780"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2146780"));
 		indexer.finalizeIndex();
 				
 		assertTrue("Expected 1 Found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
@@ -274,7 +281,16 @@ public class TestIndexerSmall
 		Set<Fieldable> fields = fieldMap.get(getFieldNameFor("stored_filename1"));
 		assertTrue(fields == null);
 		fields = fieldMap.get(getFieldNameFor("stored_fulltext"));
-		assertTrue(fields == null);
+		
+		switch(indexer.getCurrentIndexMode()) {
+
+        case LATEST_RELEASE:
+            assertTrue(fields == null);
+            break;
+        case LATEST_VERSION:
+            assertTrue(fields != null);
+            break;
+        }
 	}
 
 	
@@ -284,7 +300,7 @@ public class TestIndexerSmall
 	public void testImportTaskItem() throws Exception
 	{
 
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2110484"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2110484"));
 		indexer.finalizeIndex();
 		
 		validator = new Validator(indexer);
@@ -303,7 +319,7 @@ public class TestIndexerSmall
 	@Test
 	public void testImportTaskItem_699472() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_699472"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_699472"));
 		indexer.finalizeIndex();
 		
 		validator = new Validator(indexer);
@@ -322,7 +338,7 @@ public class TestIndexerSmall
 	@Test
 	public void testYearBookItem_2087435() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2087435"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2087435"));
 		indexer.finalizeIndex();
 		
 		validator = new Validator(indexer);
@@ -341,7 +357,7 @@ public class TestIndexerSmall
 	@Test
 	public void testYearBookItem_2096427() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2096427"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2096427"));
 		indexer.finalizeIndex();
 		
 		validator = new Validator(indexer);
@@ -360,7 +376,7 @@ public class TestIndexerSmall
 	@Test
 	public void testImportTaskItem_590478() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_590478"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_590478"));
 		indexer.finalizeIndex();
 		
 		validator = new Validator(indexer);
@@ -380,7 +396,7 @@ public class TestIndexerSmall
 	public void testPendingItem() throws Exception
 	{
 
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2087580"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2087580"));
 		indexer.finalizeIndex();
 	
 		validator = new Validator(indexer);
@@ -415,7 +431,7 @@ public class TestIndexerSmall
 	public void testPendingItemWithComponent() throws Exception
 	{
 
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2165636"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2165636"));
 		indexer.finalizeIndex();
 	
 		validator = new Validator(indexer);
@@ -451,7 +467,7 @@ public class TestIndexerSmall
 	public void testReleasedItemWithManyComponents() throws Exception
 	{
 
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2148921"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2148921"));
 		indexer.finalizeIndex();
 	
 		validator = new Validator(indexer);
@@ -483,7 +499,7 @@ public class TestIndexerSmall
 	@Test
 	public void testReleased_2110486_locator() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2110486"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2110486"));
 		indexer.finalizeIndex();
 		
 		assertTrue("Expected 1 found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
@@ -491,7 +507,6 @@ public class TestIndexerSmall
 		assertTrue(indexer.getIndexingReport().getFilesSkippedBecauseOfTime() == 0);
 		
 		validator = new Validator(indexer);
-		validator.setReferencePath(JBOSS_SERVER_LUCENE_ESCIDOC_ALL);
 		
 		Map<String, Set<Fieldable>> fieldMap = validator.getFieldsOfDocument();
 		assertTrue(fieldMap != null);
@@ -516,11 +531,10 @@ public class TestIndexerSmall
 	public void testReleasedItemWithoutComponent() throws Exception
 	{
 
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2110474"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2110474"));
 		indexer.finalizeIndex();
 		
 		validator = new Validator(indexer);
-		validator.setReferencePath(JBOSS_SERVER_LUCENE_ESCIDOC_ALL);
 		
 		validator.compareToReferenceIndex();
 		
@@ -542,7 +556,7 @@ public class TestIndexerSmall
 	public void testReleasedItem_2110495() throws Exception
 	{
 
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2110495"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2110495"));
 		indexer.finalizeIndex();
 		
 		assertTrue("Expected 1 found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
@@ -562,8 +576,6 @@ public class TestIndexerSmall
 		assertTrue(fieldMap.get(getFieldNameFor("stored_fulltext")) == null);
 		
 		//assertTrue(fieldMap.get("escidoc.property.created-by.name").equals("Nadine Schröder"));
-
-		validator.setReferencePath(JBOSS_SERVER_LUCENE_ESCIDOC_ALL);
 		
 		validator.compareToReferenceIndex();	
 		
@@ -577,11 +589,10 @@ public class TestIndexerSmall
 	public void testReleasedItem_2110508() throws Exception
 	{
 
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2110508"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2110508"));
 		indexer.finalizeIndex();
 		
 		validator = new Validator(indexer);
-		validator.setReferencePath(JBOSS_SERVER_LUCENE_ESCIDOC_ALL);
 		
 		validator.compareToReferenceIndex();
 		
@@ -602,11 +613,10 @@ public class TestIndexerSmall
 	@Test
 	public void testReleasedItem_2110529_locator() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2110529"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2110529"));
 		indexer.finalizeIndex();
 		
 		validator = new Validator(indexer);
-		validator.setReferencePath(JBOSS_SERVER_LUCENE_ESCIDOC_ALL);
 		
 		validator.compareToReferenceIndex();
 		
@@ -626,7 +636,7 @@ public class TestIndexerSmall
 	@Test
 	public void testReleasedItem_2110549_locator() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2110549"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2110549"));
 		indexer.finalizeIndex();
 		
 		assertTrue("Expected 1 found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
@@ -634,12 +644,10 @@ public class TestIndexerSmall
 		assertTrue(indexer.getIndexingReport().getFilesSkippedBecauseOfTime() == 0);
 		
 		validator = new Validator(indexer);
-		validator.setReferencePath(JBOSS_SERVER_LUCENE_ESCIDOC_ALL);
 		Map<String, Set<Fieldable>> fieldMap = validator.getFieldsOfDocument();
 		assertTrue(fieldMap != null);		
 		
 		validator = new Validator(indexer);
-		validator.setReferencePath(JBOSS_SERVER_LUCENE_ESCIDOC_ALL);
 		
 		validator.compareToReferenceIndex();	
 		assertTrue(Arrays.toString(indexer.getIndexingReport().getErrorList().toArray()), 
@@ -651,7 +659,7 @@ public class TestIndexerSmall
 	@Test
 	public void testWithdrawnItem_2110608() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2110608"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2110608"));
 		indexer.finalizeIndex();
 		
 		switch(indexer.currentIndexMode)
@@ -675,7 +683,7 @@ public class TestIndexerSmall
 	public void testItem_2149549() throws Exception
 	{
 		indexer.createDatabase();
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2149549"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2149549"));
 		indexer.finalizeIndex();
 		
 		assertTrue("Expected 1 found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
@@ -715,7 +723,7 @@ public class TestIndexerSmall
 	@Test
 	public void testReleasedItem_2111614() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2111614"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2111614"));
 		indexer.finalizeIndex();
 		
 		assertTrue("Expected 1 found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
@@ -730,7 +738,7 @@ public class TestIndexerSmall
 	@Test
 	public void testReleasedItem_2111689() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2111689"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2111689"));
 		indexer.finalizeIndex();
 		
 		assertTrue("Expected 1 found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
@@ -744,7 +752,7 @@ public class TestIndexerSmall
 	@Test
 	public void testReleasedItem_2111495() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2111495"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2111495"));
 		indexer.finalizeIndex();
 		
 		assertTrue("Expected 1 found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
@@ -753,7 +761,6 @@ public class TestIndexerSmall
 		assertTrue(indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType() == 0);
 		
 		validator = new Validator(indexer);
-		validator.setReferencePath(JBOSS_SERVER_LUCENE_ESCIDOC_ALL);
 		
 		validator.compareToReferenceIndex();
 		assertTrue(Arrays.toString(indexer.getIndexingReport().getErrorList().toArray()), 
@@ -765,7 +772,7 @@ public class TestIndexerSmall
 	@Test
 	public void testReleasedItem_2111711() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2111711"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2111711"));
 		indexer.finalizeIndex();
 		
 		assertTrue("Expected 1 found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
@@ -774,7 +781,6 @@ public class TestIndexerSmall
 		assertTrue(indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType() == 0);
 		
 		validator = new Validator(indexer);
-		validator.setReferencePath(JBOSS_SERVER_LUCENE_ESCIDOC_ALL);
 		
 		Map<String, Set<Fieldable>> fieldMap = validator.getFieldsOfDocument();
 		
@@ -805,7 +811,7 @@ public class TestIndexerSmall
 	@Test
 	public void testReleasedItem_2120373() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2120373"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2120373"));
 		indexer.finalizeIndex();
 		
 		assertTrue("Expected 1 found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
@@ -814,7 +820,6 @@ public class TestIndexerSmall
 		assertTrue(indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType() == 0);
 		
 		validator = new Validator(indexer);
-		validator.setReferencePath(JBOSS_SERVER_LUCENE_ESCIDOC_ALL);
 		
 		Map<String, Set<Fieldable>> fieldMap = validator.getFieldsOfDocument();
 		
@@ -847,7 +852,7 @@ public class TestIndexerSmall
 	@Test
 	public void testItemComponentMissing_2163640() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2163640"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2163640"));
 		indexer.finalizeIndex();
 		
 		assertTrue("Expected 0 found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 0);
@@ -866,7 +871,7 @@ public class TestIndexerSmall
 	@Test
 	public void testItemWithRevision_2086801() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2086801"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2086801"));
 		indexer.finalizeIndex();
 		
 		assertTrue("Expected 1 found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
@@ -885,7 +890,7 @@ public class TestIndexerSmall
 	@Test
 	public void testIndexWriteMode() throws Exception
 	{
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2120373"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2120373"));
 		indexer.finalizeIndex();
 		
 		Properties properties = new Properties();
@@ -903,20 +908,20 @@ public class TestIndexerSmall
 		assertTrue(indexer.getIndexWriter().maxDoc() == 1);
 
 		// add one index document more
-		indexer = new Indexer(new File("src/test/resources/20"));
+		indexer = new Indexer(new File(TEST_RESOURCES_OBJECTS));
 		indexer.init();
 		indexer.setCreateIndex(false);
 		indexer.prepareIndex();
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2111711"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2111711"));
 		indexer.finalizeIndex();
 		assertTrue("Found " + indexer.getIndexWriter().maxDoc(), indexer.getIndexWriter().maxDoc() == 2);
 		
 		// and again
-		indexer = new Indexer(new File("src/test/resources/20"));
+		indexer = new Indexer(new File(TEST_RESOURCES_OBJECTS));
 		indexer.init();
 		indexer.setCreateIndex(false);
 		indexer.prepareIndex();
-		indexer.indexItemsStart(new File("src/test/resources/20/escidoc_2110486"));
+		indexer.indexItemsStart(new File(TEST_RESOURCES_OBJECTS + "escidoc_2110486"));
 		indexer.finalizeIndex();
 		assertTrue("Found " + indexer.getIndexWriter().maxDoc(), indexer.getIndexWriter().maxDoc() == 3);
 		

@@ -35,7 +35,9 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +62,7 @@ import net.sf.jasperreports.engine.export.JRTextExporterParameter;
 import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.tika.sax.XHTMLContentHandler;
 import org.docx4j.Docx4J;
@@ -67,11 +70,26 @@ import org.docx4j.convert.in.xhtml.FormattingOption;
 import org.docx4j.convert.in.xhtml.XHTMLImporter;
 import org.docx4j.convert.in.xhtml.XHTMLImporterImpl;
 import org.docx4j.convert.out.FOSettings;
+import org.docx4j.fonts.BestMatchingMapper;
+import org.docx4j.fonts.IdentityPlusMapper;
+import org.docx4j.fonts.Mapper;
+import org.docx4j.fonts.PhysicalFont;
+import org.docx4j.fonts.PhysicalFonts;
+import org.docx4j.jaxb.Context;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
+import org.docx4j.wml.DocDefaults.RPrDefault;
+import org.docx4j.wml.Fonts;
+import org.docx4j.wml.Fonts.Font;
+import org.docx4j.wml.ObjectFactory;
 import org.docx4j.wml.P;
 import org.docx4j.wml.PPrBase.PStyle;
+import org.docx4j.wml.ParaRPr;
 import org.docx4j.wml.R;
+import org.docx4j.wml.RFonts;
+import org.docx4j.wml.RPr;
+import org.docx4j.wml.Style;
+import org.docx4j.wml.Styles;
 import org.w3c.dom.Document;
 
 import de.mpg.escidoc.services.citation_style_language_manager.CitationStyleLanguageManagerDefaultImpl;
@@ -219,26 +237,118 @@ public class CitationStyleExecutor implements CitationStyleHandler{
 			{
 				String htmlResult = generateHtmlOutput(snippet, "html_plain", "xhtml", false);
 				
+				System.out.println("--------------------\nHTML Document:\n" + htmlResult + "\n--------------------");
+				
 				WordprocessingMLPackage wordOutputDoc = WordprocessingMLPackage.createPackage();
+				Mapper fontMapper = new BestMatchingMapper();
+				
+				// Set up font mapper
+                wordOutputDoc.setFontMapper(fontMapper);
+				
+				// Example of mapping missing font Algerian to installed font Comic Sans MS
+				PhysicalFont font = PhysicalFonts.getPhysicalFonts().get("Mona");
+				if (font != null) 
+				{
+				    System.out.println("FontReplace: " + font.getName());
+				    fontMapper.getFontMappings().put("Mona", font);
+				}
+				else
+                {
+                    System.out.println("NoSuchFont (Mona)");
+                }
+				
+				
+				if (font != null) 
+                {
+				    font = PhysicalFonts.getPhysicalFonts().get("DejaVu Sans");
+				    System.out.println("FontReplace: " + font.getName());
+                }
+				else
+                {
+                    System.out.println("NoSuchFont (DejaVu Sans)");
+                }
+				
+				fontMapper.getFontMappings().put("DejaVu Sans", font);
+				
+				
+				
 				XHTMLImporter xhtmlImporter = new XHTMLImporterImpl(wordOutputDoc);
+				
+				// Set different font
 				MainDocumentPart mdp = wordOutputDoc.getMainDocumentPart();
+
+//				Fonts fontContent = mdp.getFontTablePart().getContents();
+//				List<Font> fonts = fontContent.getFont();
+//              for (Font font : fonts)
+//              {
+//                  System.out.println(font.getName() + " (" + font.getFamily() + ")");
+//              }
+
+				Collection<PhysicalFont> pFonts = PhysicalFonts.getPhysicalFonts().values();
+				PhysicalFont pFont = null;
+				Iterator<PhysicalFont> iter = pFonts.iterator();
+				if (!pFonts.isEmpty())
+				{
+				    while(iter.hasNext())
+	                {
+	                    pFont = iter.next();
+//	                    System.out.println("Physical FONT: " + pFont.getName() + " (" + pFont.getEmbeddedFile() + " / " + pFont.getEmbedFontInfo() + ")");
+	                    System.out.println("Physical FONT: " + pFont.getName());
+	                }
+				}
+				else 
+				{
+				    System.out.println("NO Physical Fonts found");
+				}
+				
+				
+				Styles styles = mdp.getStyleDefinitionsPart().getContents();
+				
+				RPrDefault rprDefault = styles.getDocDefaults().getRPrDefault();
+				RPr rprDef = rprDefault.getRPr();
+				RFonts runFontDef = new RFonts();
+				runFontDef.setAscii("DejaVu Sans");
+				runFontDef.setHAnsi("DejaVu Sans");
+				runFontDef.setEastAsia("Mona");
+                rprDefault.setRPr(rprDef);
+				styles.getDocDefaults().setRPrDefault(rprDefault);
+				
+				ObjectFactory factory = Context.getWmlObjectFactory();
+				RPr rpr = factory.createRPr();
+				RFonts runFont = factory.createRFonts();
+                runFont.setAscii("DejaVu Sans");
+                runFont.setHAnsi("DejaVu Sans");
+                runFont.setEastAsia("Mona");
+                rpr.setRFonts(runFont);
+                
+				List<Style> stylesList = styles.getStyle();
+				for (Style style : stylesList)
+				{
+			        style.setRPr(rpr);
+				}
 				//mdp.addStyledParagraphOfText("Title", "Citation Style " + cs);
 
 				List<Object> xhtmlObjects = xhtmlImporter.convert(htmlResult,null);
-				
+//				ParaRPr paraRpr = factory.createParaRPr();
+//				paraRpr.setRFonts(runFont);
 				
 				//Remove line-height information for every paragraph
 				for(Object xhtmlObject : xhtmlObjects)
 				{
 					try {
 						P paragraph = (P) xhtmlObject;
+//						paragraph.getPPr().setRPr(paraRpr);
 						paragraph.getPPr().setSpacing(null);
+						for (Object obj : paragraph.getContent())
+						{
+						    R rObj = (R) obj;
+						    rObj.setRPr(null);
+						}
 					} catch (Exception e) {
-						logger.error("Error while removing spacing information during docx export");
+						logger.error("Error while setting paragraph configuration for docx export");
 					}
 					
 				}
-				
 				
 				mdp.getContent().addAll(xhtmlObjects);
 				
@@ -246,6 +356,8 @@ public class CitationStyleExecutor implements CitationStyleHandler{
 				mdp.getStyleDefinitionsPart().getStyleById("DocDefaults").getPPr().getSpacing().setAfter(BigInteger.valueOf(400));
 				
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				
+				System.out.println("--------------------\nResulting Document:\n" + wordOutputDoc.getMainDocumentPart().getXML() + "\n--------------------");
 				
 				if("docx".equals(outputFormat))
 				{
@@ -261,8 +373,7 @@ public class CitationStyleExecutor implements CitationStyleHandler{
 				
 				bos.flush();
 				result = bos.toByteArray();
-				
-				
+				System.out.println("--------------------\nResulting Document:\n" + IOUtils.toString(result, "UTF-8") + "\n--------------------");
 				
 			}
 

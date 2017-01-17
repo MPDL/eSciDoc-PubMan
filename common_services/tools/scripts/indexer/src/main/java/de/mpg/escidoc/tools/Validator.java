@@ -1,4 +1,4 @@
-package de.mpg.escidoc.tools.reindex;
+package de.mpg.escidoc.tools;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,14 +24,14 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 
-import de.mpg.escidoc.services.common.XmlTransforming;
 import de.mpg.escidoc.services.common.exceptions.TechnicalException;
-import de.mpg.escidoc.services.common.valueobjects.publication.PubItemVO;
-import de.mpg.escidoc.services.common.xmltransforming.XmlTransformingBean;
 
 public class Validator
 {
-	protected Indexer indexer;
+    private static final String JBOSS_SERVER_LUCENE_ESCIDOC_ALL = "C:/Test/tmp/escidoc_all";
+    private static final String JBOSS_SERVER_LUCENE_ITEM_CONTAINER_ADMIN = "C:/Test/tmp/item_container_admin";
+    
+	protected static Indexer indexer;
 	protected String referenceIndexPath;
 	
 	IndexReader indexReader1 = null;
@@ -40,20 +40,37 @@ public class Validator
 	
 	protected static Logger logger = Logger.getLogger(Validator.class);
 	
-	protected static String[] fieldNamesToSkip = {
+	protected static String[] fieldNamesToSkipInValidate = {
+	    
+	    // for LATEST_RELEASE
 		"xml_representation", 
 		"xml_metadata",
+		
+		// for LATEST_VERSION
 		"aa_xml_representation", 
 		"aa_xml_metadata",
 		"/base",
 		
-		// the following indexes causes problems because of encoding of '&' -> '&amp;'
+		// the following indexes cause problems because of encoding of '&' -> '&amp;'
 		// occurs only for item_container_admin index
 		"/title",
 		"/components/component/xLinkTitle"
 		};
 	
-	protected static String[] objidsToSkip = {
+	protected static String[] fieldNamesToCompare = {
+        
+        // for LATEST_RELEASE
+        "escidoc.property.latest-version.number", 
+        "escidoc.property.version.number",
+        "escidoc.property.version.status",
+        
+        // for LATEST_VERSION
+        "properties/latest-version/number",
+        "/properties/version/number", 
+        "/properties/version/status"
+        };
+	
+	protected static String[] objidsToSkipInValidate = {
 		"escidoc:2111614",
 		"escidoc:2111636",
 		"escidoc:2111643",
@@ -63,23 +80,48 @@ public class Validator
 		"escidoc:2116439"	
 	};
 	
+	protected static int numberOfDocuments = 10;
+	
 	public Validator()
 	{
 	}
 	
-	public Validator(Indexer indexer)
+	public Validator(Indexer indexer) throws CorruptIndexException, IOException
 	{
-		this.indexer = indexer;
+	    this.indexer = indexer;
+		this.setReferencePath();
 	}
 	
-	public Validator(Indexer indexer, String path) throws CorruptIndexException, IOException
-	{
-		this(indexer);
-		this.setReferencePath(path);
-	}
+	public Validator(String path1, String path2) throws CorruptIndexException, IOException
+    {
+	    indexer = new Indexer();
+	    
+	    if (!new File(path1).exists())
+        {
+            logger.warn("Invalid reference index path <" + path1 + ">");
+            throw new FileNotFoundException("Invalid reference index path <" + path1 + ">");
+        }
+        this.referenceIndexPath = path2;
+        
+        indexReader1 = IndexReader.open(FSDirectory.open(new File(path1)));
+        indexReader2 = IndexReader.open(FSDirectory.open(new File(path2)));
+        indexSearcher2 = new IndexSearcher(indexReader2);
+    }
 	
-	public void setReferencePath(String path) throws CorruptIndexException, IOException
+	public void setReferencePath() throws CorruptIndexException, IOException
 	{
+	    String path = "";
+	    
+	    switch (indexer.getCurrentIndexMode())
+        {
+        case LATEST_RELEASE:
+            path = JBOSS_SERVER_LUCENE_ESCIDOC_ALL;
+            break;
+        case LATEST_VERSION:
+            path = JBOSS_SERVER_LUCENE_ITEM_CONTAINER_ADMIN;
+            break;
+        }
+	    
 		if (!new File(path).exists())
 		{
 			logger.warn("Invalid reference index path <" + path + ">");
@@ -87,10 +129,17 @@ public class Validator
 		}
 		this.referenceIndexPath = path;
 		
+		logger.info("Index path <" + indexer.getIndexPath() + ">");
+		logger.info("Reference path <" + this.referenceIndexPath + ">");
+		
 		indexReader1 = IndexReader.open(FSDirectory.open(new File(indexer.getIndexPath())), true);
 		indexReader2 = IndexReader.open(FSDirectory.open(new File(this.referenceIndexPath)), true);
 		indexSearcher2 = new IndexSearcher(indexReader2);
 		
+	}
+	
+	public void setNumberOfFilesToValidate(int n) {
+	    this.numberOfDocuments = n;
 	}
 	
 	public void compareToReferenceIndex() throws CorruptIndexException, IOException
@@ -98,12 +147,12 @@ public class Validator
 		Document document1 = null;
 		Document document2 = null;
 		
-		for (int i = 0; i < indexReader1.maxDoc(); i++)
+		for (int i = 0; i < Math.min(indexReader1.maxDoc(), numberOfDocuments); i++)
 		{			
 			document1 = indexReader1.document(i);	
 			document2 = getReferenceDocument(getObjidFieldName(), document1.get(getObjidFieldName()), indexSearcher2);
 			
-			if (Arrays.asList(objidsToSkip).contains(document1.get(getObjidFieldName())))
+			if (Arrays.asList(objidsToSkipInValidate).contains(document1.get(getObjidFieldName())))
 			{
 				logger.warn("Skipping verify for <" + document1.get(getObjidFieldName()) + ">");
 				continue;
@@ -130,14 +179,16 @@ public class Validator
 			Map<String, Set<Fieldable>> m1 = getMap(fields1);
 			Map<String, Set<Fieldable>> m2 = getMap(fields2);
 			
-			logger.info("comparing 1 - 2");
+			logger.info("comparing 1 [" + indexer.getIndexPath() + "] - 2 [" + this.referenceIndexPath + "]");
 			compareFields(m1, m2);
 			
-			logger.info("comparing 2 - 1");
+			logger.info("comparing 2 [" + this.referenceIndexPath + "] - 1 [" + indexer.getIndexPath() + "]");
 			compareFields(m2, m1);
 			
 			logger.info("comparing skipped fields 1 - 2");
 			compareSkippedFields(m1, m2);
+			
+			logger.info("End verifying index documents with <" + document1.get(getObjidFieldName()) + ">");
 		}
 		
 		logger.info("Validator result \n" + indexer.getIndexingReport().toString());
@@ -148,7 +199,7 @@ public class Validator
 	}
 	
 	private String getObjidFieldName()
-	{
+	{	    
 		switch (indexer.getCurrentIndexMode())
 		{
 		case LATEST_RELEASE:
@@ -186,8 +237,11 @@ public class Validator
 	{
 		for (String name : m1.keySet())
 		{
-			if (Arrays.asList(fieldNamesToSkip).contains(name))
+			if (Arrays.asList(fieldNamesToSkipInValidate).contains(name))
 				continue;
+			
+			if (!Arrays.asList(fieldNamesToCompare).contains(name))
+                continue;
 			
 			Set<Fieldable> sf1 = m1.get(name);
 			Set<Fieldable> sf2 = m2.get(name);
@@ -215,7 +269,7 @@ public class Validator
 			{
 				Fieldable f2 = findFieldFor(f1, sf2);
 				
-				if (f2 == null)
+				if (f2 == null && !Arrays.asList(fieldNamesToSkipInValidate).contains(f1.name()))
 				{
 					indexer.getIndexingReport().addToErrorList("Different field values found for <" + name + ">" + " in <" +  m1.get(getObjidFieldName()) + ">\n");
 					continue;
@@ -346,13 +400,21 @@ public class Validator
 	private void compareSkippedFields(Map<String, Set<Fieldable>> m1,
 			Map<String, Set<Fieldable>> m2)
 	{
+	   Set<Fieldable> s1 = m1.get("xml_representation");
+	   Set<Fieldable> s2 = m1.get("xml_representation");
+	   
+	   if (s1 == null || s2 == null)
+	       return;
 		String xml_representation1 = m1.get("xml_representation").iterator().next().stringValue();
 		String xml_representation2 = m2.get("xml_representation").iterator().next().stringValue();
 		
-		PubItemVO pubItem1 = null;
-		PubItemVO pubItem2 = null;
+		if (xml_representation1 == null || xml_representation2 == null)
+		    return;
 		
-		XmlTransforming xmlTransforming = new XmlTransformingBean();
+		de.mpg.escidoc.services.common.valueobjects.publication.PubItemVO pubItem1 = null;
+		de.mpg.escidoc.services.common.valueobjects.publication.PubItemVO pubItem2 = null;
+		
+		de.mpg.escidoc.services.common.xmltransforming.XmlTransformingBean xmlTransforming = new de.mpg.escidoc.services.common.xmltransforming.XmlTransformingBean();
 		
 		try
 		{
@@ -400,46 +462,68 @@ public class Validator
 	     return doc;
 	}
 	
-	private boolean comparePubItemVOs(final PubItemVO item1, final PubItemVO item2)
+	private boolean comparePubItemVOs(final de.mpg.escidoc.services.common.valueobjects.publication.PubItemVO pubItem1, final de.mpg.escidoc.services.common.valueobjects.publication.PubItemVO pubItem2)
 	{
-		if (item1.getBaseUrl() != null && item2.getBaseUrl() != null && !item1.getBaseUrl().equals(item2.getBaseUrl()))
+		if (pubItem1.getBaseUrl() != null && pubItem2.getBaseUrl() != null && !pubItem1.getBaseUrl().equals(pubItem2.getBaseUrl()))
 				return false;
-		if (!item1.getContentModel().equals(item2.getContentModel()))
+		if (!pubItem1.getContentModel().equals(pubItem2.getContentModel()))
 				return false;
-		if (!item1.getContext().equals(item2.getContext()))
+		if (!pubItem1.getContext().equals(pubItem2.getContext()))
 			return false;
-		if (!item1.getCreationDate().equals(item2.getCreationDate()))
+		if (!pubItem1.getCreationDate().equals(pubItem2.getCreationDate()))
 			return false;
-		if (!item1.getFiles().equals(item2.getFiles()))
+		if (!pubItem1.getFiles().equals(pubItem2.getFiles()))
 			return false;
-		if (!item1.getLatestRelease().equals(item2.getLatestRelease()))
+		if (!pubItem1.getLatestRelease().equals(pubItem2.getLatestRelease()))
 			return false;
-		if (!item1.getLatestVersion().equals(item2.getLatestVersion()))
+		if (!pubItem1.getLatestVersion().equals(pubItem2.getLatestVersion()))
 			return false;
-		if (!item1.getLocalTags().equals(item2.getLocalTags()))
+		if (!pubItem1.getLocalTags().equals(pubItem2.getLocalTags()))
 			return false;
-		if (!item1.getLockStatus().equals(item2.getLockStatus()))
+		if (!pubItem1.getLockStatus().equals(pubItem2.getLockStatus()))
 			return false;
-		if (!item1.getLockStatus().equals(item2.getLockStatus()))
+		if (!pubItem1.getLockStatus().equals(pubItem2.getLockStatus()))
 			return false;
-		if (!item1.getMetadata().equals(item2.getMetadata()))
+		if (!pubItem1.getMetadata().equals(pubItem2.getMetadata()))
 			return false;
-		if (!item1.getModificationDate().equals(item2.getModificationDate()))
+		if (!pubItem1.getModificationDate().equals(pubItem2.getModificationDate()))
 			return false;
-		if (!item1.getOwner().equals(item2.getOwner()))
+		if (!pubItem1.getOwner().equals(pubItem2.getOwner()))
 			return false;
-		if (!item1.getPid().equals(item2.getPid()))
+		if (!pubItem1.getPid().equals(pubItem2.getPid()))
 			return false;
-		if (!item1.getPublicStatus().equals(item2.getPublicStatus()))
+		if (!pubItem1.getPublicStatus().equals(pubItem2.getPublicStatus()))
 			return false;
-		if (!item1.getPublicStatusComment().equals(item2.getPublicStatusComment()))
+		if (!pubItem1.getPublicStatusComment().equals(pubItem2.getPublicStatusComment()))
 			return false;
-		if (!item1.getVersion().equals(item2.getVersion()))
+		if (!pubItem1.getVersion().equals(pubItem2.getVersion()))
 			return false;
-		if (item1.getWithdrawalComment() != null && item2.getWithdrawalComment() != null && !item1.getWithdrawalComment().equals(item2.getWithdrawalComment()))
+		if (pubItem1.getWithdrawalComment() != null && pubItem2.getWithdrawalComment() != null && !pubItem1.getWithdrawalComment().equals(pubItem2.getWithdrawalComment()))
 			return false;
 		
 		return true;
+	}
+	
+	public static void main(String[] args)
+	{
+	    try {
+            Validator validator = new Validator(args[0], args[1]);
+            
+            logger.info("Comparing <" + args[0]+ " to <" + args[1] + ">");
+            
+            if (args[2] != null) {
+                validator.setNumberOfFilesToValidate(Integer.valueOf(args[2]));
+            }
+            
+            validator.compareToReferenceIndex();
+        } catch (CorruptIndexException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+	    
 	}
 
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.mpg.escidoc.tools.reindex;
+package de.mpg.escidoc.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Properties;
@@ -50,7 +51,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import de.escidoc.sb.common.lucene.analyzer.EscidocAnalyzer;
-import de.escidoc.sb.gsearch.xslt.SortFieldHelper;
 import de.mpg.escidoc.tools.util.IndexingReport;
 import de.mpg.escidoc.tools.util.Util;
 
@@ -81,7 +81,6 @@ public class Indexer
 	
 	// name of the index inside the index to be built
 	private String indexName;
-	private String indexAttributesName;
 	
 	// absolute name of the directory containing the extracted fulltexts
 	private String fulltextDir;
@@ -125,7 +124,24 @@ public class Indexer
 	
 	public IndexMode currentIndexMode = IndexMode.LATEST_VERSION;
 	
+ 
+    public Indexer() throws IOException {
+        InputStream s = getClass().getClassLoader().getResourceAsStream(propFileName);
 
+        if (s != null) {
+            properties.load(s);
+            logger.info(properties.toString());
+        } else {
+            throw new FileNotFoundException("Not found " + propFileName);
+        }
+
+        try {
+            this.init();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 	
 	/**
 	 * Constructor with initial base directory, should be the fedora "objects" directory.
@@ -195,11 +211,12 @@ public class Indexer
 			this.indexName = properties.getProperty("index.name.built");
 		}
 		this.currentIndexMode = ("escidoc_all".equals(this.indexName) ? IndexMode.LATEST_RELEASE : IndexMode.LATEST_VERSION);
-		this.indexAttributesName = properties.getProperty("index.stylesheet.attributes");
+//		this.indexAttributesName = properties.getProperty("index.stylesheet.attributes");
 				
 		String mDate = properties.getProperty("index.modification.date", "0");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");					
 		String combinedDate = mDate + defaultDate.substring(mDate.length());
+		logger.info("Got modification date <" + combinedDate + ">");
 		mDateMillis = dateFormat.parse(combinedDate).getTime();
 		
 		this.mimetypes = readMimetypes();
@@ -292,6 +309,19 @@ public class Indexer
 	public IndexMode getCurrentIndexMode()
 	{
 		return this.currentIndexMode;
+	}
+	
+	public void setLastModificationDate(String mDate)
+	{
+	    long x = mDateMillis;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");                  
+        String combinedDate = mDate + defaultDate.substring(mDate.length());
+        try {
+            this.mDateMillis = dateFormat.parse(combinedDate).getTime();
+        } catch (ParseException e) {
+            mDateMillis = x;
+        }
+	    
 	}
 
 	/**
@@ -448,8 +478,7 @@ public class Indexer
 		catch (Exception e)
 		{
 			logger.warn("Indexing interrupted at <" + currentDir + ">", e);
-			FileWriter writer = new FileWriter(new File(resumeFilename));
-			writer.write(currentDir);
+			new FileWriter(new File(resumeFilename)).write(currentDir);
 		}		
 	}
 	
@@ -488,6 +517,7 @@ public class Indexer
 				}
 				else if (file.lastModified() < mDateMillis)
 				{
+				    logger.info("Skipping because of date <" + file.getName() + ">");
 					indexingReport.incrementFilesSkippedBecauseOfTime();
 				}
 			}
@@ -544,7 +574,6 @@ public class Indexer
 				// should be called only in case of error explicitly; usual it's called in DocumentHandler
 				threadLogger.warn("Error occured during indexing <" + file.getName() + ">", e);
 				return;
-				//throw new RuntimeException(e);
 			}
 			cleanup();
 		}
@@ -594,7 +623,7 @@ public class Indexer
 				long e1 = System.currentTimeMillis();
 				threadLogger.info("FOXML2eSciDoc transformation used <" + (e1 - s1) + "> ms");
 				
-				if (threadLogger.isDebugEnabled())
+				if (threadLogger.isDebugEnabled() || threadLogger.isTraceEnabled())
 				{
 					File tmpFile1 = File.createTempFile(file.getName() + "_foxml2escidoc_", ".tmp");
 					FileUtils.writeStringToFile(tmpFile1, writer1.toString());
@@ -616,7 +645,7 @@ public class Indexer
 				}
 				else if ("nocomponent".equals(de.getErrorCodeLocalPart()))
 				{
-					threadLogger.info("Component file missing for < " + file + ">");
+					threadLogger.warn("Component file missing for < " + file + ">");
 					indexingReport.addToErrorList(file.getName());
 					indexingReport.incrementFilesErrorOccured();
 				}
@@ -628,7 +657,7 @@ public class Indexer
 			long e2 = System.currentTimeMillis();
 			threadLogger.info("eSciDoc2IndexDoc transformation used <" + (e2 - s2) + "> ms");
 			
-			if (threadLogger.isDebugEnabled())
+			if (threadLogger.isDebugEnabled()  || threadLogger.isTraceEnabled())
 			{
 				File tmpFile2 = File.createTempFile(file.getName() + "_idx_", ".tmp");			
 				FileUtils.writeStringToFile(tmpFile2, writer2.toString());
@@ -742,13 +771,6 @@ public class Indexer
 			
 			indexer.finalizeIndex();
 			indexer.removeResumeFile();
-		}
-		
-		if (referenceIndexDir != null)
-		{
-			Validator validator = new Validator(indexer);
-			validator.setReferencePath(referenceIndexDir.getCanonicalPath());
-			
 		}
 
 		logger.info(indexer.getIndexingReport().toString());

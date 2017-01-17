@@ -1,11 +1,12 @@
 /**
  * 
  */
-package de.mpg.escidoc.tools.reindex;
+package de.mpg.escidoc.tools;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,6 +36,9 @@ public class FullTextExtractor {
     private static Logger logger = Logger.getLogger(FullTextExtractor.class);
 
     private String fulltextDir = "";
+    
+    // timestamp used to do extracting only for fulltexts modified since mDateMillis
+    private long mDateMillis = 0L;
 
     private static ExtractionReport extractionReport = new ExtractionReport();
 
@@ -64,6 +68,14 @@ public class FullTextExtractor {
         if (!new File(fulltextDir).exists()) {
             FileUtils.forceMkdir(new File(properties.getProperty("index.fulltexts.path")));
         }
+        
+        String mDate = properties.getProperty("index.modification.date", "0");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");                  
+        String combinedDate = mDate + defaultDate.substring(mDate.length());
+        logger.info("Got modification date <" + combinedDate + ">");
+        mDateMillis = dateFormat.parse(combinedDate).getTime();
+        
+        this.setLastModificationDate(mDate);
 
         envp[0] = "extract.pdftotext.path=" + properties.getProperty("extract.pdftotext.path");
         envp[1] = "extract.pdfbox-app-jar.path=" + properties.getProperty("extract.pdfbox-app-jar.path");
@@ -92,9 +104,23 @@ public class FullTextExtractor {
     public ExtractionReport getStatistic() {
         return extractionReport;
     }
+    
+    public void setLastModificationDate(String mDate)
+    {
+        long x = mDateMillis;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");                  
+        String combinedDate = mDate + defaultDate.substring(mDate.length());
+        try {
+            this.mDateMillis = dateFormat.parse(combinedDate).getTime();
+            logger.info("setLastModificationDate to <" + mDateMillis +">");
+        } catch (ParseException e) {
+            mDateMillis = x;
+        }
+        logger.info("setLastModificationDate to <" + mDateMillis +">");
+    }
 
     public void extractFulltexts(File dirOrFile) throws Exception {
-        this.extractFulltexts(dirOrFile, 0);
+        this.extractFulltexts(dirOrFile, mDateMillis);
     }
 
     public void extractFulltexts(File dirOrFile, long mDateMillis) throws Exception
@@ -207,8 +233,7 @@ public class FullTextExtractor {
     public static void main(String[] args) throws Exception {
         File baseDir = new File(args[0]);
 
-        long mDateMillis = 0;
-
+/*
         if (args.length > 1) {
             String mDate = args[1];
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -216,13 +241,13 @@ public class FullTextExtractor {
 
             mDateMillis = dateFormat.parse(combinedDate).getTime();
         }
-
+*/
         // TODO check parameter
 
         FullTextExtractor extractor = new FullTextExtractor();
 
         extractor.init(baseDir);
-        extractor.extractFulltexts(baseDir, mDateMillis);
+        extractor.extractFulltexts(baseDir);
         extractor.finalizeExtraction();
     }
 
