@@ -23,7 +23,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<!-- 
+
 	<repositories>
 		<repository>
 			<id>oss-snapshots-repo</id>
@@ -38,7 +38,7 @@
 			</snapshots>
 		</repository>
 	</repositories>
--->
+
 	<build>
 		<plugins>
 			<plugin>
