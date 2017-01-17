@@ -3884,7 +3884,15 @@
 							<xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute of Immunobiology and Epigenetics')"/>
 						</xsl:when>
 						<xsl:when test="$import-name = 'CEC'">
+							<xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute for Bioinorganic Chemistry')"/>
 							<xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute for Chemical Energy Conversion')"/>
+							<xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute for Radiation Chemistry')"/>
+						</xsl:when>
+						<xsl:when test="$import-name = 'Brain'">
+							<xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute for Brain Research')"/>
+						</xsl:when>
+						<xsl:when test="$import-name = 'MPICC'">
+							<xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute for Foreign and International Criminal Law')"/>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:copy-of select="Util:queryCone('persons', concat('&quot;',$creatornfamily, ', ', $creatorngiven, '&quot;'))"/>
@@ -4332,8 +4340,8 @@
 								</xsl:when>
 								
 								<!-- MPI Experimentelle Medizin (MPIEM) will Institut als Affiliation, falls Pub-Date nicht in einen CoNE-Zeitraum passt -->
-								<xsl:when test="($coneCreator/cone[1]/rdf:RDF[1]/rdf:Description) and not($coneCreator/cone[1]/rdf:RDF[1]/rdf:Description/escidoc:position[escidocFunctions:smaller(rdf:Description/escidoc:start-date, $publication-date) 
-													and escidocFunctions:smaller($publication-date, rdf:Description/escidoc:end-date)] and ($import-name='MPIEM'))">			
+								<xsl:when test="($coneCreator/cone[1]/rdf:RDF[1]/rdf:Description) and (not($coneCreator/cone[1]/rdf:RDF[1]/rdf:Description/escidoc:position[escidocFunctions:smaller(rdf:Description/escidoc:start-date, $publication-date) 
+													and escidocFunctions:smaller($publication-date, rdf:Description/escidoc:end-date)]) and ($import-name='MPIEM'))">			
 									<organization:organization>
 										<dc:title>
 											<xsl:text>Max Planck Institute of Experimental Medicine</xsl:text>
