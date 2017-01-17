@@ -216,6 +216,7 @@ public class Indexer
 		String mDate = properties.getProperty("index.modification.date", "0");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");					
 		String combinedDate = mDate + defaultDate.substring(mDate.length());
+		logger.info("Got modification date <" + combinedDate + ">");
 		mDateMillis = dateFormat.parse(combinedDate).getTime();
 		
 		this.mimetypes = readMimetypes();

@@ -57,6 +57,19 @@ public class Validator
 		"/components/component/xLinkTitle"
 		};
 	
+	protected static String[] fieldNamesToCompare = {
+        
+        // for LATEST_RELEASE
+        "escidoc.property.latest-version.number", 
+        "escidoc.property.version.number",
+        "escidoc.property.version.status",
+        
+        // for LATEST_VERSION
+        "properties/latest-version/number",
+        "/properties/version/number", 
+        "/properties/version/status"
+        };
+	
 	protected static String[] objidsToSkipInValidate = {
 		"escidoc:2111614",
 		"escidoc:2111636",
@@ -123,6 +136,10 @@ public class Validator
 		indexReader2 = IndexReader.open(FSDirectory.open(new File(this.referenceIndexPath)), true);
 		indexSearcher2 = new IndexSearcher(indexReader2);
 		
+	}
+	
+	public void setNumberOfFilesToValidate(int n) {
+	    this.numberOfDocuments = n;
 	}
 	
 	public void compareToReferenceIndex() throws CorruptIndexException, IOException
@@ -222,6 +239,9 @@ public class Validator
 		{
 			if (Arrays.asList(fieldNamesToSkipInValidate).contains(name))
 				continue;
+			
+			if (!Arrays.asList(fieldNamesToCompare).contains(name))
+                continue;
 			
 			Set<Fieldable> sf1 = m1.get(name);
 			Set<Fieldable> sf2 = m2.get(name);
@@ -490,6 +510,10 @@ public class Validator
             Validator validator = new Validator(args[0], args[1]);
             
             logger.info("Comparing <" + args[0]+ " to <" + args[1] + ">");
+            
+            if (args[2] != null) {
+                validator.setNumberOfFilesToValidate(Integer.valueOf(args[2]));
+            }
             
             validator.compareToReferenceIndex();
         } catch (CorruptIndexException e) {
