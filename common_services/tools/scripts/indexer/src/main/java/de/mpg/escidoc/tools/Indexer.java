@@ -17,7 +17,9 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.Stack;
 import java.util.concurrent.ExecutorService;
@@ -28,6 +30,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -104,7 +107,7 @@ public class Indexer
 	
 	// the transformed indexing stylesheet (e.g. includes resolved, xalan -> saxon transformed..)
 	private File stylesheetTmpFile = null;
-	private Stack<Transformer> transformerStackFoxml2Escidoc = new Stack<Transformer>();
+	private List<Stack<Transformer>> transformerStackFoxml2Escidoc = new ArrayList<Stack<Transformer>>();
 	private Stack<Transformer> transformerStackEscidoc2Index = new Stack<Transformer>();
 	
 	private TransformerFactory saxonFactory = new net.sf.saxon.TransformerFactoryImpl();
@@ -120,9 +123,43 @@ public class Indexer
 	
 	private ExecutorService executor = null;
 	
-	public enum IndexMode {LATEST_VERSION, LATEST_RELEASE};
+	// LATEST_RELEASE indexing the latest release as eSciDoc does for escidoc_all index
+	// LATEST_VERSION indexing the latest version
+	// BOTH indexing the latest version and additionally the latest release if differs from the latest release,
+	// as eSciDoc does for item_container_admin index
+    public enum IndexMode {
+        LATEST_RELEASE, LATEST_VERSION, BOTH;
+        
+        int getNumberOfIndexOperations() {
+            switch(this) {
+                case LATEST_RELEASE:
+                    return 1;
+                case LATEST_VERSION:
+                    return 1;  
+                case BOTH:
+                    return 2;
+                default:
+                    return 1;
+            }
+            
+        }
+        
+        public String[] getVersionsToWorkOn() {
+            switch(this) {
+                case LATEST_RELEASE:
+                    return new String[]{"latest-release"};
+                case LATEST_VERSION:
+                    return new String[]{"latest-version"};  
+                case BOTH:
+                    return new String[]{"latest-version", "latest-release"};
+                default:
+                    return new String[]{"latest-version"};
+            }
+        }
+    }
 	
-	public IndexMode currentIndexMode = IndexMode.LATEST_VERSION;
+	public IndexMode currentIndexMode = IndexMode.BOTH;
+	//public IndexMode currentIndexMode = IndexMode.LATEST_VERSION;
 	
  
     public Indexer() throws IOException {
@@ -138,8 +175,7 @@ public class Indexer
         try {
             this.init();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.warn("Exception occured during initialization", e);
         }
     }
 	
@@ -210,7 +246,7 @@ public class Indexer
 		{
 			this.indexName = properties.getProperty("index.name.built");
 		}
-		this.currentIndexMode = ("escidoc_all".equals(this.indexName) ? IndexMode.LATEST_RELEASE : IndexMode.LATEST_VERSION);
+		this.currentIndexMode = ("escidoc_all".equals(this.indexName) ? IndexMode.LATEST_RELEASE : IndexMode.BOTH);
 //		this.indexAttributesName = properties.getProperty("index.stylesheet.attributes");
 				
 		String mDate = properties.getProperty("index.modification.date", "0");
@@ -237,25 +273,7 @@ public class Indexer
 		long e3 = System.currentTimeMillis();
 		logger.info("transforming index stylesheet used <" + (e3-s3) + "> ms");
 		
-		for (int i = 0; i <= procCount + 1; i++)
-		{		
-			Transformer transformerFoxml2escidoc = saxonFactory.newTransformer(new StreamSource(getClass().getClassLoader().getResourceAsStream("foxml2escidoc.xsl")));
-			transformerFoxml2escidoc.setParameter("index-db", dbFile.getAbsolutePath().replace("\\", "/"));
-			transformerFoxml2escidoc.setParameter("version", "escidoc_all".equals(this.indexName) ? "latest-release" : "latest-version");
-			transformerFoxml2escidoc.setParameter("number", i);
-			transformerStackFoxml2Escidoc.push(transformerFoxml2escidoc);
-			
-			Transformer transformerEscidoc2Index = saxonFactory.newTransformer(new StreamSource(stylesheetTmpFile));
-			//Xalan transformation not possible due to needed XSLT2 functions
-			//transformer2 = xalanFactory.newTransformer(new StreamSource(tmpFile));
-			transformerEscidoc2Index.setParameter("index-db", dbFile.getAbsolutePath().replace("\\", "/"));
-			transformerEscidoc2Index.setParameter("SUPPORTED_MIMETYPES", mimetypes);
-			transformerEscidoc2Index.setParameter("fulltext-directory", fulltextDir.replace("\\", "/"));
-			transformerStackEscidoc2Index.push(transformerEscidoc2Index);
-		}
-		
-		logger.info("init transformerStackFoxml2Escidoc size <" + transformerStackFoxml2Escidoc.size() + "> ");
-		logger.info("init transformerStackEscidoc2Index size <" + transformerStackEscidoc2Index.size() + "> ");
+		initializeTransformerStacks();
 		
 		// create executor corresponding the number of processors
 		executor = Executors.newFixedThreadPool(procCount);
@@ -274,6 +292,44 @@ public class Indexer
 			}
 		}		
 	}
+
+    private void initializeTransformerStacks() throws TransformerConfigurationException {
+        
+        for (int j = 0; j < currentIndexMode.getNumberOfIndexOperations(); j++) {
+            
+            Stack<Transformer> stack = new Stack<Transformer>();
+            for (int i = 0; i <= procCount + 1; i++) {
+
+                Transformer transformerFoxml2escidoc =
+                        saxonFactory.newTransformer(new StreamSource(getClass().getClassLoader()
+                                .getResourceAsStream("foxml2escidoc.xsl")));
+
+                transformerFoxml2escidoc.setParameter("index-db",
+                        dbFile.getAbsolutePath().replace("\\", "/"));
+                transformerFoxml2escidoc.setParameter("index-mode",
+                        currentIndexMode.toString());
+                transformerFoxml2escidoc.setParameter("version",
+                        currentIndexMode.getVersionsToWorkOn()[j]);
+                transformerFoxml2escidoc.setParameter("number", i);
+                stack.push(transformerFoxml2escidoc);
+            }
+            transformerStackFoxml2Escidoc.add(stack);
+        }
+        
+        for (int i = 0; i <= procCount + 1; i++)
+        {   
+            Transformer transformerEscidoc2Index = saxonFactory.newTransformer(new StreamSource(stylesheetTmpFile));
+            //Xalan transformation not possible due to needed XSLT2 functions
+            //transformer2 = xalanFactory.newTransformer(new StreamSource(tmpFile));
+            transformerEscidoc2Index.setParameter("index-db", dbFile.getAbsolutePath().replace("\\", "/"));
+            transformerEscidoc2Index.setParameter("SUPPORTED_MIMETYPES", mimetypes);
+            transformerEscidoc2Index.setParameter("fulltext-directory", fulltextDir.replace("\\", "/"));
+            transformerStackEscidoc2Index.push(transformerEscidoc2Index);
+        }
+		
+		logger.info("init transformerStackFoxml2Escidoc size <" + transformerStackFoxml2Escidoc.size() + "> ");
+		logger.info("init transformerStackEscidoc2Index size <" + transformerStackEscidoc2Index.size() + "> ");
+    }
 
 	/**
 	 * 
@@ -552,31 +608,45 @@ public class Indexer
 			this.file = file;
 		}
 		
-		public void run()
-		{
-			this.transformer1 = transformerStackFoxml2Escidoc.pop();
-			this.transformer2 = transformerStackEscidoc2Index.pop();
-			
-			try
-			{
-				threadLogger.info("Start indexItem <" + file.getName() + ">");
-				long start = System.currentTimeMillis();
-				indexItem(file);
-				long end = System.currentTimeMillis();
-				threadLogger.info("Total time used for <" + file.getName() + "> <" + (end - start) + "> ms");	
-			}
-			catch (Exception e)
-			{
-				cleanup();
-				indexingReport.addToErrorList(file.getName());
-				indexingReport.incrementFilesErrorOccured();
-				
-				// should be called only in case of error explicitly; usual it's called in DocumentHandler
-				threadLogger.warn("Error occured during indexing <" + file.getName() + ">", e);
-				return;
-			}
-			cleanup();
-		}
+        public void run() {
+            
+            for (int j = 0; j < currentIndexMode.getNumberOfIndexOperations(); j++) {
+
+                transformer1 = transformerStackFoxml2Escidoc.get(j).pop();
+                transformer2 = transformerStackEscidoc2Index.pop();
+                
+                threadLogger.debug("transformer 1 version <" + transformer1.getParameter("version") + ">");
+
+                try {
+                    threadLogger.info("Start indexItem <" + file.getName() + ">");
+                    long start = System.currentTimeMillis();
+                    indexItem(file);
+                    long end = System.currentTimeMillis();
+                    threadLogger.info("Total time used for <" + file.getName() + "> <"
+                            + (end - start) + "> ms");
+                } catch (Exception e) {
+                    cleanup();
+
+                    transformerStackFoxml2Escidoc.get(j).push(transformer1);
+                    transformerStackEscidoc2Index.push(transformer2);
+
+                    indexingReport.addToErrorList(file.getName());
+                    indexingReport.incrementFilesErrorOccured();
+
+                    // should be called only in case of error explicitly; usual it's called in
+                    // DocumentHandler
+                    threadLogger.warn("Error occured during indexing <" + file.getName() + ">", e);
+                    return;
+                }
+                cleanup();
+
+                transformerStackFoxml2Escidoc.get(j).push(transformer1);
+                transformerStackEscidoc2Index.push(transformer2);
+
+                threadLogger.info(transformer1.getParameter("number") + " done.");
+                
+            }
+        }
 		
 		void cleanup()
 		{
@@ -587,11 +657,6 @@ public class Indexer
 				
 				logger.info("Document pool cleaned");
 			}	
-			
-			transformerStackFoxml2Escidoc.push(transformer1);
-			transformerStackEscidoc2Index.push(transformer2);
-			
-			threadLogger.info(transformer1.getParameter("number") + " done.");
 		}
 		
 		private boolean checkForCleanDocumentPool()
@@ -637,12 +702,17 @@ public class Indexer
 					indexingReport.incrementFilesSkippedBecauseOfStatusOrType();
 					
 				} 
-				else if ("wrongStatus".equals(de.getErrorCodeLocalPart()))
+				else if ("wrongPublicStatus".equals(de.getErrorCodeLocalPart()))
 				{
 					threadLogger.info("Item in wrong public status < " + file + ">");
 					indexingReport.incrementFilesSkippedBecauseOfStatusOrType();
 					
 				}
+				else if ("samePublicStatus".equals(de.getErrorCodeLocalPart()))
+                {
+                    threadLogger.info("Same item in same public status < " + file + ">");
+                    
+                }
 				else if ("nocomponent".equals(de.getErrorCodeLocalPart()))
 				{
 					threadLogger.warn("Component file missing for < " + file + ">");

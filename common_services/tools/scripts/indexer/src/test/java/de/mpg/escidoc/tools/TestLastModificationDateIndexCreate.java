@@ -37,7 +37,15 @@ public class TestLastModificationDateIndexCreate {
         
         assertTrue(indexer.getIndexingReport().getFilesSkippedBecauseOfTime() > 0);
         assertTrue(indexer.getIndexingReport().getFilesErrorOccured() == 0);
-        assertTrue(indexer.getIndexingReport().getFilesIndexingDone() == 0);
+        switch(indexer.getCurrentIndexMode()) {
+            case LATEST_VERSION:
+            case BOTH:
+                assertTrue(indexer.getIndexingReport().getFilesIndexingDone() == 2);
+                break;
+            case LATEST_RELEASE:
+                assertTrue(indexer.getIndexingReport().getFilesIndexingDone() == 1);
+                break;
+        }
     }
     
     @Test

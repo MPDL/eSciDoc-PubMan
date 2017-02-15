@@ -118,6 +118,7 @@ public class Validator
             path = JBOSS_SERVER_LUCENE_ESCIDOC_ALL;
             break;
         case LATEST_VERSION:
+        case BOTH:    
             path = JBOSS_SERVER_LUCENE_ITEM_CONTAINER_ADMIN;
             break;
         }
@@ -204,6 +205,7 @@ public class Validator
 		{
 		case LATEST_RELEASE:
 			return "escidoc.objid";
+		case BOTH:
 		case LATEST_VERSION:
 			return "/id";
 		default:
