@@ -309,6 +309,7 @@
 			<artifactId>fedoragsearch</artifactId>
 			<version>1.3.44-SNAPSHOT</version>
 			<type>jar</type>
+			<classifier>indexer</classifier>
 			<scope>compile</scope>
 		</dependency>
 

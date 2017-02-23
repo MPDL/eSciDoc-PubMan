@@ -76,9 +76,17 @@ public class TestLastModificationDateIndexAppend {
                     indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType() == TestIndexerSmall.SKIPPED_LATEST_RELEASE);
             assertTrue("Found " + indexer.getIndexWriter().maxDoc(), indexer.getIndexWriter().maxDoc() == TestIndexerSmall.INDEXING_DONE_LATEST_RELEASE);
             break;
+        case BOTH:
+            assertTrue("Expected 25 Found " + indexer.getIndexingReport().getFilesIndexingDone(), 
+                    indexer.getIndexingReport().getFilesIndexingDone() == TestIndexerSmall.INDEXING_DONE_BOTH);            
+            assertTrue(indexer.getIndexingReport().getFilesErrorOccured() == 2);
+            assertTrue("Is "+ indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType(), 
+                    indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType() == TestIndexerSmall.SKIPPED_BOTH);
+            assertTrue("Found " + indexer.getIndexWriter().maxDoc(), indexer.getIndexWriter().maxDoc() == TestIndexerSmall.INDEXING_DONE_BOTH);
+            break;
         case LATEST_VERSION:
-            assertTrue("Expected 23 Found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == TestIndexerSmall.INDEXING_DONE_LATEST_VERSION);            
-            assertTrue(indexer.getIndexingReport().getFilesErrorOccured() == 1);
+            assertTrue("Expected 25 Found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == TestIndexerSmall.INDEXING_DONE_LATEST_VERSION);            
+            assertTrue(indexer.getIndexingReport().getFilesErrorOccured() == 2);
             assertTrue("Is "+ indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType(), 
                     indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType() == TestIndexerSmall.SKIPPED_LATEST_VERSION);
             assertTrue("Found " + indexer.getIndexWriter().maxDoc(), indexer.getIndexWriter().maxDoc() == TestIndexerSmall.INDEXING_DONE_LATEST_VERSION);
@@ -107,21 +115,35 @@ public class TestLastModificationDateIndexAppend {
         indexer.indexItemsStart(new File(TestIndexerSmall.TEST_RESOURCES_OBJECTS));
         indexer.finalizeIndex();
         
-        assertTrue(indexer.getIndexingReport().getFilesSkippedBecauseOfTime() == numOfFilesBeforeCopy);
+        // 1 files have time stamp from 2017 (escidoc_2351094), 
+        assertTrue(indexer.getIndexingReport().getFilesSkippedBecauseOfTime() == numOfFilesBeforeCopy - 2);
         
         switch (indexer.getCurrentIndexMode()) {
      
         case LATEST_RELEASE:
-            assertTrue("Expected 0 Found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 0);
+            assertTrue("Expected 1 Found " + indexer.getIndexingReport().getFilesIndexingDone(), 
+                    indexer.getIndexingReport().getFilesIndexingDone() == 1);
             
             assertTrue(indexer.getIndexingReport().getFilesErrorOccured() == 0);
 
             assertTrue("Is "+ indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType(), 
-                    indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType() == numCopies);
-            assertTrue("Found " + indexer.getIndexWriter().maxDoc(), indexer.getIndexWriter().maxDoc() == TestIndexerSmall.INDEXING_DONE_LATEST_RELEASE);
+                    indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType() == numCopies + 1);
+            assertTrue("Found " + indexer.getIndexWriter().maxDoc(), 
+                    indexer.getIndexWriter().maxDoc() == TestIndexerSmall.INDEXING_DONE_LATEST_RELEASE + 1);
+            break;
+        case BOTH:
+            assertTrue("Expected " + numCopies + 2 + " Found " + indexer.getIndexingReport().getFilesIndexingDone(),
+                    indexer.getIndexingReport().getFilesIndexingDone() == numCopies + 2);
+            
+            assertTrue(indexer.getIndexingReport().getFilesErrorOccured() == 0);
+
+            assertTrue("Is "+ indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType(), 
+                    indexer.getIndexingReport().getFilesSkippedBecauseOfStatusOrType() == 2);
+            assertTrue("Found " + indexer.getIndexWriter().maxDoc(), indexer.getIndexWriter().maxDoc() == TestIndexerSmall.INDEXING_DONE_LATEST_VERSION + numCopies);
             break;
         case LATEST_VERSION:
-            assertTrue("Expected " + numCopies + " Found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == numCopies);
+            assertTrue("Expected " + numCopies + 2 + " Found " + indexer.getIndexingReport().getFilesIndexingDone(),
+                    indexer.getIndexingReport().getFilesIndexingDone() == numCopies + 2);
             
             assertTrue(indexer.getIndexingReport().getFilesErrorOccured() == 0);
 
