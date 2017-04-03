@@ -42,6 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.rpc.ServiceException;
 
+import org.apache.commons.httpclient.HttpException;
 import org.apache.log4j.Logger;
 
 import de.escidoc.www.services.aa.UserManagementWrapper;
@@ -49,6 +50,8 @@ import de.mpg.escidoc.pubman.appbase.FacesBean;
 import de.mpg.escidoc.pubman.breadcrumb.BreadcrumbItemHistorySessionBean;
 import de.mpg.escidoc.pubman.util.CommonUtils;
 import de.mpg.escidoc.pubman.util.LoginHelper;
+import de.mpg.escidoc.services.common.exceptions.TechnicalException;
+import de.mpg.escidoc.services.framework.AdminHelper;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 
@@ -136,7 +139,21 @@ public class Login extends FacesBean
         }
         else
         {
-            fc.getExternalContext().redirect(getLoginUrlFromCurrentBreadcrumb());
+            try
+            {
+                String eSciDocUserHandle = AdminHelper.loginUser(loginHelper.getUsername(), loginHelper.getPassword());
+                loginHelper.setESciDocUserHandle(eSciDocUserHandle);
+                loginHelper.insertLogin();
+            }
+            catch (ServiceException|HttpException e)
+            {
+                error(getMessage("LoginError"));
+                logger.warn("Login failed for user " + loginHelper.getUsername());
+            }
+            catch (TechnicalException e)
+            {
+                logger.error("Error loggin in user " + loginHelper.getUsername());
+            }
         }
         return "";
     }

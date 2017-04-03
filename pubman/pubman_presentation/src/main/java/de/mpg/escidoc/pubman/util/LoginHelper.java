@@ -72,6 +72,7 @@ import de.mpg.escidoc.services.common.valueobjects.intelligent.grants.Grant;
 import de.mpg.escidoc.services.common.valueobjects.intelligent.usergroup.UserGroup;
 import de.mpg.escidoc.services.common.valueobjects.intelligent.usergroup.UserGroupList;
 import de.mpg.escidoc.services.common.xmltransforming.XmlTransformingBean;
+import de.mpg.escidoc.services.framework.AdminHelper;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 
 /**
@@ -105,6 +106,9 @@ public class LoginHelper extends FacesBean
     
     
     private ViewItemSessionBean visb;
+
+    private String username;
+    private String password;
     
     /**
      * Public constructor.
@@ -201,21 +205,21 @@ public class LoginHelper extends FacesBean
      */
     public String insertLogin() throws IOException, ServiceException, TechnicalException, URISyntaxException
     {
-        FacesContext fc = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
-        String userHandle = request.getParameter(LoginHelper.PARAMETERNAME_USERHANDLE);
-        if (this.eSciDocUserHandle == null || this.eSciDocUserHandle.equals(""))
-        {
-            if (userHandle != null)
-            {
-                this.eSciDocUserHandle = new String(Base64.decode(userHandle));
-                this.loggedIn = true;
-                this.wasLoggedIn = true;
-                this.setDetailedMode(true);
-                
-            }
-        }
-        if (this.eSciDocUserHandle != null && !this.eSciDocUserHandle.equals("") && this.wasLoggedIn)
+//        FacesContext fc = FacesContext.getCurrentInstance();
+//        HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
+//        String userHandle = request.getParameter(LoginHelper.PARAMETERNAME_USERHANDLE);
+//        if (this.eSciDocUserHandle == null || this.eSciDocUserHandle.equals(""))
+//        {
+//            if (userHandle != null)
+//            {
+//                this.eSciDocUserHandle = new String(Base64.decode(userHandle));
+//                this.loggedIn = true;
+//                this.wasLoggedIn = true;
+//                this.setDetailedMode(true);
+//                
+//            }
+//        }
+        if (this.eSciDocUserHandle != null && !this.eSciDocUserHandle.equals(""))
         {
             fetchAccountUser(this.eSciDocUserHandle);
             this.btnLoginLogout = "login_btLogout";
@@ -430,6 +434,22 @@ public class LoginHelper extends FacesBean
     public String getLoginLogoutLabel()
     {
         return getLabel(btnLoginLogout);
+    }
+    
+    public String getUsername() {
+        return this.username;
+      }
+
+      public void setUsername(String username) {
+        this.username = username;
+      }
+
+      public String getPassword() {
+        return password;
+      }
+
+      public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
