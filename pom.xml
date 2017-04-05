@@ -1105,7 +1105,7 @@
 		<xsd.metadata.project>http://purl.org/escidoc/metadata/profiles/0.1/project</xsd.metadata.project>
 
 		<!-- Just used for tests -->
-		<escidoc.framework_access.context.id.test>escidoc:171002</escidoc.framework_access.context.id.test>
+		<escidoc.framework_access.context.id.test>escidoc:2079350</escidoc.framework_access.context.id.test>
 		<escidoc.framework_access.context.name.test>Test Context</escidoc.framework_access.context.name.test>
 		<escidoc.framework_access.content-model.id.test>escidoc:2002</escidoc.framework_access.content-model.id.test>
 		
@@ -1113,19 +1113,24 @@
 		<framework.admin.username>roland</framework.admin.username>
 		<framework.admin.id>escidoc:exuser1</framework.admin.id>
 		<framework.admin.displayname>System Administrator User</framework.admin.displayname>
-		<framework.scientist.username>test_dep_scientist</framework.scientist.username>
-		<framework.scientist.id>escidoc:41002</framework.scientist.id>
-		<framework.scientist.displayname>Scientist User for Tests</framework.scientist.displayname>
-		<framework.librarian.username>test_dep_lib</framework.librarian.username>
-		<framework.librarian.id>escidoc:3002</framework.librarian.id>
-		<framework.librarian.displayname>Librarian User for Tests</framework.librarian.displayname>
-		<framework.author.username>test_author</framework.author.username>
-		<framework.author.id>escidoc:3010</framework.author.id>
-		<framework.author.displayname>Author User for Tests</framework.author.displayname>
-		<framework.editor.username>test_editor</framework.editor.username>
-		<framework.editor.id>escidoc:3003</framework.editor.id>
-		<framework.editor.displayname>Editor User for Tests</framework.editor.displayname>
-		<framework.organizational_unit.id>escidoc:1</framework.organizational_unit.id>
+
+         <framework.scientist.username>test_dep_scientist</framework.scientist.username>
+         <framework.scientist.id>escidoc:2078316</framework.scientist.id>
+         <framework.scientist.displayname>Scientist User for Tests</framework.scientist.displayname>
+
+         <framework.librarian.username>test_dep_lib</framework.librarian.username>
+         <framework.librarian.id>escidoc:2078315</framework.librarian.id>
+         <framework.librarian.displayname>Librarian User for Tests</framework.librarian.displayname>
+
+         <framework.author.username>test_author</framework.author.username>
+         <framework.author.id>escidoc:2078317</framework.author.id>
+         <framework.author.displayname>Author User for Tests</framework.author.displayname>
+
+         <framework.editor.username>test_editor</framework.editor.username>
+         <framework.editor.id>escidoc:2078318</framework.editor.id>
+         <framework.editor.displayname>Editor User for Tests</framework.editor.displayname>
+
+		<framework.organizational_unit.id>escidoc:persistent25</framework.organizational_unit.id>
 		
 	</properties>
 	
@@ -1209,7 +1214,8 @@
 			<properties>
 				<!-- URL of the FIZ framework instance -->
 
-				<escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de/cone/</escidoc.cone.service.url>
+				<escidoc.cone.service.url>https://dev-pubman.mpdl.mpg.de/cone/</escidoc.cone.service.url>
+				<escidoc.cone.service.url.http>http://dev-pubman.mpdl.mpg.de/cone/</escidoc.cone.service.url.http>
 
 		
 				<!-- Pid cache properties -->
