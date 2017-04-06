@@ -139,21 +139,7 @@ public class Login extends FacesBean
         }
         else
         {
-            try
-            {
-                String eSciDocUserHandle = AdminHelper.loginUser(loginHelper.getUsername(), loginHelper.getPassword());
-                loginHelper.setESciDocUserHandle(eSciDocUserHandle);
-                loginHelper.insertLogin();
-            }
-            catch (ServiceException|HttpException e)
-            {
-                error(getMessage("LoginError"));
-                logger.warn("Login failed for user " + loginHelper.getUsername());
-            }
-            catch (TechnicalException e)
-            {
-                logger.error("Error loggin in user " + loginHelper.getUsername());
-            }
+            fc.getExternalContext().redirect(getLoginUrlFromCurrentBreadcrumb());
         }
         return "";
     }
