@@ -1,9 +1,11 @@
 package de.mpg.escidoc.pubman.desktop;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Base64;
 import java.util.Map;
 
@@ -26,7 +28,16 @@ public class EscidocLogin extends FacesBean{
 	{
         FacesContext context = FacesContext.getCurrentInstance();
         Map<String, String> parameters = context.getExternalContext().getRequestParameterMap();
-        this.target = parameters.get("target");
+        
+        String targetParam = parameters.get("target");
+        if(targetParam!=null)
+        {
+        	try {
+				target = URLDecoder.decode(targetParam, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				target=null;
+			}
+        }
         
         
 	}
