@@ -871,6 +871,7 @@
 		<escidoc.cone.rdfs.template>models2rdfs.xsl</escidoc.cone.rdfs.template>
 		<!-- URL of this PubMan instance -->
 		<escidoc.pubman.instance.url>http://localhost:8080/pubman</escidoc.pubman.instance.url>
+		<escidoc.pubman.login.url>http://localhost:8080/pubman/faces/EscidocLogin.jsp</escidoc.pubman.login.url>
 		<escidoc.pubman.instance.context.path>/pubman</escidoc.pubman.instance.context.path>
 		<escidoc.pubman.item.pattern>/item/$1</escidoc.pubman.item.pattern>
 		<escidoc.pubman.component.pattern>/item/$1/component/$2/$3</escidoc.pubman.component.pattern>
@@ -1236,6 +1237,7 @@
 				<escidoc.doi.service.create.url>/doxi/rest/doi</escidoc.doi.service.create.url>
 				
 				<escidoc.pubman.instance.url>https://dev-pubman.mpdl.mpg.de</escidoc.pubman.instance.url>
+				<escidoc.pubman.login.url>https://login.dev-pubman.mpdl.mpg.de</escidoc.pubman.login.url>
 				<escidoc.pubman.instance.seal_number>ZDB-97-MPR </escidoc.pubman.instance.seal_number>
 				<escidoc.systemtype>dev</escidoc.systemtype>
 				<escidoc.unapi.download.server>https://dev-pubman.mpdl.mpg.de/dataacquisition/download/unapi</escidoc.unapi.download.server>

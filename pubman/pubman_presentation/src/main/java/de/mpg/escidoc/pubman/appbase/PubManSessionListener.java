@@ -36,6 +36,7 @@ import javax.servlet.http.HttpSessionListener;
 import org.apache.log4j.Logger;
 
 import de.mpg.escidoc.pubman.desktop.Login;
+import de.mpg.escidoc.pubman.util.LoginHelper;
 
 /**
  * TODO Description
@@ -71,7 +72,8 @@ public class PubManSessionListener implements HttpSessionListener
         {
             try
             {
-                login.logout();
+            	LoginHelper loginHelper = (LoginHelper) event.getSession().getAttribute(LoginHelper.BEAN_NAME);
+                login.logout(loginHelper.getESciDocUserHandle());
             }
             catch (Exception e)
             {

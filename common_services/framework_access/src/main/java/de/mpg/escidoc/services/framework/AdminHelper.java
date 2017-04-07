@@ -44,6 +44,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.cookie.CookieSpec;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.log4j.Logger;
 
@@ -180,5 +181,44 @@ public class AdminHelper
             }
         }
         return adminUserHandle;
+    }
+    
+    
+    
+    public static void logoutUser(String userHandle) throws HttpException, IOException, ServiceException, URISyntaxException
+    {
+        String frameworkUrl = ServiceLocator.getLoginUrl();
+        
+        int delim1 = frameworkUrl.indexOf("//");
+        int delim2 = frameworkUrl.indexOf(":", delim1);
+        
+        String host;
+        int port;
+        
+        if (delim2 > 0)
+        {
+            host = frameworkUrl.substring(delim1 + 2, delim2);
+            port = Integer.parseInt(frameworkUrl.substring(delim2 + 1));
+        }
+        else
+        {
+            host = frameworkUrl.substring(delim1 + 2);
+            port = 80;
+        }
+        HttpClient client = new HttpClient();
+        
+        client.getParams().setCookiePolicy(CookiePolicy.DEFAULT);
+        
+        
+        GetMethod getMethod = new GetMethod( frameworkUrl + "/aa/logout");
+        client.getState().addCookie(new Cookie(host, "escidocCookie", userHandle));
+        //client.getState().addCookie(sessionCookie);
+        ProxyHelper.executeMethod(client, getMethod);
+        
+        if (HttpServletResponse.SC_OK != getMethod.getStatusCode())
+        {
+            throw new HttpException("Wrong status code: " + getMethod.getStatusCode());
+        }
+        
     }
 }
