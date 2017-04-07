@@ -50,14 +50,32 @@
 			<div class="full wrapper">
 			<h:inputHidden id="offset"></h:inputHidden>
 			
-				<ui:include src="header/Header.jspf" />
+				<div class="full_area0 header clear">
+					<!-- begin: header section (including meta menu, logo, searchMenu and main menu)-->
+						<!-- import meta menu here -->
+						<span id="metaMenuSkipLinkAnchor" class="full_area0 metaMenu">
+						</span>
+						<div class="full_area0 LogoNSearch">
+					
+							<h:outputLink id="lnkStartPage" title="#{tip.navigation_lblStartpage}" value="#{ApplicationBean.appContext}HomePage.jsp">
+								<h:graphicImage styleClass="tiny_marginLExcl headerLogo" style="border:none;" url="#{ApplicationBean.logoUrl}"></h:graphicImage>
+								<h:panelGroup styleClass="tiny_marginLExcl xDouble_area0 themePark #{Header.serverLogo}"></h:panelGroup>
+							</h:outputLink>
+							
+					
+							<!-- import search here-->
+							
+						</div>
+						
+					</div>
+					<!-- import main menu here -->
+					<div id="mainMenuSkipLinkAnchor" class="full_area0 mainMenu" >
+					</div>
 				<h:form >
 				<div id="content" class="full_area0 clear">
 				<!-- begin: content section (including elements that visualy belong to the header (breadcrumb, headline, subheader and content menu)) -->
 					<div class="clear">
 						<div class="headerSection">
-							
-						<ui:include src="header/Breadcrumb.jspf" />
 				
 							<div id="contentSkipLinkAnchor" class="clear headLine">
 								<!-- Headline starts here -->

@@ -1237,7 +1237,7 @@
 				<escidoc.doi.service.create.url>/doxi/rest/doi</escidoc.doi.service.create.url>
 				
 				<escidoc.pubman.instance.url>http://dev-pubman.mpdl.mpg.de</escidoc.pubman.instance.url>
-				<escidoc.pubman.login.url>https://login.dev-pubman.mpdl.mpg.de</escidoc.pubman.login.url>
+				<escidoc.pubman.login.url>https://login.dev-pubman.mpdl.mpg.de/pubman/faces/EscidocLogin.jsp</escidoc.pubman.login.url>
 				<escidoc.pubman.instance.seal_number>ZDB-97-MPR </escidoc.pubman.instance.seal_number>
 				<escidoc.systemtype>dev</escidoc.systemtype>
 				<escidoc.unapi.download.server>http://dev-pubman.mpdl.mpg.de/dataacquisition/download/unapi</escidoc.unapi.download.server>
