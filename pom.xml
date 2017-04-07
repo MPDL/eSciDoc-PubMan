@@ -849,9 +849,9 @@
 		<cargo.jboss.install.dir>${user.home}/wildfly/wildfly-8.2.0.Final/wildfly-8.2.0.Final</cargo.jboss.install.dir>
 		
 		<!-- URL of the FIZ framework instance -->
-		<escidoc.framework_access.framework.url>https://dev-pubman.mpdl.mpg.de</escidoc.framework_access.framework.url>
-		<escidoc.common.framework.url>https://dev-pubman.mpdl.mpg.de</escidoc.common.framework.url>
-		<escidoc.framework_access.login.url>https://dev-pubman.mpdl.mpg.de</escidoc.framework_access.login.url>
+		<escidoc.framework_access.framework.url>http://dev-pubman.mpdl.mpg.de</escidoc.framework_access.framework.url>
+		<escidoc.common.framework.url>http://dev-pubman.mpdl.mpg.de</escidoc.common.framework.url>
+		<escidoc.framework_access.login.url>http://dev-pubman.mpdl.mpg.de</escidoc.framework_access.login.url>
 		<!-- Identifier of the content type "publication" in the actual framework instance -->
 		<escidoc.framework_access.content-model.id.publication>escidoc:2001</escidoc.framework_access.content-model.id.publication>
 		<escidoc.pubman.external.organisation.id>escidoc:9019</escidoc.pubman.external.organisation.id>
@@ -1175,7 +1175,7 @@
 				<escidoc.pid.pidcache.service.url>http://localhost:8080/pidcache/handle</escidoc.pid.pidcache.service.url>
 				<escidoc.pidcache.cache.size.max>100</escidoc.pidcache.cache.size.max>
 				<escidoc.pidcache.refresh.interval>1</escidoc.pidcache.refresh.interval>		
-				<escidoc.pidcache.dummy.url>https://dev-pubman.mpdl.mpg.de/pubman/faces/PidNotResolved.jsp?id=</escidoc.pidcache.dummy.url>
+				<escidoc.pidcache.dummy.url>http://dev-pubman.mpdl.mpg.de/pubman/faces/PidNotResolved.jsp?id=</escidoc.pidcache.dummy.url>
 				<escidoc.pid.gwdg.service.url>http://handle.gwdg.de:8080/pidservice</escidoc.pid.gwdg.service.url>
 				<escidoc.pid.gwdg.timeout>3000</escidoc.pid.gwdg.timeout>		
 				<escidoc.pid.service.create.path>/write/create</escidoc.pid.service.create.path>
@@ -1215,13 +1215,13 @@
 			<properties>
 				<!-- URL of the FIZ framework instance -->
 
-				<escidoc.cone.service.url>https://dev-pubman.mpdl.mpg.de/cone/</escidoc.cone.service.url>
+				<escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de/cone/</escidoc.cone.service.url>
 				
 
 		
 				<!-- Pid cache properties -->
-				<escidoc.pid.pidcache.service.url>https://dev-pubman.mpdl.mpg.de/pidcache/handle</escidoc.pid.pidcache.service.url>
-				<escidoc.pidcache.dummy.url>https://dev-pubman.mpdl.mpg.de/pubman/faces/PidNotResolved.jsp?id=</escidoc.pidcache.dummy.url>
+				<escidoc.pid.pidcache.service.url>http://dev-pubman.mpdl.mpg.de/pidcache/handle</escidoc.pid.pidcache.service.url>
+				<escidoc.pidcache.dummy.url>http://dev-pubman.mpdl.mpg.de/pubman/faces/PidNotResolved.jsp?id=</escidoc.pidcache.dummy.url>
 				<escidoc.pid.gwdg.service.url>http://handle.gwdg.de:8080/pidservice</escidoc.pid.gwdg.service.url>
 				<escidoc.pid.gwdg.timeout>3000</escidoc.pid.gwdg.timeout>
 				<escidoc.pidcache.cache.size.max>100</escidoc.pidcache.cache.size.max>
@@ -1236,12 +1236,12 @@
 				<escidoc.doi.service.url>https://test.doi.mpdl.mpg.de</escidoc.doi.service.url>
 				<escidoc.doi.service.create.url>/doxi/rest/doi</escidoc.doi.service.create.url>
 				
-				<escidoc.pubman.instance.url>https://dev-pubman.mpdl.mpg.de</escidoc.pubman.instance.url>
+				<escidoc.pubman.instance.url>http://dev-pubman.mpdl.mpg.de</escidoc.pubman.instance.url>
 				<escidoc.pubman.login.url>https://login.dev-pubman.mpdl.mpg.de</escidoc.pubman.login.url>
 				<escidoc.pubman.instance.seal_number>ZDB-97-MPR </escidoc.pubman.instance.seal_number>
 				<escidoc.systemtype>dev</escidoc.systemtype>
-				<escidoc.unapi.download.server>https://dev-pubman.mpdl.mpg.de/dataacquisition/download/unapi</escidoc.unapi.download.server>
-				<escidoc.unapi.view.server>https://dev-pubman.mpdl.mpg.de/dataacquisition/view/unapi</escidoc.unapi.view.server>
+				<escidoc.unapi.download.server>http://dev-pubman.mpdl.mpg.de/dataacquisition/download/unapi</escidoc.unapi.download.server>
+				<escidoc.unapi.view.server>http://dev-pubman.mpdl.mpg.de/dataacquisition/view/unapi</escidoc.unapi.view.server>
 				<jboss.deploy.port>8889</jboss.deploy.port>
 				
 				<jboss.install.dir>/usr/share/jboss</jboss.install.dir>
@@ -1249,11 +1249,11 @@
 				<wildfly.install.dir>/usr/share/pubman/wildfly</wildfly.install.dir>
 				
 				<!-- syndication service -->
-				<escidoc.syndication.service.url>https://dev-pubman.mpdl.mpg.de/syndication</escidoc.syndication.service.url>
+				<escidoc.syndication.service.url>http://dev-pubman.mpdl.mpg.de/syndication</escidoc.syndication.service.url>
 
 				<!-- AA -->
-				<escidoc.aa.instance.url>https://dev-pubman.mpdl.mpg.de/auth/</escidoc.aa.instance.url>
-				<escidoc.aa.default.target>https://dev-pubman.mpdl.mpg.de/auth/clientLogin</escidoc.aa.default.target>
+				<escidoc.aa.instance.url>http://dev-pubman.mpdl.mpg.de/auth/</escidoc.aa.instance.url>
+				<escidoc.aa.default.target>http://dev-pubman.mpdl.mpg.de/auth/clientLogin</escidoc.aa.default.target>
 			</properties>
 			<distributionManagement>
 				<site>
