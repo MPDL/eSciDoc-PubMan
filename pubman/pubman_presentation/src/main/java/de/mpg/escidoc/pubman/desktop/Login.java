@@ -133,6 +133,7 @@ public class Login extends FacesBean
                 // Logout mechanism
 
                 //PubManSessionListener will call logout method
+                
         		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         		session.invalidate();
         		
