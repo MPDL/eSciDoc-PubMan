@@ -1,9 +1,16 @@
 package de.mpg.escidoc.services.aa.web.client;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+
+import de.mpg.escidoc.services.aa.Aa;
+import de.mpg.escidoc.services.aa.AuthenticationVO;
+import de.mpg.escidoc.services.aa.crypto.RSAEncoder;
 
 public class LogoutClient extends Client {
 
@@ -13,11 +20,15 @@ public class LogoutClient extends Client {
 	protected void process(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
+		String[] encryptedAuthVOString = request.getParameterValues("auth");
+		String authVOXml = RSAEncoder.rsaDecrypt(encryptedAuthVOString);
+		AuthenticationVO authVO = new AuthenticationVO(authVOXml);
+		
 		request.getSession().removeAttribute("authentication");
 		
 		try
         {
-            response.sendRedirect(getLogoutUrl(request, response));
+            response.sendRedirect(getLogoutUrl(request, response, authVO));
         }
         catch (IllegalStateException ise)
         {
@@ -28,7 +39,7 @@ public class LogoutClient extends Client {
 
 	}
 	
-	protected String getLogoutUrl(HttpServletRequest request, HttpServletResponse response) throws Exception
+	protected String getLogoutUrl(HttpServletRequest request, HttpServletResponse response, AuthenticationVO authVO) throws Exception
 	{
 		String target = request.getParameter("target");
 		

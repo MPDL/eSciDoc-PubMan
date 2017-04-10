@@ -64,8 +64,7 @@ public class EscidocAaClientStart extends StartClient
         }
         else
         {
-            return Config.getProperty("escidoc.framework_access.login.url")
-                + "/aa/login"
+            return Config.getProperty("escidoc.pubman.login.url")
                 + "?target=" + aaInstanceUrl + "clientReturn"
                 + URLEncoder.encode(URLEncoder.encode("?target="
                 + from

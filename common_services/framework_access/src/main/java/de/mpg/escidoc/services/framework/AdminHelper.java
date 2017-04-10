@@ -211,7 +211,7 @@ public class AdminHelper
         
         
         GetMethod getMethod = new GetMethod( frameworkUrl + "/aa/logout");
-        client.getState().addCookie(new Cookie(host, "escidocCookie", userHandle));
+        client.getState().addCookie(new Cookie(host, "escidocCookie", userHandle, "/", null, false));
         //client.getState().addCookie(sessionCookie);
         ProxyHelper.executeMethod(client, getMethod);
         

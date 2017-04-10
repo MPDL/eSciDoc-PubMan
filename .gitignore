@@ -6,3 +6,8 @@ target/
 .classpath
 *.launch
 *~
+
+# IntelliJ
+*.iml
+.idea/
+*.iws

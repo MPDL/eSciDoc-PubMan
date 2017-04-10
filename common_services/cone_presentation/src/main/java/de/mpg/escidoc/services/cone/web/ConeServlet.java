@@ -154,11 +154,11 @@ public class ConeServlet extends HttpServlet
         String action = null;
         String format = DEFAULT_FORMAT;
         String lang = (request.getParameter("lang") != null ? request.getParameter("lang") : request.getParameter("l"));
-        boolean loggedIn = false;
+        boolean loggedIn = false; 
         if (request.getSession().getAttribute("logged_in") == null || !((Boolean) request.getSession().getAttribute("logged_in")).booleanValue())
         {
             Login.checkLogin(request, false);
-            loggedIn = getLoggedIn(request);
+            loggedIn = getLoggedIn(request); 
         }
         else
         {
