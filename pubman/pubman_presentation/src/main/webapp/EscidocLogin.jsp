@@ -57,7 +57,7 @@
 						</span>
 						<div class="full_area0 LogoNSearch">
 					
-							<h:outputLink id="lnkStartPage" title="#{tip.navigation_lblStartpage}" value="#{ApplicationBean.appContext}HomePage.jsp">
+							<h:outputLink id="lnkStartPage" title="#{tip.navigation_lblStartpage}" value="#{ApplicationBean.instanceContextPath}/HomePage.jsp">
 								<h:graphicImage styleClass="tiny_marginLExcl headerLogo" style="border:none;" url="#{ApplicationBean.logoUrl}"></h:graphicImage>
 								<h:panelGroup styleClass="tiny_marginLExcl xDouble_area0 themePark #{Header.serverLogo}"></h:panelGroup>
 							</h:outputLink>
