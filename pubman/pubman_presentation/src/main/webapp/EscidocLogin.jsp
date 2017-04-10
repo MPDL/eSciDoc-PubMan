@@ -41,7 +41,15 @@
 			<h:head>
 
 				<title><h:outputText value="#{ApplicationBean.appTitle}"/></title>
-				<ui:include src="header/ui/StandardImports.jspf" />
+				<link href="/common/resources/cssFramework/main.css" type="text/css" rel="stylesheet" />
+				<h:outputText value="#{ApplicationBean.pubmanStyleTags}" escape="false"/>
+				<style type="text/css">
+					/*.headerLogo {background-image: url("<h:outputText value='#{ApplicationBean.logoUrl}'/>") !important; background-repeat: norepeat; background-position: top left;}*/
+					.headerLogo {background-image: none; <h:outputText value='#{ApplicationBean.additionalLogoCss}'/>}
+				</style>
+				<style type="text/css">
+					.fa { line-height: inherit; margin-right: 0.454545em; color: #004465;}
+				</style>
 
 			</h:head>
 			<body lang="${InternationalizationHelper.locale}">
