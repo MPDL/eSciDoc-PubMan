@@ -65,7 +65,7 @@
 						</span>
 						<div class="full_area0 LogoNSearch">
 					
-							<h:outputLink id="lnkStartPage" title="#{tip.navigation_lblStartpage}" value="#{ApplicationBean.pubmanInstanceUrl}#{ApplicationBean.instanceContextPath}/">
+							<h:outputLink id="lnkStartPage" title="#{tip.navigation_lblStartpage}" value="#{ApplicationBean.pubmanInstanceUrl}#{ApplicationBean.appContext}HomePage.jsp">
 								<h:graphicImage styleClass="tiny_marginLExcl headerLogo" style="border:none;" url="#{ApplicationBean.logoUrl}"></h:graphicImage>
 								<h:panelGroup styleClass="tiny_marginLExcl xDouble_area0 themePark #{Header.serverLogo}"></h:panelGroup>
 							</h:outputLink>
@@ -78,6 +78,9 @@
 					</div>
 					<!-- import main menu here -->
 					<div id="mainMenuSkipLinkAnchor" class="full_area0 mainMenu" >
+						<h:outputLink id="lnkHome" styleClass="free_area0" title="#{tip.mainMenu_lnkHome}" value="#{ApplicationBean.pubmanInstanceUrl}#{ApplicationBean.appContext}HomePage.jsp">
+							<h:outputText value="#{lbl.mainMenu_lnkHome}" />
+						</h:outputLink>
 					</div>
 				<h:form >
 				<div id="content" class="full_area0 clear">
