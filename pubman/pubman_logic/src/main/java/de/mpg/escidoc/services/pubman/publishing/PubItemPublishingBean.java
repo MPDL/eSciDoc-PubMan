@@ -302,7 +302,7 @@ public class PubItemPublishingBean implements PubItemPublishing
     /**
      * {@inheritDoc}
      */
-    public final void withdrawPubItem(
+    public void withdrawPubItem(
             final PubItemVO pubItem,
             final Date lastModificationDate,
             final String withdrawalComment,
