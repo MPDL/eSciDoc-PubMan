@@ -32,7 +32,11 @@ package de.mpg.escidoc.services.aa;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.xml.parsers.SAXParser;
@@ -120,6 +124,8 @@ public class AuthenticationVO
     {
         private Grant currentGrant = null;
         private Role currentRole = null;
+        private String currentDataKey = null;
+        private String currentDataValue = null;
         
         @Override
         public void startElement(String uri, String localName, String name, Attributes attributes) throws SAXException
@@ -139,6 +145,11 @@ public class AuthenticationVO
             else if ("role".equals(name))
             {
                 currentRole = new Role();
+            }
+            else if ("data".equals(name))
+            {
+                currentDataKey = null;
+                currentDataValue = null;
             }
         }
 
@@ -165,6 +176,14 @@ public class AuthenticationVO
             {
                 currentRole.setKey(content);
             }
+            else if ("authentication-object/data/key".equals(getLocalStack().toString()))
+            {
+                currentDataKey = content;
+            }
+            else if ("authentication-object/data/value".equals(getLocalStack().toString()))
+            {
+                currentDataValue = content;
+            }
         }
 
         @Override
@@ -182,6 +201,10 @@ public class AuthenticationVO
                 roles.add(currentRole);
                 currentRole = null;
             }
+            else if ("data".equals(name))
+            {
+                data.put(currentDataKey, currentDataValue);
+            }
 
         }
         
@@ -195,6 +218,7 @@ public class AuthenticationVO
     private String fullName;
     private Set<Grant> grants = new HashSet<AuthenticationVO.Grant>();
     private Set<Role> roles = new HashSet<AuthenticationVO.Role>();
+    private Map<String,String> data = new HashMap<>();
     
     public AuthenticationVO()
     {}
@@ -268,6 +292,19 @@ public class AuthenticationVO
             }
             writer.append("\t</grants>\n");
         }
+        
+        for(Entry<String,String> entry : getData().entrySet())
+        {
+        	writer.append("\t<data>\n");
+        	writer.append("\t\t<key>");
+        	writer.append(entry.getKey());
+        	writer.append("</key>\n");
+        	writer.append("\t\t<value>");
+        	writer.append(entry.getValue());
+        	writer.append("</value>\n");
+        	writer.append("\t</data>\n");
+        }
+        
         writer.append("</authentication-object>\n");
         
         return writer.toString();
@@ -329,5 +366,13 @@ public class AuthenticationVO
     {
         this.fullName = fullName;
     }
+
+	public Map<String,String> getData() {
+		return data;
+	}
+
+	public void setData(Map<String,String> data) {
+		this.data = data;
+	}
     
 }

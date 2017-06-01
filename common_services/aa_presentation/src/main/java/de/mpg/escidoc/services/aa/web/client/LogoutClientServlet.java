@@ -29,6 +29,7 @@ public class LogoutClientServlet extends HttpServlet {
     {
 
         String context = request.getContextPath();
+        System.out.println(request.getSession().getAttribute("user") + " " + request.getSession().getAttribute("authentication") );
         
         try
         {

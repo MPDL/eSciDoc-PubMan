@@ -33,6 +33,7 @@ public class Login
 	    if (aa != null && aa.getAuthenticationVO() != null)
 	    {
 	        request.getSession().setAttribute("logged_in", Boolean.TRUE);
+	        request.getSession().setAttribute("user", aa.getAuthenticationVO());
 	    }
 	    else
 	    {
@@ -52,8 +53,7 @@ public class Login
 	    {
 	        if ("escidoc:role-system-administrator".equals(role.getKey()))
 	        {
-	            request.getSession().setAttribute("logged_in", Boolean.TRUE);
-	            request.getSession().setAttribute("user", aa.getAuthenticationVO());
+	            
 	    		request.getSession().setAttribute("edit_open_vocabulary", Boolean.TRUE);
 	    		request.getSession().setAttribute("edit_closed_vocabulary", Boolean.TRUE);
 	    		showWarning = false;
@@ -61,16 +61,14 @@ public class Login
 	        }
 	        if (roleConeOpenVocabularyId != null && roleConeOpenVocabularyId.equals(role.getKey()))
 	        {
-	        	request.getSession().setAttribute("user", aa.getAuthenticationVO());
-	    		request.getSession().setAttribute("logged_in", Boolean.TRUE);
+	        	
 	    		request.getSession().setAttribute("edit_open_vocabulary", Boolean.TRUE);	    		
 	        	showWarning = false;
 	        	continue;
 	        }
 	        if (roleConeClosedVocabularyId != null && roleConeClosedVocabularyId.equals(role.getKey()))
 	        {
-	        	request.getSession().setAttribute("user", aa.getAuthenticationVO());
-	    		request.getSession().setAttribute("logged_in", Boolean.TRUE);
+	        	
 	    		request.getSession().setAttribute("edit_closed_vocabulary", Boolean.TRUE);	    		
 	        	showWarning = false;
 	        	continue;

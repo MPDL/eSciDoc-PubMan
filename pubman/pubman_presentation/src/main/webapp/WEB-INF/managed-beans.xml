@@ -620,4 +620,9 @@
 		<managed-bean-class>de.mpg.escidoc.pubman.util.InternationalizationHelper</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+		<managed-bean>
+		<managed-bean-name>EscidocLogin</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.pubman.desktop.EscidocLogin</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
 </faces-config>
