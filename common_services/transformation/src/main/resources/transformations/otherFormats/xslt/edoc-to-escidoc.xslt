@@ -1038,6 +1038,31 @@
 					</xsl:for-each>
 				</xsl:if>
 				
+				<xsl:if test="$import-name = 'MPICC'">
+					<xsl:for-each select="identifiers/identifier[@type = 'url']">
+						<ec:component>		
+							<ec:properties>
+								<prop:visibility>public</prop:visibility>
+								<prop:content-category>
+									<xsl:value-of select="$contentCategory-ves/enum[. = 'any-fulltext']/@uri"/>
+								</prop:content-category>
+								<prop:file-name><xsl:value-of select="."/></prop:file-name>
+							</ec:properties>
+							<ec:content xlink:href="{.}" storage="external-url"/>
+							<mdr:md-records>
+								<mdr:md-record>
+									<file:file>
+										<dc:title><xsl:value-of select="."/></dc:title>
+										<eterms:content-category>
+											<xsl:value-of select="$contentCategory-ves/enum[. = 'any-fulltext']/@uri"/>
+										</eterms:content-category>
+									</file:file>
+								</mdr:md-record>
+							</mdr:md-records>
+						</ec:component>
+					</xsl:for-each>
+				</xsl:if>
+				
 				<xsl:if test="$import-name = 'MPIPKS'">
 					<xsl:for-each select="relations/relation[@type = 'url' and @reltype='hasreferences']">
 						<ec:component>		
@@ -2885,7 +2910,7 @@
 						<xsl:attribute name="xsi:type" select="'eterms:ISSN'"/>
 						<xsl:value-of select="."/>
 					</xsl:when>
-					<xsl:when test="@type='uri' or @type='url'">
+					<xsl:when test="(@type='uri' or @type='url') and (not($import-name = 'MPICC'))">
 						<xsl:attribute name="xsi:type" select="'eterms:URI'"/>
 						<xsl:value-of select="."/>
 					</xsl:when>
