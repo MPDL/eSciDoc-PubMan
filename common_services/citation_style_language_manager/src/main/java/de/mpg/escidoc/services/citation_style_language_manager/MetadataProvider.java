@@ -44,7 +44,7 @@ import de.undercouch.citeproc.csl.CSLType;
 public class MetadataProvider implements ItemDataProvider {
 	
 	private final static Logger logger = Logger
-			.getLogger(CitationStyleLanguageManagerDefaultImpl.class);
+			.getLogger(MetadataProvider.class);
 	
 	private final static String[] dateFormats = { "yyyy-MM-dd" , "yyyy-MM", "yyyy" };
 	
@@ -703,7 +703,6 @@ public class MetadataProvider implements ItemDataProvider {
 		CSLType cslGenre = null;
 		if (Genre.ARTICLE.equals(genre)
 				|| Genre.EDITORIAL.equals(genre)
-				|| Genre.PAPER.equals(genre)
 				|| Genre.OTHER.equals(genre)) 
 		{
 			cslGenre = CSLType.ARTICLE_JOURNAL;
