@@ -93,7 +93,7 @@ public class GwdgPidService
      *  - http://vm04.pid.gwdg.de:8081/handles/<suffix>
      * 
      * @param url 
-     * @return pid
+     * @return pid e.g. 21.T11998/0000-0005-B319-5 
      */
 	public String create(String url) throws Exception
 	{
@@ -109,13 +109,10 @@ public class GwdgPidService
         String jsonPid = create.getResponseBodyAsString();
         ObjectMapper mapper = new ObjectMapper();
         
-        EpicPid epicPid = mapper.readValue(jsonPid, EpicPid.class);
-        
+        EpicPid epicPid = mapper.readValue(jsonPid, EpicPid.class);       
         logger.info("Create request returning pid  <" + epicPid.getEpicPid() + ">");
         
-        String purePid = epicPid.getEpicPid().replace(PropertyReader.getProperty("escidoc.pid.gwdg.service.suffix").concat("/"), "");
-        
-     	return purePid;
+     	return epicPid.getEpicPid();
 	}
 	
 	 /**
@@ -130,6 +127,9 @@ public class GwdgPidService
      */
     public int update(String id, String url) throws Exception
     {
+        if (id.startsWith(PropertyReader.getProperty("escidoc.pid.gwdg.service.suffix"))) {
+            id.replace(PropertyReader.getProperty("escidoc.pid.gwdg.service.suffix").concat("/"), "");
+        }
         
         HttpClient client = getHttpClient();
         
