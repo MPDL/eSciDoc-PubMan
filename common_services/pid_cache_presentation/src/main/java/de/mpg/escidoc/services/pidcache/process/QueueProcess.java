@@ -58,8 +58,8 @@ public class QueueProcess
 			{
 				try 
 				{
-					String pidXml = gwdgPidService.update(pid.getIdentifier(), pid.getUrl());
-					xmlTransforming.transformToPidServiceResponse(pidXml);
+					int httpStatus = gwdgPidService.update(pid.getIdentifier(), pid.getUrl());
+					//xmlTransforming.transformToPidServiceResponse(pidXml);
 					queue.remove(pid);
 				} 
 				catch (Exception e) 
@@ -92,9 +92,9 @@ public class QueueProcess
             {
                 try 
                 {
-                    String pidXml = gwdgPidService.update(pid.getIdentifier(), pid.getUrl());
-                    logger.debug("emptyBlock updated pid <" + pid.getIdentifier() + "> url <" + pid.getUrl() + ">");
-                    xmlTransforming.transformToPidServiceResponse(pidXml);
+                    int httpStatus = gwdgPidService.update(pid.getIdentifier(), pid.getUrl());
+                    logger.debug("emptyBlock updated pid <" + pid.getIdentifier() + "> url <" + pid.getUrl() + "> with status <" + httpStatus + ">");
+                    //xmlTransforming.transformToPidServiceResponse(pidXml);
                     queue.remove(pid);
                 } 
                 catch (Exception e) 

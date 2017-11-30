@@ -2,8 +2,6 @@ package de.mpg.escidoc.services.pidcache.process;
 
 import java.util.Date;
 
-import javax.annotation.Resource;
-import javax.inject.Inject;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
@@ -30,8 +28,8 @@ public class CacheProcess
 {
 	 private static String DUMMY_URL = null;
 	 private static final Logger logger = Logger.getLogger(CacheProcess.class);
-	 private InitialContext context = null;
-	 
+	 private InitialContext context = new InitialContext();
+	 	 
 	 private XmlTransforming xmlTransforming;
 
 	 
@@ -42,10 +40,7 @@ public class CacheProcess
 	public CacheProcess() throws Exception
 	{
 		DUMMY_URL = PropertyReader.getProperty("escidoc.pidcache.dummy.url");
-		//context = new InitialContext();
-		
-		
-		
+
 		xmlTransforming = new XmlTransformingBean();
 	}
 
@@ -70,9 +65,12 @@ public class CacheProcess
                     && i < number)
             {
                 current = new Date().getTime();
-                String pidXml = gwdgPidService.create(DUMMY_URL.concat(Long.toString(current)));
-                PidServiceResponseVO pidServiceResponseVO = xmlTransforming.transformToPidServiceResponse(pidXml);
-                Pid pid = new Pid(pidServiceResponseVO.getIdentifier(), pidServiceResponseVO.getUrl());
+                String completeDummyUrl = DUMMY_URL.concat(Long.toString(current));
+                String pidIdentifier = gwdgPidService.create(completeDummyUrl);
+                logger.info("pidIdentifier <" + pidIdentifier + ">");
+                logger.info("completeDummyUrl <" + completeDummyUrl + ">");
+                //PidServiceResponseVO pidServiceResponseVO = xmlTransforming.transformToPidServiceResponse(pidXml);
+                Pid pid = new Pid(pidIdentifier, completeDummyUrl);
                 cache.add(pid);
                 i++;
             }

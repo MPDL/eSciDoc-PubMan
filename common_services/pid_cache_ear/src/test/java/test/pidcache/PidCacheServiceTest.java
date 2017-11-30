@@ -78,13 +78,13 @@ public class PidCacheServiceTest
 	@Before
 	public void setup() throws Exception
 	{
-        // Wait until pid cache is surely filled
+        // Wait until pid cache is filled
         do
         {
             Thread.sleep(20000);
         }
         while (getCacheSize() < Integer.parseInt(PropertyReader.getProperty("escidoc.pidcache.cache.size.max")));
-        logger.info("Setup finished with cache size " + getCacheSize());
+        logger.info("Setup finished with cache size <" + getCacheSize() + ">");
         
         testUrl = ITEM_TEST_URL.concat(Long.toString(new Date().getTime())).concat("/test");
 	}
@@ -92,7 +92,7 @@ public class PidCacheServiceTest
 	@Test
 	public void testAssignAndUpdatePid() throws Exception
 	{
-		logger.info("TEST ASSIGN PID for url: " + testUrl);
+		logger.info("Test assign pid for url <" + testUrl + ">");
 		PostMethod method = new PostMethod(CACHE_PIDSERVICE.concat(PIDSERVICE_CREATE));
 		method.setParameter("url", testUrl);
 		
@@ -102,10 +102,10 @@ public class PidCacheServiceTest
     	ProxyHelper.executeMethod(client, method);
 		PidServiceResponseVO pidServiceResponseVO = xmlTransforming.transformToPidServiceResponse(method.getResponseBodyAsString());
 		assertNotNull(method.getResponseHeader("Location").getValue());
-		logger.info("Location: " +  method.getResponseHeader("Location").getValue());
+		logger.info("Location  >" +  method.getResponseHeader("Location").getValue() + ">");
 		testIdentifier = pidServiceResponseVO.getIdentifier();
 		assertNotNull(testIdentifier);
-		logger.info("PID"  + pidServiceResponseVO.getIdentifier() + " has been assigned.");
+		logger.info("Pid <"  + pidServiceResponseVO.getIdentifier() + "> has been assigned.");
 	
 		testUrl = testUrl.concat("/edition");
 		logger.info("TEST UPDATE PID " + testIdentifier + " with new URL: " + testUrl);

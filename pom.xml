@@ -560,6 +560,13 @@
 				<version>8.7</version>
 			</dependency>
 			
+			<dependency>
+			    <groupId>com.fasterxml.jackson.core</groupId>
+			    <artifactId>jackson-annotations</artifactId>
+			    <version>2.9.1</version>
+			</dependency>
+			
+			
 		</dependencies>
 	</dependencyManagement>
 	
@@ -1176,8 +1183,9 @@
 				<escidoc.pidcache.cache.size.max>100</escidoc.pidcache.cache.size.max>
 				<escidoc.pidcache.refresh.interval>1</escidoc.pidcache.refresh.interval>		
 				<escidoc.pidcache.dummy.url>http://dev-pubman.mpdl.mpg.de/pubman/faces/PidNotResolved.jsp?id=</escidoc.pidcache.dummy.url>
-				<escidoc.pid.gwdg.service.url>http://handle.gwdg.de:8080/pidservice</escidoc.pid.gwdg.service.url>
-				<escidoc.pid.gwdg.timeout>3000</escidoc.pid.gwdg.timeout>		
+				<escidoc.pid.gwdg.service.url>http://vm04.pid.gwdg.de:8081/handles/</escidoc.pid.gwdg.service.url>
+				<escidoc.pid.gwdg.service.suffix>21.T11998</escidoc.pid.gwdg.service.suffix>
+				<escidoc.pid.gwdg.timeout>3</escidoc.pid.gwdg.timeout>		
 				<escidoc.pid.service.create.path>/write/create</escidoc.pid.service.create.path>
 				<escidoc.pid.service.view.path>/read/view</escidoc.pid.service.view.path>
 				<escidoc.pid.service.delete.path>/write/delete</escidoc.pid.service.delete.path>
@@ -1222,8 +1230,9 @@
 				<!-- Pid cache properties -->
 				<escidoc.pid.pidcache.service.url>http://dev-pubman.mpdl.mpg.de/pidcache/handle</escidoc.pid.pidcache.service.url>
 				<escidoc.pidcache.dummy.url>http://dev-pubman.mpdl.mpg.de/pubman/faces/PidNotResolved.jsp?id=</escidoc.pidcache.dummy.url>
-				<escidoc.pid.gwdg.service.url>http://handle.gwdg.de:8080/pidservice</escidoc.pid.gwdg.service.url>
-				<escidoc.pid.gwdg.timeout>3000</escidoc.pid.gwdg.timeout>
+				<escidoc.pid.gwdg.service.url>http://vm04.pid.gwdg.de:8081/handles/</escidoc.pid.gwdg.service.url>
+				<escidoc.pid.gwdg.service.suffix>21.T11998</escidoc.pid.gwdg.service.suffix>
+				<escidoc.pid.gwdg.timeout>3</escidoc.pid.gwdg.timeout>
 				<escidoc.pidcache.cache.size.max>100</escidoc.pidcache.cache.size.max>
 				<escidoc.pidcache.refresh.interval>1</escidoc.pidcache.refresh.interval>
 				<escidoc.pid.service.create.path>/write/create</escidoc.pid.service.create.path>

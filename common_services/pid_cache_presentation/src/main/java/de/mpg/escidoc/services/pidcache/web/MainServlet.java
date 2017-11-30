@@ -93,15 +93,6 @@ public class MainServlet extends HttpServlet
            		}
         		resp.getWriter().append(pidCacheService.retrieve(req.getParameter("pid")));
     		}
-        	else if (GwdgPidService.GWDG_PIDSERVICE_FIND.equals(req.getPathInfo())
-        			|| GwdgPidService.GWDG_PIDSERVICE_FIND.concat("/").equals(req.getPathInfo())) 
-        	{
-        		if (req.getParameter("url") == null) 
-                {
-        			resp.sendError(HttpServletResponse.SC_NO_CONTENT, "URL parameter failed.");
-           		}
-        		resp.getWriter().append(pidCacheService.search(req.getParameter("url")));
-    		}
         	else if ("/cache/size".equals(req.getPathInfo()))
         	{
         		resp.getWriter().append("There are " +  pidCacheService.getCacheSize() + " PID stored in cache");
