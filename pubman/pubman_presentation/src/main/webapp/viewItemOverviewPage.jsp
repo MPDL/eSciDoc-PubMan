@@ -45,7 +45,9 @@
 				</title>
 				<link rel="unapi-server" type="application/xml" title="unAPI"
 					href="${ViewItemFull.unapiURLview}" />
-				
+				<ui:fragment rendered="#{ViewItemFull.pubItem == null or ViewItemFull.isStateWithdrawn}">
+					<meta name="robots" content="noindex" />
+				</ui:fragment>	
 				<h:outputText value="#{ViewItemFull.htmlMetaTags}" escape="false" rendered="#{ViewItemFull.pubItem != null and ViewItemFull.isStateReleased}"/>
 				
 				<meta name="description" content="${ViewItemFull.pubItem.descriptionMetaTag}"/>
