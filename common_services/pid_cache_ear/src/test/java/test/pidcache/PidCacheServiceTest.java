@@ -102,7 +102,7 @@ public class PidCacheServiceTest
     	ProxyHelper.executeMethod(client, method);
 		PidServiceResponseVO pidServiceResponseVO = xmlTransforming.transformToPidServiceResponse(method.getResponseBodyAsString());
 		assertNotNull(method.getResponseHeader("Location").getValue());
-		logger.info("Location  >" +  method.getResponseHeader("Location").getValue() + ">");
+		logger.info("Location  <" +  method.getResponseHeader("Location").getValue() + ">");
 		testIdentifier = pidServiceResponseVO.getIdentifier();
 		assertNotNull(testIdentifier);
 		logger.info("Pid <"  + pidServiceResponseVO.getIdentifier() + "> has been assigned.");
@@ -111,8 +111,16 @@ public class PidCacheServiceTest
 		logger.info("TEST UPDATE PID " + testIdentifier + " with new URL: " + testUrl);
 		method = new PostMethod(CACHE_PIDSERVICE.concat(PIDSERVICE_EDIT).concat("?pid=").concat(testIdentifier));
 		method.setParameter("url", testUrl);
+		
     	ProxyHelper.executeMethod(client, method);
+    	logger.info("Pid update request returned with <" + method.getStatusCode() + ">");; 
+    	logger.info("ResponseBodyAsString <" + method.getResponseBodyAsString() + ">");
 		pidServiceResponseVO = xmlTransforming.transformToPidServiceResponse(method.getResponseBodyAsString());
+		//assertNotNull("Pid creator null", pidServiceResponseVO.getCreator());
+		assertNotNull("Pid action null", pidServiceResponseVO.getAction());
+		assertNotNull("Pid identifier null", pidServiceResponseVO.getIdentifier());
+		assertNotNull("Pid url null", pidServiceResponseVO.getUrl());
+		assertNotNull("Pid institut null", pidServiceResponseVO.getInstitute());
 		assertNotNull(method.getResponseHeader("Location").getValue());
 		testIdentifier = pidServiceResponseVO.getIdentifier();
 		logger.info("Location: " +  method.getResponseHeader("Location").getValue());

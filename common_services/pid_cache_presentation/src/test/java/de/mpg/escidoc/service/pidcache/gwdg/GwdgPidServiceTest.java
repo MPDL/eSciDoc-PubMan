@@ -47,5 +47,18 @@ public class GwdgPidServiceTest {
         
         assertTrue(data != null);
     }
+    
+    @Test
+    public void createAndUpdatePid() throws Exception {
+        GwdgPidService gwdgPidService = new GwdgPidService();
+        String response = gwdgPidService.create("http://test.mpdl.mpg.de");
+        
+        logger.info("Create request returned <" + response + ">");
+        assertTrue(response != null);
+        
+        int status = gwdgPidService.update(response, "http://test.mpdl.mpg.de/updated");
+        
+        assertTrue(status - 200 < 10);
+    }
 
 }

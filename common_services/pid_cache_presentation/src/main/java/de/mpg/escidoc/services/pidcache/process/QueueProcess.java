@@ -5,12 +5,8 @@ package de.mpg.escidoc.services.pidcache.process;
 
 import java.util.List;
 
-import javax.naming.InitialContext;
-
 import org.apache.log4j.Logger;
 
-import de.mpg.escidoc.services.common.XmlTransforming;
-import de.mpg.escidoc.services.common.xmltransforming.XmlTransformingBean;
 import de.mpg.escidoc.services.pidcache.Pid;
 import de.mpg.escidoc.services.pidcache.gwdg.GwdgPidService;
 import de.mpg.escidoc.services.pidcache.tables.Queue;
@@ -28,16 +24,13 @@ import de.mpg.escidoc.services.pidcache.tables.Queue;
 public class QueueProcess 
 {      
 	private static final Logger logger = Logger.getLogger(QueueProcess.class);
-	private XmlTransforming xmlTransforming = null;
+;
 	private int blockSize = 1;
 	
 	/**
      * Default constructor
      */
-    public QueueProcess() throws Exception
-    {
-    	
-    	xmlTransforming = new XmlTransformingBean();
+    public QueueProcess() throws Exception {   
     }
 	
 	/**
@@ -58,8 +51,7 @@ public class QueueProcess
 			{
 				try 
 				{
-					int httpStatus = gwdgPidService.update(pid.getIdentifier(), pid.getUrl());
-					//xmlTransforming.transformToPidServiceResponse(pidXml);
+					gwdgPidService.update(pid.getIdentifier(), pid.getUrl());
 					queue.remove(pid);
 				} 
 				catch (Exception e) 
@@ -93,8 +85,12 @@ public class QueueProcess
                 try 
                 {
                     int httpStatus = gwdgPidService.update(pid.getIdentifier(), pid.getUrl());
-                    logger.debug("emptyBlock updated pid <" + pid.getIdentifier() + "> url <" + pid.getUrl() + "> with status <" + httpStatus + ">");
-                    //xmlTransforming.transformToPidServiceResponse(pidXml);
+                     
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("emptyBlock updated pid <" 
+                                + pid.getIdentifier() + "> url <" 
+                                + pid.getUrl() + "> with status <" + httpStatus + ">");
+                    }
                     queue.remove(pid);
                 } 
                 catch (Exception e) 

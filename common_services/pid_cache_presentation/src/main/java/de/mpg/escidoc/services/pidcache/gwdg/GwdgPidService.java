@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.Base64;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
@@ -45,19 +46,20 @@ public class GwdgPidService
 	 */
 	public GwdgPidService() throws Exception
 	{
-		GWDG_PIDSERVICE = PropertyReader.getProperty("escidoc.pid.gwdg.service.url").concat(PropertyReader.getProperty("escidoc.pid.gwdg.service.suffix"));
-    	GWDG_PIDSERVICE_CREATE = PropertyReader.getProperty("escidoc.pid.service.create.path");
-    	GWDG_PIDSERVICE_VIEW = PropertyReader.getProperty("escidoc.pid.service.view.path");
-    	GWDG_PIDSERVICE_FIND = PropertyReader.getProperty("escidoc.pid.service.search.path");
-    	GWDG_PIDSERVICE_EDIT = PropertyReader.getProperty("escidoc.pid.service.update.path");
-    	GWDG_PIDSERVICE_DELETE = PropertyReader.getProperty("escidoc.pid.service.delete.path");
-    	
-    	GWDG_SERVICE_TIMEOUT = Integer.parseInt(PropertyReader.getProperty("escidoc.pid.gwdg.timeout"));
-    	//todo
-    	if (logger.isInfoEnabled()) {
-    	    logger.info("GWDG_PIDSERVICE <"  + GWDG_PIDSERVICE + ">");
-    	    logger.info("GWDG_SERVICE_TIMEOUT <"  + GWDG_SERVICE_TIMEOUT + ">");
-    	}
+        GWDG_PIDSERVICE =
+                PropertyReader.getProperty("escidoc.pid.gwdg.service.url").concat(
+                        PropertyReader.getProperty("escidoc.pid.gwdg.service.suffix"));
+        GWDG_PIDSERVICE_CREATE = PropertyReader.getProperty("escidoc.pid.service.create.path");
+        GWDG_PIDSERVICE_VIEW = PropertyReader.getProperty("escidoc.pid.service.view.path");
+        GWDG_PIDSERVICE_FIND = PropertyReader.getProperty("escidoc.pid.service.search.path");
+        GWDG_PIDSERVICE_EDIT = PropertyReader.getProperty("escidoc.pid.service.update.path");
+        GWDG_PIDSERVICE_DELETE = PropertyReader.getProperty("escidoc.pid.service.delete.path");
+
+        GWDG_SERVICE_TIMEOUT =
+                Integer.parseInt(PropertyReader.getProperty("escidoc.pid.gwdg.timeout"));
+
+        logger.info("GWDG_PIDSERVICE with suffix <" + GWDG_PIDSERVICE + ">");
+        logger.info("GWDG_SERVICE_TIMEOUT <" + GWDG_SERVICE_TIMEOUT + ">");
 	}
 	
     /**
@@ -80,7 +82,7 @@ public class GwdgPidService
         {
             return false;
         }
-        if (get.getStatusCode() == 200) 
+        if (get.getStatusCode() == HttpStatus.SC_OK) 
         {
             return true;
         }
@@ -104,13 +106,17 @@ public class GwdgPidService
 	    client.executeMethod(create);
         
         int status = create.getStatusCode();
-        logger.info("Create request returned with status <" + status + ">");
+        if (logger.isDebugEnabled()) {
+            logger.debug("Create request returned with status <" + status + ">");
+        }
     	
         String jsonPid = create.getResponseBodyAsString();
         ObjectMapper mapper = new ObjectMapper();
         
-        EpicPid epicPid = mapper.readValue(jsonPid, EpicPid.class);       
-        logger.info("Create request returning pid  <" + epicPid.getEpicPid() + ">");
+        EpicPid epicPid = mapper.readValue(jsonPid, EpicPid.class);    
+        if (logger.isDebugEnabled()) {
+            logger.debug("Create request returning pid  <" + epicPid.getEpicPid() + ">");
+        }
         
      	return epicPid.getEpicPid();
 	}
@@ -127,19 +133,25 @@ public class GwdgPidService
      */
     public int update(String id, String url) throws Exception
     {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Starting to update pid <" + id + "> with url <" + url + ">");
+        }
         if (id.startsWith(PropertyReader.getProperty("escidoc.pid.gwdg.service.suffix"))) {
-            id.replace(PropertyReader.getProperty("escidoc.pid.gwdg.service.suffix").concat("/"), "");
+            id = id.replace(PropertyReader.getProperty("escidoc.pid.gwdg.service.suffix").concat("/"), "");
         }
         
         HttpClient client = getHttpClient();
         
         PutMethod update = createPutMethod(id, url);
         client.executeMethod(update);
-        logger.info("Pid <" + id + "> updated.");
+        if (logger.isDebugEnabled()) {
+            logger.debug("Pid <" + id + "> updated.");
+        }
         
         int status = update.getStatusCode();
-        logger.info("Update request returned with status <" + status + ">");
-        
+        if (logger.isDebugEnabled()) {
+            logger.debug("Update request returned with status <" + status + ">");
+        }
         return status; 
     }
     
@@ -161,7 +173,9 @@ public class GwdgPidService
         client.executeMethod(retrieve);
         
         int status = retrieve.getStatusCode();
-        logger.info("Get request returned with status <" + status + ">");
+        if (logger.isDebugEnabled()) {
+            logger.debug("Get request returned with status <" + status + ">");
+        }
         
         String jsonFullPid = retrieve.getResponseBodyAsString();
         ObjectMapper mapper = new ObjectMapper();
