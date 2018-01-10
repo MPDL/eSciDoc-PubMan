@@ -58,8 +58,10 @@ public class GwdgPidService
         GWDG_SERVICE_TIMEOUT =
                 Integer.parseInt(PropertyReader.getProperty("escidoc.pid.gwdg.timeout"));
 
-        logger.info("GWDG_PIDSERVICE with suffix <" + GWDG_PIDSERVICE + ">");
-        logger.info("GWDG_SERVICE_TIMEOUT <" + GWDG_SERVICE_TIMEOUT + " sec >");
+        if (logger.isDebugEnabled()) {
+            logger.info("GWDG_PIDSERVICE with suffix <" + GWDG_PIDSERVICE + ">");
+            logger.info("GWDG_SERVICE_TIMEOUT <" + GWDG_SERVICE_TIMEOUT + " sec >");
+        }        
 	}
 	
     /**
