@@ -1255,7 +1255,7 @@
 				
 				<jboss.install.dir>/usr/share/jboss</jboss.install.dir>
 				<jboss.user.scp>jboss@dev-pubman.mpdl.mpg.de</jboss.user.scp>
-				<wildfly.install.dir>/usr/share/pubman/wildfly</wildfly.install.dir>
+				<wildfly.install.dir>/usr/share/pubman</wildfly.install.dir>
 				
 				<!-- syndication service -->
 				<escidoc.syndication.service.url>http://dev-pubman.mpdl.mpg.de/syndication</escidoc.syndication.service.url>
