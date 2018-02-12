@@ -30,7 +30,8 @@ public class GwdgPidServiceTest {
     @Test
     public void update() throws Exception {
         GwdgPidService gwdgPidService = new GwdgPidService();
-        int status = gwdgPidService.update("0000-0005-24B7-4", "http://test.mpdl.mpg.de/updated");
+        int status = gwdgPidService.update("0000-0005-24B7-4", "http://test.mpdl.mpg.de/updatedNew");
+        //int status = gwdgPidService.update("00-001M-0000-002E-A349-6", "http://pubman.mpdl.mpg.de/pubman/item/escidoc:2518593");
         
         logger.info("Update request returned <" + status + ">");
         

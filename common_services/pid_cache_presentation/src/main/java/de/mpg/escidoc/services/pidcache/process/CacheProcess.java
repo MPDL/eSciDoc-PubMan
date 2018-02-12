@@ -61,15 +61,27 @@ public class CacheProcess
             {
                 current = new Date().getTime();
                 String completeDummyUrl = DUMMY_URL.concat(Long.toString(current));
-                String pidIdentifier = gwdgPidService.create(completeDummyUrl);
+                String pidIdentifier = "";
                 
-                if (logger.isDebugEnabled()) {
-                    logger.debug("pidIdentifier <" + pidIdentifier + ">");
-                    logger.debug("completeDummyUrl <" + completeDummyUrl + ">");
+                try {
+                    pidIdentifier = gwdgPidService.create(completeDummyUrl);
+                    
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("pidIdentifier <" + pidIdentifier + ">");
+                        logger.debug("completeDummyUrl <" + completeDummyUrl + ">");
+                    }
+                    
+                    if (pidIdentifier != null && !pidIdentifier.isEmpty()) {
+                        Pid pid = new Pid(pidIdentifier, completeDummyUrl); 
+                        cache.add(pid);
+                    }
+                } catch (Exception e) {
+                    logger.warn("Exception caught when creating pid + " + e.getStackTrace());
+                    e.printStackTrace();
+                    i++;
+                    continue;
                 }
-              
-                Pid pid = new Pid(pidIdentifier, completeDummyUrl);
-                cache.add(pid);
+                
                 i++;
             }
         }

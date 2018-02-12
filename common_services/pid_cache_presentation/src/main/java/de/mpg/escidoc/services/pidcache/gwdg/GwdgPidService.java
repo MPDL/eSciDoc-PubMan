@@ -59,8 +59,8 @@ public class GwdgPidService
                 Integer.parseInt(PropertyReader.getProperty("escidoc.pid.gwdg.timeout"));
 
         if (logger.isDebugEnabled()) {
-            logger.info("GWDG_PIDSERVICE with suffix <" + GWDG_PIDSERVICE + ">");
-            logger.info("GWDG_SERVICE_TIMEOUT <" + GWDG_SERVICE_TIMEOUT + " sec >");
+            logger.debug("GWDG_PIDSERVICE with suffix <" + GWDG_PIDSERVICE + ">");
+            logger.debug("GWDG_SERVICE_TIMEOUT <" + GWDG_SERVICE_TIMEOUT + " sec >");
         }        
 	}
 	
@@ -69,25 +69,23 @@ public class GwdgPidService
      * False if not.
      * @return
      */
-    public boolean available()
-    {     
+    public boolean available() {
+        
         HttpClient client = getHttpClient();
-        
         GetMethod get = null;
-        
-        try
-        {  
+
+        try {
             get = createGetMethod();
-            client.executeMethod(get);
-        } 
-        catch (Exception e) 
-        {
-            return false;
+            int httpStatus = client.executeMethod(get);
+            if (httpStatus == HttpStatus.SC_OK) {
+                return true;
+            } else {
+                logger.warn("getMethod <" + get.getName() + "> returned " + httpStatus);
+            }
+        } catch (Exception e) {
+            logger.warn("Exception caught getAvailableMethod <" + get.getName() + "> " + e.getStackTrace());
         }
-        if (get.getStatusCode() == HttpStatus.SC_OK) 
-        {
-            return true;
-        }
+
         return false;
     }
 		

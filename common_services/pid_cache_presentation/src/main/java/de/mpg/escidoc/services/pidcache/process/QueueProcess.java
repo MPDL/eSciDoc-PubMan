@@ -5,6 +5,7 @@ package de.mpg.escidoc.services.pidcache.process;
 
 import java.util.List;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
 
 import de.mpg.escidoc.services.pidcache.Pid;
@@ -32,47 +33,14 @@ public class QueueProcess
      */
     public QueueProcess() throws Exception {   
     }
-	
-	/**
-	 * Empty the {@link Queue} if:
-	 *  - The service at the GWDG is available
-	 *  - And if: 	- the PID exists : update the PID with the new URL 
-	 *  			- The PID doesn't exist: Some Reporting...
-	 * @throws Exception 
-	 */
-	public void empty() throws Exception
-	{
-		Queue queue = new Queue();
-		Pid pid = queue.getFirst();
-		GwdgPidService gwdgPidService = new GwdgPidService();
-		if (gwdgPidService.available()) 
-		{
-			while (pid != null) 
-			{
-				try 
-				{
-					gwdgPidService.update(pid.getIdentifier(), pid.getUrl());
-					queue.remove(pid);
-				} 
-				catch (Exception e) 
-				{
-					logger.warn("Error, PID can not be updated on GWDG service.", e);
-				}
-				
-				pid = queue.getFirst();
-			}
-		}
-		else
-		{
-			logger.warn("PID manager at GWDG not available.");
-		}
-	}
 
     public void emptyBlock() throws Exception
     {
         Queue queue = new Queue();
         List<Pid> pids = queue.getFirstBlock(this.blockSize);
-        logger.debug("emptyBlock got " + this.blockSize + " pids");
+        if (logger.isDebugEnabled()) {
+            logger.debug("emptyBlock got " + this.blockSize + " pids");
+        }
         if (pids.size() == 0)
         {
             return;
@@ -82,16 +50,24 @@ public class QueueProcess
         {
             for (Pid pid : pids) 
             {
+                int httpStatus = HttpStatus.SC_NO_CONTENT;
                 try 
                 {
-                    int httpStatus = gwdgPidService.update(pid.getIdentifier(), pid.getUrl());
+                    httpStatus = gwdgPidService.update(pid.getIdentifier(), pid.getUrl());
                      
                     if (logger.isDebugEnabled()) {
                         logger.debug("emptyBlock updated pid <" 
                                 + pid.getIdentifier() + "> url <" 
                                 + pid.getUrl() + "> with status <" + httpStatus + ">");
                     }
-                    queue.remove(pid);
+                    if (httpStatus == HttpStatus.SC_OK || httpStatus == HttpStatus.SC_NO_CONTENT)
+                    {
+                        queue.remove(pid);
+                    } else {
+                        logger.warn("Update pid returned with <" + httpStatus + ">");
+                        logger.warn("Could not remove pid <" + pid.getIdentifier() + "> url <" 
+                                + pid.getUrl() + "> from queue");
+                    }
                 } 
                 catch (Exception e) 
                 {
@@ -103,6 +79,7 @@ public class QueueProcess
         {
             logger.warn("PID manager at GWDG not available.");
         }
+        
         
     }
     

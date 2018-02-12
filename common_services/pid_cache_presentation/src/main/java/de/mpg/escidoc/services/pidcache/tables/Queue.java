@@ -25,13 +25,14 @@ public class Queue
 	/**
 	 * Default constructor
 	 */
-	public Queue() throws Exception
+	public Queue()
 	{
 	}
 	
 	public Pid getFirst() throws Exception
 	{
 		Pid pid = new Pid();
+		
 		Connection connection  = DatabaseHelper.getConnection();
 		Statement statement = connection.createStatement();
     	statement.setMaxRows(1);
@@ -70,7 +71,9 @@ public class Queue
         }
         statement.close();
         connection.close();
-        logger.debug("getFirstBlock of queue returning " + pids.size() + " pids");
+        if (logger.isDebugEnabled()) {
+            logger.debug("getFirstBlock of queue returning " + pids.size() + " pids");
+        }
         return pids;
     }
 	
