@@ -42,7 +42,6 @@
 /*META MENU*/
 
 	.metaMenu {
-		height: 2.9091em;
 		line-height: normal;
 	}
 	
@@ -153,13 +152,13 @@
 }
 
 .LogoNSearch {
-	height:5.7272em;
+	height:4.7272em;
 }
 	
 /*SEARCH MENU*/
 .searchMenu {
 	float: right;
-	margin-top: 2em;
+	margin-top: 1em;
 }
 
 .searchMenu * {

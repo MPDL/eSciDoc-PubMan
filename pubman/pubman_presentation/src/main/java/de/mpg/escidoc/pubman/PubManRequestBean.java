@@ -106,6 +106,25 @@ public class PubManRequestBean extends FacesBean
         return url;
     }
     
+    /**
+     * Reads the policy URL from the properties file.
+     * @return policyUrl as String
+     */
+    public String getPrivacyPolicyUrl()
+    {
+        String url = "";
+        try
+        {
+            url = PropertyReader.getProperty("escidoc.pubman.privacy.policy.url");
+        }
+        catch (Exception e)
+        {
+            logger.error("Could not read property: 'escidoc.pubman.privacy.policy.url' from properties file.", e);
+        }
+
+        return url;
+    }
+    
     
     /**
      * Reads the contact URL from the properties file.

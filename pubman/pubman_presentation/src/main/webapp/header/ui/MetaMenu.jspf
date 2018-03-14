@@ -31,7 +31,8 @@
             All rights reserved. Use is subject to license terms.
              */
 </ui:remove>
-	<span id="metaMenuSkipLinkAnchor" class="full_area0 metaMenu">
+	<h:panelGroup id="metaMenuSkipLinkAnchor" layout="block"
+		styleClass="full_area0 metaMenu">
 		<!-- meta Menu starts here --> <h:form>
 			<h:panelGroup styleClass="seperator"></h:panelGroup>
 			<div class="medium_area0 endline selectContainer">
@@ -66,13 +67,20 @@
 			</h:outputLink>
 			<h:panelGroup styleClass="seperator"></h:panelGroup>
 
-			<!-- Policy -->
+			<!-- Privacy Policy -->
 			<h:commandLink id="lnkPolicy" styleClass="free_area0_p8 endline"
+				title="#{tip.mainMenu_lnkPrivacyPolicy}"
+				onclick="loadBlog('#{PubManRequestBean.privacyPolicyUrl}');return false"
+				value="#{lbl.mainMenu_lnkPrivacyPolicy}" />
+			<h:panelGroup styleClass="seperator"></h:panelGroup>
+
+			<!-- Policy -->
+			<h:commandLink id="lnkPrivacyPolicy" styleClass="free_area0_p8 endline"
 				title="#{tip.mainMenu_lnkPolicy}"
 				onclick="loadBlog('#{PubManRequestBean.policyUrl}');return false"
 				value="#{lbl.mainMenu_lnkPolicy}" />
 			<h:panelGroup styleClass="seperator"></h:panelGroup>
-
+			
 			<!-- Contact -->
 			<h:commandLink id="lnkContact" styleClass="free_area0_p8 endline"
 				title="#{tip.contact}"
@@ -81,20 +89,23 @@
 			<h:panelGroup styleClass="seperator"></h:panelGroup>
 
 			<!-- LogIn, LogOut -->
-			<h:commandLink id="lnkLoginLogout" styleClass="free_area0_p8 endline"
-				action="#{Login.loginLogout}"
-				value="#{LoginHelper.loginLogoutLabel}" immediate="true" />
-
-			<h:panelGroup styleClass="seperator"
-				rendered="#{LoginHelper.loggedIn}"></h:panelGroup>
-
-			<h:commandLink id="lnkAccountUserName"
-				styleClass="free_area0_p8 endline"
-				action="#{LoginHelper.getUserAccountOptionsLink}"
-				value="#{LoginHelper.accountUser.name}"
-				rendered="#{LoginHelper.loggedIn}" />
+			<h:panelGroup id="login" layout="block"
+					style="clear:right; margin-top:0.37em">
+				<h:commandLink id="lnkLoginLogout" styleClass="free_area0_p8 endline"
+					action="#{Login.loginLogout}"
+					value="#{LoginHelper.loginLogoutLabel}" immediate="true" />
+	
+				<h:panelGroup styleClass="seperator"
+					rendered="#{LoginHelper.loggedIn}"></h:panelGroup>
+	
+				<h:commandLink id="lnkAccountUserName"
+					styleClass="free_area0_p8 endline"
+					action="#{LoginHelper.getUserAccountOptionsLink}"
+					value="#{LoginHelper.accountUser.name}"
+					rendered="#{LoginHelper.loggedIn}" />
+			</h:panelGroup>
 
 			<!-- meta Menu ends here -->
 		</h:form>
-	</span>
+	</h:panelGroup>
 </ui:composition>
