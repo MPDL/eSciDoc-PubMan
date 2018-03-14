@@ -113,6 +113,7 @@ import de.mpg.escidoc.services.common.valueobjects.metadata.IdentifierVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.MdsFileVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.OrganizationVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.PersonVO;
+import de.mpg.escidoc.services.common.valueobjects.metadata.ProjectInfoVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.SourceVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.TextVO;
 import de.mpg.escidoc.services.common.valueobjects.publication.MdsPublicationVO;
@@ -657,11 +658,21 @@ public class EditItem extends FacesBean
         return xmlTransforming.transformUploadResponseToFileURL(response);
     }
 
+    
+    public void addProjectInfo()
+    {
+    	this.getPubItem().getMetadata().getProjectInfos().add(new ProjectInfoVO());
+    }
+    
+
+    
     public String addLanguage()
     {
         getPubItem().getMetadata().getLanguages().add("");
         return null;
     }
+    
+    
 
     public String removeLanguage()
     {
@@ -1670,7 +1681,8 @@ public String logUploadComplete()
         }
         return null;
     }
-
+    
+   
     /**
      * This method saves the latest locator to the list of files of the item
      * 

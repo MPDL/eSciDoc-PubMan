@@ -82,6 +82,7 @@ import de.mpg.escidoc.services.common.valueobjects.metadata.FormatVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.IdentifierVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.IdentifierVO.IdType;
 import de.mpg.escidoc.services.common.valueobjects.metadata.OrganizationVO;
+import de.mpg.escidoc.services.common.valueobjects.metadata.ProjectInfoVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.SourceVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.TextVO;
 import de.mpg.escidoc.services.common.valueobjects.publication.MdsPublicationVO;
@@ -381,6 +382,12 @@ public class JiBXHelper
     {
         return new ArrayList();
     }
+    
+    public static List<ProjectInfoVO> projectInfoVOListFactory()
+    {
+        return new ArrayList<ProjectInfoVO>();
+    }
+
     
     /**
      * Factory method to create a <code>java.util.ArrayList&lt;VersionHistoryEntryVO></code> as the implementation of a
