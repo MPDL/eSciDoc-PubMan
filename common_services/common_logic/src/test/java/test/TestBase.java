@@ -355,7 +355,7 @@ public class TestBase
         
         
 
-        mds.setProjectInfo(projectInfo);
+        mds.getProjectInfos().add(projectInfo);
         item.setMetadata(mds);
 
         return item;
