@@ -31,7 +31,7 @@
 	<parent>
 		<groupId>de.mpg.escidoc.services.wildfly</groupId>
 		<artifactId>pubman</artifactId>
-		<version>7.13.1-SNAPSHOT</version>
+		<version>7.14.0</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
@@ -39,12 +39,12 @@
 	<artifactId>search</artifactId>
 	<name>search</name>
 	<packaging>ejb</packaging>
-	<version>1.1.35-SNAPSHOT</version>
+	<version>1.1.35</version>
 	<scm>
 		<connection>scm:git:git@github.com:MPDL/PubMan/common_services/search</connection>
 		<developerConnection>scm:git:git@github.com:MPDL/PubMan/common_services/search</developerConnection>
 		<url>https://github.com/MPDL/PubMan/</url>
-	  <tag>HEAD</tag>
+	  <tag>pubman-7.14.0</tag>
   </scm>
 	<build>
 		<plugins>
