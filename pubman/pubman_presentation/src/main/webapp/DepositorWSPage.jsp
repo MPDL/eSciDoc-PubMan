@@ -243,7 +243,8 @@
 			<ui:include src="footer/Footer.jspf" />
 			
 			<script type="text/javascript">
-				var citationStyleSuggestURL = '<h:outputText value="#{AdvancedSearchEdit.suggestConeUrl}"/>citation-styles/query';
+			//<![CDATA[
+				var citationStyleSuggestURL = '#{AdvancedSearchEdit.suggestConeUrl}citation-styles/query';
 				var citationStyleSuggestBaseURL = '$1?format=json';
 				$("input[id$='offset']").submit(function() {
 					$(this).val($(window).scrollTop());
@@ -257,6 +258,7 @@
 				function checkUpdateCslUi() {
 					(typeof updateCslUi == 'function') ?	updateCslUi() :	setTimeout("checkUpdateCslUi()", 30);
 				}
+				//]]>
 			</script>
 			</body>
 		</html>

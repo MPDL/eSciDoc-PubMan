@@ -41,6 +41,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
@@ -68,6 +69,7 @@ public class RetrieveTest
     }
 
     @Test
+    @Ignore
     public void testAllAction() throws Exception
     {
         logger.debug("Query: " + serviceUrl + "iso639-1/all?format=options");
@@ -94,6 +96,7 @@ public class RetrieveTest
     }
 
     @Test
+    @Ignore
     public void testQueryAction() throws Exception
     {
         logger.debug("Query: " + serviceUrl + "ddc/query?q=b&format=html");
@@ -112,6 +115,7 @@ public class RetrieveTest
     }
 
     @Test
+    @Ignore
     public void testDetailAction() throws Exception
     {
         logger.debug("Query: " + serviceUrl + "persons/all?format=jquery");

@@ -3,6 +3,40 @@
 	<xsl:key name="pubman-to-marc" match="misc:mapping" use="misc:source"/>
 	<xsl:key name="marc-e-to-pubman" match="misc:mapping" use="misc:target[@misc:use eq 'code-e']"/>
 	<xsl:key name="marc-4-to-pubman" match="misc:mapping" use="misc:target[@misc:use eq 'code-4']"/>
+	
+	<xsl:variable name="local:mapping_marc_degrees">
+		<misc:mapping>
+			<misc:source>http://purl.org/escidoc/metadata/ves/academic-degrees/master</misc:source>
+			<misc:target>Master</misc:target>
+		</misc:mapping>
+		<misc:mapping>
+			<misc:source>http://purl.org/escidoc/metadata/ves/academic-degrees/diploma</misc:source>
+			<misc:target>Diploma</misc:target>
+		</misc:mapping>
+		<misc:mapping>
+			<misc:source>http://purl.org/escidoc/metadata/ves/academic-degrees/bachelor</misc:source>
+			<misc:target>Bachelor</misc:target>
+		</misc:mapping>
+		<misc:mapping>
+			<misc:source>http://purl.org/escidoc/metadata/ves/academic-degrees/phd</misc:source>
+			<misc:target>PhD Dissertation</misc:target>
+		</misc:mapping>
+		<misc:mapping>
+			<misc:source>http://purl.org/escidoc/metadata/ves/academic-degrees/magister</misc:source>
+			<misc:target>Magister</misc:target>
+		</misc:mapping>
+		<misc:mapping>
+			<misc:source>http://purl.org/escidoc/metadata/ves/academic-degrees/habilitation</misc:source>
+			<misc:target>Habilitation</misc:target>
+		</misc:mapping>
+		<misc:mapping>
+			<misc:source>http://purl.org/escidoc/metadata/ves/academic-degrees/staatsexamen</misc:source>
+			<misc:target>Staatsexamen</misc:target>
+		</misc:mapping>
+	</xsl:variable>
+	
+	
+	
 	<xsl:variable name="local:mapping_marc_relators">
 		<misc:mapping-table xml:id="mapping_marc_relators" group="relator terms and codes">
 			<misc:mapping>
