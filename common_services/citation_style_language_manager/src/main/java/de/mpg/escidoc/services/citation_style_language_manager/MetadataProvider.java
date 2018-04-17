@@ -507,10 +507,10 @@ public class MetadataProvider implements ItemDataProvider
                     cslItem.containerTitle(source.getTitle().getValue());
                     // Source creators
                     List<CSLName> containerAuthorList = new ArrayList<CSLName>();
-                    List<CSLName> sourceEditorList = new ArrayList<CSLName>();
                     for (CreatorVO sourceCreator : source.getCreators())
                     {
-                        if (CreatorVO.CreatorRole.AUTHOR.equals(sourceCreator.getRole()))
+                        if (CreatorVO.CreatorRole.AUTHOR.equals(sourceCreator.getRole()) ||
+                                CreatorVO.CreatorRole.EDITOR.equals(sourceCreator.getRole()))
                         {
                             if (CreatorVO.CreatorType.PERSON.equals(sourceCreator.getType()))
                             {
