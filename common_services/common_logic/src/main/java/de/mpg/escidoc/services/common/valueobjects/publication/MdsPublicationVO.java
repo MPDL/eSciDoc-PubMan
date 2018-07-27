@@ -197,7 +197,7 @@ public class MdsPublicationVO extends MetadataSetVO implements Cloneable, TitleI
         MPINP("http://purl.org/escidoc/metadata/terms/0.1/MPINP"),
         JEL("http://purl.org/escidoc/metadata/terms/0.1/JEL"),
         MPICC_PROJECTS("http://purl.org/escidoc/metadata/terms/0.1/MPICC_PROJECTS"),
-        MPIWG_PROJECTS("http://purl.org/escidoc/metadata/terms/0.1/MPIWG_PROJECTS");;
+        MPIWG_PROJECTS("http://purl.org/escidoc/metadata/terms/0.1/MPIWG_PROJECTS");
         
         private String uri;
         
