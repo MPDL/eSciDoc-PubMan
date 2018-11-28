@@ -195,7 +195,9 @@ public class MdsPublicationVO extends MetadataSetVO implements Cloneable, TitleI
         PACS("http://purl.org/escidoc/metadata/terms/0.1/PACS"),
         JUS("http://purl.org/escidoc/metadata/terms/0.1/JUS"),
         MPINP("http://purl.org/escidoc/metadata/terms/0.1/MPINP"),
-        JEL("http://purl.org/escidoc/metadata/terms/0.1/JEL");
+        JEL("http://purl.org/escidoc/metadata/terms/0.1/JEL"),
+        MPICC_PROJECTS("http://purl.org/escidoc/metadata/terms/0.1/MPICC_PROJECTS"),
+        MPIWG_PROJECTS("http://purl.org/escidoc/metadata/terms/0.1/MPIWG_PROJECTS");
         
         private String uri;
         
@@ -299,7 +301,7 @@ public class MdsPublicationVO extends MetadataSetVO implements Cloneable, TitleI
     /**
      * Information about project and funding
      */
-    private ProjectInfoVO projectInfo;
+    private List<ProjectInfoVO> projectInfos = new ArrayList<>();
     
     /**
      * Creates a new instance.
@@ -398,10 +400,15 @@ public class MdsPublicationVO extends MetadataSetVO implements Cloneable, TitleI
         }
         
         setTotalNumberOfPages(other.getTotalNumberOfPages());
-        if (other.getProjectInfo() != null)
-        {
-        	 setProjectInfo(other.getProjectInfo().clone());
-        }
+        
+        if (other.getProjectInfos() != null) {
+            for (ProjectInfoVO pi : other.getProjectInfos())
+            {
+                getProjectInfos().add((ProjectInfoVO) pi.clone());
+            }
+         }
+        
+        
        
     }
 
@@ -650,7 +657,7 @@ public class MdsPublicationVO extends MetadataSetVO implements Cloneable, TitleI
                 && equals(getSubjects(), other.getSubjects()) && equals(getAbstracts(), other.getAbstracts())
                 && equals(getTableOfContents(), other.getTableOfContents())
                 && equals(getTotalNumberOfPages(), other.getTotalNumberOfPages())
-                && equals(getProjectInfo(), other.getProjectInfo());
+                && equals(getProjectInfos(), other.getProjectInfos());
     }
 
     /**
@@ -835,11 +842,11 @@ public class MdsPublicationVO extends MetadataSetVO implements Cloneable, TitleI
         }
     }
 
-	public ProjectInfoVO getProjectInfo() {
-		return projectInfo;
+	public List<ProjectInfoVO> getProjectInfos() {
+		return projectInfos;
 	}
 
-	public void setProjectInfo(ProjectInfoVO projectInfo) {
-		this.projectInfo = projectInfo;
+	public void setProjectInfos(List<ProjectInfoVO> projectInfos) {
+		this.projectInfos = projectInfos;
 	}
 }

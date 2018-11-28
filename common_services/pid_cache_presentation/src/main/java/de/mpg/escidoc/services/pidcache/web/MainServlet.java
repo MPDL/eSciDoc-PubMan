@@ -93,15 +93,6 @@ public class MainServlet extends HttpServlet
            		}
         		resp.getWriter().append(pidCacheService.retrieve(req.getParameter("pid")));
     		}
-        	else if (GwdgPidService.GWDG_PIDSERVICE_FIND.equals(req.getPathInfo())
-        			|| GwdgPidService.GWDG_PIDSERVICE_FIND.concat("/").equals(req.getPathInfo())) 
-        	{
-        		if (req.getParameter("url") == null) 
-                {
-        			resp.sendError(HttpServletResponse.SC_NO_CONTENT, "URL parameter failed.");
-           		}
-        		resp.getWriter().append(pidCacheService.search(req.getParameter("url")));
-    		}
         	else if ("/cache/size".equals(req.getPathInfo()))
         	{
         		resp.getWriter().append("There are " +  pidCacheService.getCacheSize() + " PID stored in cache");
@@ -126,11 +117,11 @@ public class MainServlet extends HttpServlet
      */
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {   
-    	
-    	logger.info("PID cache POST request");
+    	logger.info("POST request");
     	
     	if (req.getParameter("url") == null) 
         {
+    	    logger.warn("URL parameter failed.");
         	resp.sendError(HttpServletResponse.SC_NO_CONTENT, "URL parameter failed.");
 		}
         try 
@@ -145,8 +136,11 @@ public class MainServlet extends HttpServlet
         	PidCacheService cacheService = new PidCacheService();
         	String xmlOutput = null;
         	
+        	if (logger.isDebugEnabled()) {
+        	    logger.info("request pathInfo <" + req.getPathInfo() + ">");
+        	}
         	if (GwdgPidService.GWDG_PIDSERVICE_CREATE.equals(req.getPathInfo())) 
-            {
+            {  
         		xmlOutput = cacheService.create(req.getParameter("url"));
     		}
         	else if (GwdgPidService.GWDG_PIDSERVICE_EDIT.equals(req.getPathInfo())) 
@@ -162,7 +156,6 @@ public class MainServlet extends HttpServlet
         		resp.sendError(HttpServletResponse.SC_NOT_FOUND, req.getPathInfo());
 			}
         	
-        	resp.setStatus(cacheService.getStatus());
             resp.encodeRedirectURL(cacheService.getLocation());
             resp.addHeader("Location", cacheService.getLocation());
     		resp.getWriter().append(xmlOutput);

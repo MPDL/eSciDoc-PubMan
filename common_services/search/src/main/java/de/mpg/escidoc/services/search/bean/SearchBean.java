@@ -272,6 +272,7 @@ public class SearchBean implements Search
         	
             logger.info("Cql search string: <" + searchRetrieveRequest.getQuery() + ">");
             logger.info("Cql sorting key(s): <" + searchRetrieveRequest.getSortKeys() + ">");
+            logger.info("Cql start record: <" + searchRetrieveRequest.getStartRecord() + ">");
             searchResult = searchHandler.searchRetrieveOperation(searchRetrieveRequest);
             logger.debug("Search result: " + searchResult.getNumberOfRecords() + " item(s) or container(s)");
         } 

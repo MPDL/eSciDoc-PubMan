@@ -54,9 +54,7 @@ public class TestIndexerOldItems
 		indexer.indexItemsStart(new File("src/test/resources/olditems/escidoc_76990"));
 		indexer.finalizeIndex();
 				
-		assertTrue("Expected 1 Found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
 		assertTrue(indexer.getIndexingReport().getFilesErrorOccured() == 0);
-		assertTrue(indexer.getIndexingReport().getFilesIndexingDone() == 1);
 		assertTrue(indexer.getIndexingReport().getFilesSkippedBecauseOfTime() == 0);
 		
 		validator = new Validator(indexer);
@@ -65,9 +63,14 @@ public class TestIndexerOldItems
 		switch(indexer.currentIndexMode)
 		{
 			case LATEST_RELEASE:
+			    assertTrue("Expected 1 Found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
+
 				fields = fieldMap.get("xml_representation");				
 				break;
+			case BOTH:
 			case LATEST_VERSION:
+			    assertTrue("Expected 1 Found " + indexer.getIndexingReport().getFilesIndexingDone(), indexer.getIndexingReport().getFilesIndexingDone() == 1);
+
 				fields = fieldMap.get("aa_xml_representation");
 				break;
 		}	

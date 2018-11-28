@@ -2,15 +2,8 @@ package de.mpg.escidoc.services.pidcache.process;
 
 import java.util.Date;
 
-import javax.annotation.Resource;
-import javax.inject.Inject;
-import javax.naming.InitialContext;
-
 import org.apache.log4j.Logger;
 
-import de.mpg.escidoc.services.common.XmlTransforming;
-import de.mpg.escidoc.services.common.valueobjects.PidServiceResponseVO;
-import de.mpg.escidoc.services.common.xmltransforming.XmlTransformingBean;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.pidcache.Pid;
 import de.mpg.escidoc.services.pidcache.gwdg.GwdgPidService;
@@ -29,10 +22,8 @@ import de.mpg.escidoc.services.pidcache.tables.Cache;
 public class CacheProcess 
 {
 	 private static String DUMMY_URL = null;
-	 private static final Logger logger = Logger.getLogger(CacheProcess.class);
-	 private InitialContext context = null;
 	 
-	 private XmlTransforming xmlTransforming;
+	 private static final Logger logger = Logger.getLogger(CacheProcess.class);
 
 	 
 	/**
@@ -42,11 +33,10 @@ public class CacheProcess
 	public CacheProcess() throws Exception
 	{
 		DUMMY_URL = PropertyReader.getProperty("escidoc.pidcache.dummy.url");
-		//context = new InitialContext();
 		
-		
-		
-		xmlTransforming = new XmlTransformingBean();
+		if (logger.isDebugEnabled()) {
+		    logger.debug("Using dummy url <" + DUMMY_URL + ">");
+		}
 	}
 
 	/**
@@ -70,10 +60,28 @@ public class CacheProcess
                     && i < number)
             {
                 current = new Date().getTime();
-                String pidXml = gwdgPidService.create(DUMMY_URL.concat(Long.toString(current)));
-                PidServiceResponseVO pidServiceResponseVO = xmlTransforming.transformToPidServiceResponse(pidXml);
-                Pid pid = new Pid(pidServiceResponseVO.getIdentifier(), pidServiceResponseVO.getUrl());
-                cache.add(pid);
+                String completeDummyUrl = DUMMY_URL.concat(Long.toString(current));
+                String pidIdentifier = "";
+                
+                try {
+                    pidIdentifier = gwdgPidService.create(completeDummyUrl);
+                    
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("pidIdentifier <" + pidIdentifier + ">");
+                        logger.debug("completeDummyUrl <" + completeDummyUrl + ">");
+                    }
+                    
+                    if (pidIdentifier != null && !pidIdentifier.isEmpty()) {
+                        Pid pid = new Pid(pidIdentifier, completeDummyUrl); 
+                        cache.add(pid);
+                    }
+                } catch (Exception e) {
+                    logger.warn("Exception caught when creating pid + " + e.getStackTrace());
+                    e.printStackTrace();
+                    i++;
+                    continue;
+                }
+                
                 i++;
             }
         }

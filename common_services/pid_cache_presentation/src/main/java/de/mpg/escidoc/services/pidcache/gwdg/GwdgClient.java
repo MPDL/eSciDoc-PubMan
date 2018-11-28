@@ -13,7 +13,8 @@ import de.mpg.escidoc.services.framework.PropertyReader;
 public class GwdgClient extends HttpClient 
 {
 	public static String GWDG_PIDSERVICE_USER = null;
-    private static String GWDG_PIDSERVICE_PASS = null;;
+    private static String GWDG_PIDSERVICE_PASS = null;
+    
     public static int GWDG_SERVICE_TIMEOUT = 20 * 1000;
     
     /**
@@ -24,13 +25,11 @@ public class GwdgClient extends HttpClient
 	public GwdgClient() throws Exception
 	{
 		super();
-		GWDG_PIDSERVICE_USER = PropertyReader.getProperty("escidoc.pid.gwdg.user.login");
-		GWDG_PIDSERVICE_PASS = PropertyReader.getProperty("escidoc.pid.gwdg.user.password");
+		
 		GWDG_SERVICE_TIMEOUT = Integer.parseInt(PropertyReader.getProperty("escidoc.pid.gwdg.timeout"));
 		this.getParams().setAuthenticationPreemptive(true);
     	Credentials defaultcreds = new UsernamePasswordCredentials(GWDG_PIDSERVICE_USER, GWDG_PIDSERVICE_PASS);
     	this.getState().setCredentials(new AuthScope(AuthScope.ANY), defaultcreds);
-    	this.setConnectionTimeout(GWDG_SERVICE_TIMEOUT);
     	
 	}
 	
@@ -46,11 +45,11 @@ public class GwdgClient extends HttpClient
 	 * @param port
 	 * @param realm
 	 */
-	public GwdgClient(String host, int port, String realm)
+/*	public GwdgClient(String host, int port, String realm)
 	{
 		super();
 		this.getParams().setAuthenticationPreemptive(true);
     	Credentials defaultcreds = new UsernamePasswordCredentials(GWDG_PIDSERVICE_USER, GWDG_PIDSERVICE_PASS);
     	this.getState().setCredentials(new AuthScope(host, port, realm), defaultcreds);
-	}
+	}*/
 }

@@ -287,7 +287,7 @@
 			
 			<script type="text/javascript">
 				//<![CDATA[
-					var citationStyleSuggestURL = '<h:outputText value="#{AdvancedSearchEdit.suggestConeUrl}"/>citation-styles/query';
+					var citationStyleSuggestURL = '#{AdvancedSearchEdit.suggestConeUrl}citation-styles/query';
 					var citationStyleSuggestBaseURL = '$1?format=json';
 					$("input[id$='offset']").submit(function() {
 						$(this).val($(window).scrollTop());

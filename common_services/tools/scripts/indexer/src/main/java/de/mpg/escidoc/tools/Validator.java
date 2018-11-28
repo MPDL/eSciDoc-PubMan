@@ -28,7 +28,10 @@ import de.mpg.escidoc.services.common.exceptions.TechnicalException;
 
 public class Validator
 {
-	protected Indexer indexer;
+    private static final String JBOSS_SERVER_LUCENE_ESCIDOC_ALL = "C:/Test/tmp/escidoc_all";
+    private static final String JBOSS_SERVER_LUCENE_ITEM_CONTAINER_ADMIN = "C:/Test/tmp/item_container_admin";
+    
+	protected static Indexer indexer;
 	protected String referenceIndexPath;
 	
 	IndexReader indexReader1 = null;
@@ -37,9 +40,13 @@ public class Validator
 	
 	protected static Logger logger = Logger.getLogger(Validator.class);
 	
-	protected static String[] fieldNamesToSkip = {
-//		"xml_representation", 
-//		"xml_metadata",
+	protected static String[] fieldNamesToSkipInValidate = {
+	    
+	    // for LATEST_RELEASE
+		"xml_representation", 
+		"xml_metadata",
+		
+		// for LATEST_VERSION
 		"aa_xml_representation", 
 		"aa_xml_metadata",
 		"/base",
@@ -50,7 +57,20 @@ public class Validator
 		"/components/component/xLinkTitle"
 		};
 	
-	protected static String[] objidsToSkip = {
+	protected static String[] fieldNamesToCompare = {
+        
+        // for LATEST_RELEASE
+        "escidoc.property.latest-version.number", 
+        "escidoc.property.version.number",
+        "escidoc.property.version.status",
+        
+        // for LATEST_VERSION
+        "properties/latest-version/number",
+        "/properties/version/number", 
+        "/properties/version/status"
+        };
+	
+	protected static String[] objidsToSkipInValidate = {
 		"escidoc:2111614",
 		"escidoc:2111636",
 		"escidoc:2111643",
@@ -66,15 +86,10 @@ public class Validator
 	{
 	}
 	
-	public Validator(Indexer indexer)
+	public Validator(Indexer indexer) throws CorruptIndexException, IOException
 	{
-		this.indexer = indexer;
-	}
-	
-	public Validator(Indexer indexer, String path) throws CorruptIndexException, IOException
-	{
-		this(indexer);
-		this.setReferencePath(path);
+	    this.indexer = indexer;
+		this.setReferencePath();
 	}
 	
 	public Validator(String path1, String path2) throws CorruptIndexException, IOException
@@ -93,8 +108,21 @@ public class Validator
         indexSearcher2 = new IndexSearcher(indexReader2);
     }
 	
-	public void setReferencePath(String path) throws CorruptIndexException, IOException
+	public void setReferencePath() throws CorruptIndexException, IOException
 	{
+	    String path = "";
+	    
+	    switch (indexer.getCurrentIndexMode())
+        {
+        case LATEST_RELEASE:
+            path = JBOSS_SERVER_LUCENE_ESCIDOC_ALL;
+            break;
+        case LATEST_VERSION:
+        case BOTH:    
+            path = JBOSS_SERVER_LUCENE_ITEM_CONTAINER_ADMIN;
+            break;
+        }
+	    
 		if (!new File(path).exists())
 		{
 			logger.warn("Invalid reference index path <" + path + ">");
@@ -102,10 +130,17 @@ public class Validator
 		}
 		this.referenceIndexPath = path;
 		
+		logger.info("Index path <" + indexer.getIndexPath() + ">");
+		logger.info("Reference path <" + this.referenceIndexPath + ">");
+		
 		indexReader1 = IndexReader.open(FSDirectory.open(new File(indexer.getIndexPath())), true);
 		indexReader2 = IndexReader.open(FSDirectory.open(new File(this.referenceIndexPath)), true);
 		indexSearcher2 = new IndexSearcher(indexReader2);
 		
+	}
+	
+	public void setNumberOfFilesToValidate(int n) {
+	    this.numberOfDocuments = n;
 	}
 	
 	public void compareToReferenceIndex() throws CorruptIndexException, IOException
@@ -118,7 +153,7 @@ public class Validator
 			document1 = indexReader1.document(i);	
 			document2 = getReferenceDocument(getObjidFieldName(), document1.get(getObjidFieldName()), indexSearcher2);
 			
-			if (Arrays.asList(objidsToSkip).contains(document1.get(getObjidFieldName())))
+			if (Arrays.asList(objidsToSkipInValidate).contains(document1.get(getObjidFieldName())))
 			{
 				logger.warn("Skipping verify for <" + document1.get(getObjidFieldName()) + ">");
 				continue;
@@ -145,10 +180,10 @@ public class Validator
 			Map<String, Set<Fieldable>> m1 = getMap(fields1);
 			Map<String, Set<Fieldable>> m2 = getMap(fields2);
 			
-			logger.info("comparing 1 - 2");
+			logger.info("comparing 1 [" + indexer.getIndexPath() + "] - 2 [" + this.referenceIndexPath + "]");
 			compareFields(m1, m2);
 			
-			logger.info("comparing 2 - 1");
+			logger.info("comparing 2 [" + this.referenceIndexPath + "] - 1 [" + indexer.getIndexPath() + "]");
 			compareFields(m2, m1);
 			
 			logger.info("comparing skipped fields 1 - 2");
@@ -170,6 +205,7 @@ public class Validator
 		{
 		case LATEST_RELEASE:
 			return "escidoc.objid";
+		case BOTH:
 		case LATEST_VERSION:
 			return "/id";
 		default:
@@ -203,8 +239,11 @@ public class Validator
 	{
 		for (String name : m1.keySet())
 		{
-			if (Arrays.asList(fieldNamesToSkip).contains(name))
+			if (Arrays.asList(fieldNamesToSkipInValidate).contains(name))
 				continue;
+			
+			if (!Arrays.asList(fieldNamesToCompare).contains(name))
+                continue;
 			
 			Set<Fieldable> sf1 = m1.get(name);
 			Set<Fieldable> sf2 = m2.get(name);
@@ -232,7 +271,7 @@ public class Validator
 			{
 				Fieldable f2 = findFieldFor(f1, sf2);
 				
-				if (f2 == null && !Arrays.asList(fieldNamesToSkip).contains(f1.name()))
+				if (f2 == null && !Arrays.asList(fieldNamesToSkipInValidate).contains(f1.name()))
 				{
 					indexer.getIndexingReport().addToErrorList("Different field values found for <" + name + ">" + " in <" +  m1.get(getObjidFieldName()) + ">\n");
 					continue;
@@ -473,6 +512,10 @@ public class Validator
             Validator validator = new Validator(args[0], args[1]);
             
             logger.info("Comparing <" + args[0]+ " to <" + args[1] + ">");
+            
+            if (args[2] != null) {
+                validator.setNumberOfFilesToValidate(Integer.valueOf(args[2]));
+            }
             
             validator.compareToReferenceIndex();
         } catch (CorruptIndexException e) {

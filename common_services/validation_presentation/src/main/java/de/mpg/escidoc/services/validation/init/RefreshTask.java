@@ -63,6 +63,7 @@ public class RefreshTask extends Thread
         try
         {
             int timeout = Integer.parseInt(PropertyReader.getProperty("escidoc.validation.refresh.interval"));
+            logger.info("Timeout for escidoc.validation.refresh.interval read: " + timeout);
             while (!signal)
             {
                 Thread.sleep(timeout * 60 * 1000);

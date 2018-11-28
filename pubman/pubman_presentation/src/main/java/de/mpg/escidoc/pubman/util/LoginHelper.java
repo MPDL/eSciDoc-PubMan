@@ -38,7 +38,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +50,6 @@ import de.escidoc.core.common.exceptions.application.security.AuthenticationExce
 import de.escidoc.core.common.exceptions.system.SqlDatabaseSystemException;
 import de.escidoc.core.common.exceptions.system.WebserverSystemException;
 import de.escidoc.www.services.aa.UserAccountHandler;
-import de.escidoc.www.services.aa.UserGroupHandler;
 import de.escidoc.www.services.oum.OrganizationalUnitHandler;
 import de.mpg.escidoc.pubman.appbase.FacesBean;
 import de.mpg.escidoc.pubman.contextList.ContextListSessionBean;
@@ -61,14 +59,12 @@ import de.mpg.escidoc.pubman.qaws.QAWSSessionBean;
 import de.mpg.escidoc.pubman.viewItem.ViewItemSessionBean;
 import de.mpg.escidoc.services.common.exceptions.TechnicalException;
 import de.mpg.escidoc.services.common.valueobjects.AccountUserVO;
-import de.mpg.escidoc.services.common.valueobjects.FilterTaskParamVO.Filter;
-import de.mpg.escidoc.services.common.valueobjects.FilterTaskParamVO.LimitFilter;
 import de.mpg.escidoc.services.common.valueobjects.FilterTaskParamVO;
+import de.mpg.escidoc.services.common.valueobjects.FilterTaskParamVO.Filter;
 import de.mpg.escidoc.services.common.valueobjects.GrantVO;
 import de.mpg.escidoc.services.common.valueobjects.SearchRetrieveRecordVO;
 import de.mpg.escidoc.services.common.valueobjects.SearchRetrieveResponseVO;
 import de.mpg.escidoc.services.common.valueobjects.UserAttributeVO;
-import de.mpg.escidoc.services.common.valueobjects.intelligent.grants.Grant;
 import de.mpg.escidoc.services.common.valueobjects.intelligent.usergroup.UserGroup;
 import de.mpg.escidoc.services.common.valueobjects.intelligent.usergroup.UserGroupList;
 import de.mpg.escidoc.services.common.xmltransforming.XmlTransformingBean;
@@ -431,7 +427,7 @@ public class LoginHelper extends FacesBean
     {
         return getLabel(btnLoginLogout);
     }
-
+    
     @Override
     public String toString()
     {

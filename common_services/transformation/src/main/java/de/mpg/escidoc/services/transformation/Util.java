@@ -37,7 +37,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -52,8 +51,6 @@ import java.util.Vector;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
-import net.sf.saxon.dom.DocumentBuilderFactoryImpl;
 
 import org.apache.axis.encoding.Base64;
 import org.apache.commons.httpclient.Header;
@@ -81,6 +78,7 @@ import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ProxyHelper;
 import de.mpg.escidoc.services.transformation.valueObjects.Format;
 // Only for DOM Debugging
+import net.sf.saxon.dom.DocumentBuilderFactoryImpl;
 
 /**
  * Helper methods for the transformation service.
@@ -377,7 +375,11 @@ public class Util
                             detailMethod.setRequestHeader("Cookie", "JSESSIONID=" + coneSession);
                         }
                         ProxyHelper.executeMethod(client, detailMethod);
-                        logger.info("CoNE query: " + id + "?format=rdf&eSciDocUserHandle="  + Base64.encode(AdminHelper.getAdminUserHandle().getBytes("UTF-8")) + " returned " + detailMethod.getResponseBodyAsString());
+						if (logger.isDebugEnabled()) {
+							logger.debug("CoNE query: " + id + "?format=rdf&eSciDocUserHandle="
+									+ Base64.encode(AdminHelper.getAdminUserHandle().getBytes("UTF-8")) + " returned "
+									+ detailMethod.getResponseBodyAsString());
+						}
 
                         if (detailMethod.getStatusCode() == 200)
                         {
@@ -600,7 +602,9 @@ public class Util
                 method.setRequestHeader("Cookie", "JSESSIONID=" + coneSession);
             }
             ProxyHelper.executeMethod(client, method);
-            logger.info("CoNE query: " + queryUrl + " returned " + method.getResponseBodyAsString());
+			if (logger.isDebugEnabled()) {
+				logger.debug("CoNE query: " + queryUrl + " returned " + method.getResponseBodyAsString());
+			}
             if (method.getStatusCode() == 200)
             {
                 ArrayList<String> results = new ArrayList<String>();
@@ -615,7 +619,9 @@ public class Util
                     method.setRequestHeader("Cookie", "JSESSIONID=" + coneSession);
                 }
                 ProxyHelper.executeMethod(client, method);
-                logger.info("CoNE query: " + queryUrl + " returned " + method.getResponseBodyAsString());
+				if (logger.isDebugEnabled()) {
+					logger.debug("CoNE query: " + queryUrl + " returned " + method.getResponseBodyAsString());
+				}
                 if (method.getStatusCode() == 200)
                 {
                     results.addAll(Arrays.asList(method.getResponseBodyAsString().split("\n")));
@@ -634,7 +640,11 @@ public class Util
                                 ProxyHelper.setProxy(client, detailsUrl.replace("$1", id));
                                 client.executeMethod(detailMethod);
                                 // TODO "&redirect=true" must be reinserted again
-                                logger.info("CoNE query: " + id + "?format=rdf&eSciDocUserHandle="  + Base64.encode(AdminHelper.getAdminUserHandle().getBytes("UTF-8")) + " returned " + detailMethod.getResponseBodyAsString());
+								if (logger.isDebugEnabled()) {
+									logger.debug("CoNE query: " + id + "?format=rdf&eSciDocUserHandle="
+											+ Base64.encode(AdminHelper.getAdminUserHandle().getBytes("UTF-8"))
+											+ " returned " + detailMethod.getResponseBodyAsString());
+								}
                                 if (detailMethod.getStatusCode() == 200)
                                 {
                                     Document details = documentBuilder.parse(detailMethod.getResponseBodyAsStream());
@@ -707,7 +717,9 @@ public class Util
                 method.setRequestHeader("Cookie", "JSESSIONID=" + coneSession);
             }
             ProxyHelper.executeMethod(client, method);
-            logger.info("CoNE query: " + queryUrl + " returned " + method.getResponseBodyAsString());
+			if (logger.isDebugEnabled()) {
+				logger.debug("CoNE query: " + queryUrl + " returned " + method.getResponseBodyAsString());
+			}
             if (method.getStatusCode() == 200)
             {
                 ArrayList<String> results = new ArrayList<String>();
@@ -727,7 +739,11 @@ public class Util
                             ProxyHelper.setProxy(client, detailsUrl.replace("$1", id));
                             client.executeMethod(detailMethod);
                             // TODO "&redirect=true" must be reinserted again
-                            logger.info("CoNE query: " + id + "?format=rdf&eSciDocUserHandle="  + Base64.encode(AdminHelper.getAdminUserHandle().getBytes("UTF-8")) + " returned " + detailMethod.getResponseBodyAsString());
+							if (logger.isDebugEnabled()) {
+								logger.debug("CoNE query: " + id + "?format=rdf&eSciDocUserHandle="
+										+ Base64.encode(AdminHelper.getAdminUserHandle().getBytes("UTF-8"))
+										+ " returned " + detailMethod.getResponseBodyAsString());
+							}
                             if (detailMethod.getStatusCode() == 200)
                             {
                                 Document details = documentBuilder.parse(detailMethod.getResponseBodyAsStream());
@@ -955,7 +971,7 @@ public class Util
             Element element = document.createElement("size");
             document.appendChild(element);
             Header header = headMethod.getResponseHeader("Content-Length");
-            logger.info("HEAD Request to " + url + " returned Content-Length: " + (header!=null?header.getValue():null) );
+            logger.info("HEAD Request to " + url + " returned Content-Length: " + (header!=null ? header.getValue() : null) );
             if (header != null)
             {
                 element.setTextContent(header.getValue());

@@ -1038,6 +1038,31 @@
 					</xsl:for-each>
 				</xsl:if>
 				
+				<xsl:if test="$import-name = 'MPICC'">
+					<xsl:for-each select="identifiers/identifier[@type = 'url']">
+						<ec:component>		
+							<ec:properties>
+								<prop:visibility>public</prop:visibility>
+								<prop:content-category>
+									<xsl:value-of select="$contentCategory-ves/enum[. = 'any-fulltext']/@uri"/>
+								</prop:content-category>
+								<prop:file-name><xsl:value-of select="."/></prop:file-name>
+							</ec:properties>
+							<ec:content xlink:href="{.}" storage="external-url"/>
+							<mdr:md-records>
+								<mdr:md-record>
+									<file:file>
+										<dc:title><xsl:value-of select="."/></dc:title>
+										<eterms:content-category>
+											<xsl:value-of select="$contentCategory-ves/enum[. = 'any-fulltext']/@uri"/>
+										</eterms:content-category>
+									</file:file>
+								</mdr:md-record>
+							</mdr:md-records>
+						</ec:component>
+					</xsl:for-each>
+				</xsl:if>
+				
 				<xsl:if test="$import-name = 'MPIPKS'">
 					<xsl:for-each select="relations/relation[@type = 'url' and @reltype='hasreferences']">
 						<ec:component>		
@@ -2885,7 +2910,7 @@
 						<xsl:attribute name="xsi:type" select="'eterms:ISSN'"/>
 						<xsl:value-of select="."/>
 					</xsl:when>
-					<xsl:when test="@type='uri' or @type='url'">
+					<xsl:when test="(@type='uri' or @type='url') and (not($import-name = 'MPICC'))">
 						<xsl:attribute name="xsi:type" select="'eterms:URI'"/>
 						<xsl:value-of select="."/>
 					</xsl:when>
@@ -3837,6 +3862,9 @@
 						<xsl:when test="$import-name = 'MPIIB'">
 							<xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute for Infection Biology')"/>
 						</xsl:when>
+						<xsl:when test="$import-name = 'MPIL'">
+							<xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute for Comparative Public Law and International Law')"/>
+						</xsl:when>
 						<xsl:when test="$import-name = 'MolePhys'">
 							<xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute of Molecular Physiology')"/>
 						</xsl:when>
@@ -3887,6 +3915,19 @@
 							 <xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute for Bioinorganic Chemistry')"/>
                              <xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute for Chemical Energy Conversion')"/>
                              <xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute for Radiation Chemistry')"/>
+							<xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute for Radiation Chemistry')"/>
+						</xsl:when>
+						<xsl:when test="$import-name = 'Brain'">
+							<xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute for Brain Research')"/>
+						</xsl:when>
+						<xsl:when test="$import-name = 'MPICC'">
+							<xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute for Foreign and International Criminal Law')"/>
+						</xsl:when>
+						<xsl:when test="$import-name = 'MPICBG'">
+							<xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute of Molecular Cell Biology and Genetics')"/>
+						</xsl:when>
+						<xsl:when test="$import-name = 'MPIMM'">
+							<xsl:copy-of select="Util:queryConeExact('persons', concat($creatornfamily, ', ', $creatorngiven), 'Max Planck Institute for Marine Microbiology')"/>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:copy-of select="Util:queryCone('persons', concat('&quot;',$creatornfamily, ', ', $creatorngiven, '&quot;'))"/>
@@ -4394,8 +4435,8 @@
 								</xsl:when>
 								
 								<!-- MPI Experimentelle Medizin (MPIEM) will Institut als Affiliation, falls Pub-Date nicht in einen CoNE-Zeitraum passt -->
-								<xsl:when test="($coneCreator/cone[1]/rdf:RDF[1]/rdf:Description) and not($coneCreator/cone[1]/rdf:RDF[1]/rdf:Description/escidoc:position[escidocFunctions:smaller(rdf:Description/escidoc:start-date, $publication-date) 
-													and escidocFunctions:smaller($publication-date, rdf:Description/escidoc:end-date)] and ($import-name='MPIEM'))">			
+								<xsl:when test="($coneCreator/cone[1]/rdf:RDF[1]/rdf:Description) and (not($coneCreator/cone[1]/rdf:RDF[1]/rdf:Description/escidoc:position[escidocFunctions:smaller(rdf:Description/escidoc:start-date, $publication-date) 
+													and escidocFunctions:smaller($publication-date, rdf:Description/escidoc:end-date)]) and ($import-name='MPIEM'))">			
 									<organization:organization>
 										<dc:title>
 											<xsl:text>Max Planck Institute of Experimental Medicine</xsl:text>

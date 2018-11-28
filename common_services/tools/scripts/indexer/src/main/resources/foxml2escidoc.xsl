@@ -29,6 +29,7 @@
 	<xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
 	<xsl:param name="version" select="'latest-release'"/>
+	<xsl:param name="index-mode" select="'latest-release'"/>	
 	<xsl:param name="index-db"/>
 	
 	<xsl:variable name="database" select="document($index-db)"/>
@@ -52,14 +53,29 @@
 		
 		<xsl:variable name="PID" select="foxml:digitalObject/@PID"/>
 		<xsl:variable name="first-dc-title" select="(//dc:title)[1]"/>
-		<xsl:variable name="latest-version-rels-ext"><xsl:copy-of select="foxml:digitalObject/foxml:datastream[@ID='RELS-EXT']/foxml:datastreamVersion[last()]/foxml:xmlContent/rdf:RDF/rdf:Description/*"/></xsl:variable>
+		<xsl:variable name="latest-version-rels-ext"><xsl:copy-of select="foxml:digitalObject/foxml:datastream[@ID='RELS-EXT']/foxml:datastreamVersion[last()]/foxml:xmlContent/rdf:RDF/rdf:Description/*"/></xsl:variable>    
+		
+		<!--                  
+		<xsl:message>latest-version-rels-ext <xsl:value-of select="$latest-version-rels-ext"/></xsl:message>
+		-->
+		
 		<xsl:variable name="latest-release-rels-ext"><xsl:copy-of select="foxml:digitalObject/foxml:datastream[@ID='RELS-EXT']/foxml:datastreamVersion[foxml:xmlContent/rdf:RDF/rdf:Description/version:status = 'released'][last()]/foxml:xmlContent/rdf:RDF/rdf:Description/*"/></xsl:variable>
+		
+		<!-- 
+		<xsl:message>latest-release-rels-ext <xsl:value-of select="$latest-release-rels-ext"/></xsl:message>
+		<xsl:message>version <xsl:value-of select="$version"/></xsl:message>
+		<xsl:message>index-mode <xsl:value-of select="$index-mode"/></xsl:message>
+		 -->
 		<xsl:variable name="RELS-EXT">
 			<xsl:choose>
 				<xsl:when test="$version = 'latest-version'">
 					<xsl:copy-of select="$latest-version-rels-ext"/>
 				</xsl:when>
-				<xsl:when test="$version = 'latest-release'">
+				<xsl:when test="$version = 'latest-release' and $index-mode != 'BOTH'">
+					<xsl:copy-of select="$latest-release-rels-ext"/>
+				</xsl:when>
+				<xsl:when test="$version = 'latest-release' and $index-mode = 'BOTH' and $latest-version-rels-ext != '' and $latest-release-rels-ext != '' and $latest-version-rels-ext != $latest-release-rels-ext">
+					<xsl:message>2 versions of the same item to process</xsl:message>
 					<xsl:copy-of select="$latest-release-rels-ext"/>
 				</xsl:when>
 				<xsl:otherwise>
@@ -67,18 +83,20 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
+		
+		<xsl:message>RELS-EXT <xsl:value-of select="$RELS-EXT"/></xsl:message>
 
-		<xsl:if test="$RELS-EXT = ''">
-			<xsl:value-of select="error(QName('http://www.escidoc.de', 'err:wrongStatus'), 'Item in wrong public status') "/>
+		<xsl:if test="$RELS-EXT = '' and $index-mode != 'BOTH'">
+			<xsl:value-of select="error(QName('http://www.escidoc.de', 'err:wrongPublicStatus'), 'Item in wrong public status') "/>
+		</xsl:if>
+		<xsl:if test="$RELS-EXT = '' and $index-mode = 'BOTH'">
+			<xsl:value-of select="error(QName('http://www.escidoc.de', 'err:samePublicStatus'), 'Item in same public status') "/>
 		</xsl:if>
 		
-        <!--                                 
-		<xsl:message>public-status <xsl:value-of select="$latest-version-rels-ext/prop:public-status"/></xsl:message>
-		-->
 		<xsl:variable name="status" select="$latest-version-rels-ext/prop:public-status" /> 
 	
 		<xsl:if test="$status = 'withdrawn' and $version = 'latest-release'">
-			<xsl:value-of select="error(QName('http://www.escidoc.de', 'err:wrongStatus'), 'Item status is withdrawn') "/>
+			<xsl:value-of select="error(QName('http://www.escidoc.de', 'err:wrongPublicStatus'), 'Item status is withdrawn') "/>
 		</xsl:if>
 
 		<xsl:variable name="last-modification-date" select="foxml:digitalObject/foxml:datastream[@ID='RELS-EXT']/foxml:datastreamVersion[last()]/foxml:xmlContent/rdf:RDF/rdf:Description/version:date"/>

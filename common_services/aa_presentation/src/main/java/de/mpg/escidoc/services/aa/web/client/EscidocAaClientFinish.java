@@ -86,6 +86,7 @@ public class EscidocAaClientFinish extends FinalClient
                 authenticationVO.setUsername(accountUserVO.getUserid());
                 authenticationVO.setUserId(accountUserVO.getReference().getObjectId());
                 authenticationVO.setFullName(accountUserVO.getName());
+                authenticationVO.getData().put("eSciDocUserHandle", escidocUserHandle);
 
                 for (GrantVO grantVO : accountUserVO.getGrants())
                 {

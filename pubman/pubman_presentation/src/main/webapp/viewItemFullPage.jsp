@@ -42,8 +42,7 @@
 	<f:loadBundle var="lbl" basename="Label" />
 	<f:loadBundle var="msg" basename="Messages" />
 	<f:loadBundle var="tip" basename="Tooltip" />
-	<f:loadBundle var="genre"
-		basename="Genre_#{ViewItemFull.pubItem.metadata.genre}" />
+	<f:loadBundle var="genre" basename="Genre_#{ViewItemFull.pubItem!=null ? ViewItemFull.pubItem.metadata.genre : 'ARTICLE' }" />
 	<html xmlns="http://www.w3.org/1999/xhtml">
 <h:head>
 
@@ -52,7 +51,10 @@
 			converter="HTMLTitleSubSupConverter" /></title>
 	<link rel="unapi-server" type="application/xml" title="unAPI"
 		href="${ViewItemFull.unapiURLview}" />
-
+	
+	<ui:fragment rendered="#{ViewItemFull.pubItem == null or ViewItemFull.isStateWithdrawn}">
+		<meta name="robots" content="noindex" />
+	</ui:fragment>		
 
 	<h:outputText value="#{ViewItemFull.htmlMetaTags}" escape="false"
 		rendered="#{ViewItemFull.pubItem != null and ViewItemFull.isStateReleased}" />
@@ -525,6 +527,7 @@
 				</div>
 				<h:panelGroup layout="block" styleClass="full_area0 clear"
 					rendered="#{ViewItemFull.pubItem != null}">
+						
 					<div class="full_area0 fullItem">
 						<div class="full_area0 fullItemControls">
 							<span class="full_area0_p5"> <b

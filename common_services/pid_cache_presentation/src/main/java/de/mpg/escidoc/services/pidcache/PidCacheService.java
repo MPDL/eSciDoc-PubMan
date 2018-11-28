@@ -1,7 +1,5 @@
 package de.mpg.escidoc.services.pidcache;
 
-import javax.annotation.Resource;
-import javax.naming.InitialContext;
 import javax.servlet.http.HttpServletResponse;
 
 import de.mpg.escidoc.services.common.XmlTransforming;
@@ -10,6 +8,7 @@ import de.mpg.escidoc.services.common.valueobjects.PidServiceResponseVO;
 import de.mpg.escidoc.services.common.xmltransforming.XmlTransformingBean;
 import de.mpg.escidoc.services.pidcache.gwdg.GwdgClient;
 import de.mpg.escidoc.services.pidcache.gwdg.GwdgPidService;
+import de.mpg.escidoc.services.pidcache.process.CacheProcess;
 import de.mpg.escidoc.services.pidcache.tables.Cache;
 import de.mpg.escidoc.services.pidcache.tables.Queue;
 
@@ -41,9 +40,6 @@ public class PidCacheService
 		cache = new Cache();
 		queue = new Queue();
 		gwdgPidService = new GwdgPidService();
-		//context = new InitialContext();
-		//String appName = (String)context.lookup("java:app/AppName");
-		//String appName = "pid_cache_ear";
 		xmlTransforming = new XmlTransformingBean();
 	}
 	
@@ -94,24 +90,6 @@ public class PidCacheService
 	}
 	
 	/**
-	 * Search a PID:
-	 * 	- Search first in {@link Queue} if PID still in it
-	 *  - Check then if GWDG service available
-	 *  - Search with GWDG service.
-	 * @param url
-	 * @return
-	 */
-	public String search(String url) throws Exception
-	{
-		pid = queue.search(url);
-		if (pid != null) 
-		{
-			return transformToPidServiceResponse(pid, "search");
-		}
-		return  gwdgPidService.search(url);
-	}
-	
-	/**
 	 * Update a PID
 	 * @param id
 	 * @param url
@@ -126,16 +104,6 @@ public class PidCacheService
 		xmlOutput = transformToPidServiceResponse(pid, "modify");
 		this.status = HttpServletResponse.SC_OK;
     	return xmlOutput;
-	}
-	
-	/**
-	 * Should a PID be removable?
-	 * @param id
-	 * @return
-	 */
-	public String delete(String id)
-	{
-		return "Delete not possible for a PID";
 	}
 	
 	private String transformToPidServiceResponse(Pid pid, String action) throws TechnicalException

@@ -42,6 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.rpc.ServiceException;
 
+import org.apache.commons.httpclient.HttpException;
 import org.apache.log4j.Logger;
 
 import de.escidoc.www.services.aa.UserManagementWrapper;
@@ -49,6 +50,8 @@ import de.mpg.escidoc.pubman.appbase.FacesBean;
 import de.mpg.escidoc.pubman.breadcrumb.BreadcrumbItemHistorySessionBean;
 import de.mpg.escidoc.pubman.util.CommonUtils;
 import de.mpg.escidoc.pubman.util.LoginHelper;
+import de.mpg.escidoc.services.common.exceptions.TechnicalException;
+import de.mpg.escidoc.services.framework.AdminHelper;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 
@@ -129,9 +132,15 @@ public class Login extends FacesBean
 
                 // Logout mechanism
 
-                logout();
-                HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
-                session.invalidate();
+                //PubManSessionListener will call logout method
+                
+        		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        		session.invalidate();
+        		
+
+                
+
+               
             }
         }
         else
@@ -147,15 +156,28 @@ public class Login extends FacesBean
      * @throws ServiceException
      * @throws URISyntaxException
      */
-    public void logout() throws IOException, ServiceException, URISyntaxException
+    public void logout(String userHandle) throws IOException, ServiceException, URISyntaxException
     {
-        FacesContext fc = FacesContext.getCurrentInstance();
+
+        try {
+			AdminHelper.logoutUser(userHandle);
+		} catch (Exception e) {
+			logger.error("Error logging out user", e);
+		}
+		
+        FacesContext.getCurrentInstance().getExternalContext().redirect(PropertyReader.getProperty("escidoc.pubman.instance.url") + PropertyReader.getProperty("escidoc.pubman.instance.context.path") + "?logout=true");
+        
+        
+        //FacesContext fc = FacesContext.getCurrentInstance();
+        
         // Deactivated because of import tool
+        /*
         fc.getExternalContext().redirect(
                 ServiceLocator.getLoginUrl() + LOGOUT_URL + "?target="
                 + URLEncoder.encode(PropertyReader.getProperty("escidoc.pubman.instance.url")
                         + PropertyReader.getProperty("escidoc.pubman.instance.context.path")
                         + "?logout=true", "UTF-8"));
+        */
         //fc.getExternalContext().redirect(PropertyReader.getProperty("escidoc.pubman.instance.url") + PropertyReader.getProperty("escidoc.pubman.instance.context.path") + "?logout=true");
     }
 
@@ -166,6 +188,7 @@ public class Login extends FacesBean
      */
     public String forceLogout()
     {
+    	
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
         try
@@ -276,7 +299,10 @@ public class Login extends FacesBean
         if(!pubmanUrl.endsWith("/")) pubmanUrl = pubmanUrl + "/";
 
         //Use double URL encoding here because the login mechanism gives back the decoded URL parameters.
-        String url =  ServiceLocator.getLoginUrl() + LOGIN_URL + "?target=" + pubmanUrl + "faces/" + URLEncoder.encode(URLEncoder.encode(breadCrumbHistory.getCurrentItem().getPage(), "UTF-8"),"UTF-8");
+        //String url =  ServiceLocator.getLoginUrl() + LOGIN_URL + "?target=" + pubmanUrl + "faces/" + URLEncoder.encode(URLEncoder.encode(breadCrumbHistory.getCurrentItem().getPage(), "UTF-8"),"UTF-8");
+       
+        String url =  PropertyReader.getProperty("escidoc.pubman.login.url") + "?target=" + pubmanUrl + "faces/" + URLEncoder.encode(URLEncoder.encode(breadCrumbHistory.getCurrentItem().getPage(), "UTF-8"),"UTF-8");
+        
         return url;
     }
 }
