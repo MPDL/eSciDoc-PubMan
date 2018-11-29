@@ -922,7 +922,7 @@ public class ItemControllerSessionBean extends FacesBean
 		
 		if (newPubItem.getMetadata().getProjectInfos() == null)
 		{
-			newPubItem.getMetadata().setProjectInfos(new ArrayList<>());
+			newPubItem.getMetadata().setProjectInfos(new ArrayList<ProjectInfoVO>());
 		}
 		
 		if (newPubItem.getMetadata().getProjectInfos().isEmpty())
