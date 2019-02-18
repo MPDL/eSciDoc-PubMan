@@ -8,7 +8,7 @@
 public class ConfigUtil {
 	
 	// Set the CoNE instance to be queried
-	public static final String CONE_URL = "http://pubman.mpdl.mpg.de/cone/";
+	public static final String CONE_URL = "https://pure.mpg.de/cone/";
 	
 	// Set to "true" for logging information
 	public final static boolean VERBOSE = true;
@@ -19,14 +19,14 @@ public class ConfigUtil {
 	public final static boolean SEARCH_ONLY_EXACT_COMPLETE_NAMES = true;
 	
 	// Set the file path, where you want the duplicates to be written
-	public final static String OUTPUT_FILE_PATH = "E:\\tmp\\possibleConeDuplicates.txt";
+	public final static String OUTPUT_FILE_PATH = "H:\\tmp\\possibleConeDuplicates.txt";
 	
 	// set the CoNE-Person model
 	public static final String PERSON_MODEL = "persons";
 	
 	// Set the file path to the cone-rdf-xml
 	// (only needed for RDF-Check)
-	public final static String RDF_FILE_PATH = "E:\\tmp\\result_migration_cone_mpi_rcg.xml";
+	public final static String RDF_FILE_PATH = "H:\\tmp\\cone_persons_export_migration_MPIRC.xml";
 	
 	// XPath-Expression for the title node
 	// (only needed for RDF-Check)
